@@ -243,7 +243,7 @@ ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
   organism <- c(Hsapiens="homo_sapiens", Mmusculus="mus_musculus")[tokens[2]]  
   ensemblVersion <- sub("v", "", tokens[3])
 
-  MetaData <- data.frame(matrix(ncol=2, nrow=11))
+  MetaData <- data.frame(matrix(ncol=2, nrow=9))
   colnames(MetaData) <- c("name", "value")
   MetaData[1,] <- c("package_name", packageName)
   MetaData[2,] <- c("db_type", "EnsDbLite")

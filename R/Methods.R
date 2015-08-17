@@ -1,4 +1,4 @@
-## TxDbLite methods for all subclasses 
+## TxDbLite methods (inherited by all subclasses)
 
 setMethod("dbconn", "TxDbLite", function(x) return(x@con))
 
@@ -15,6 +15,7 @@ setMethod("metadata", "TxDbLite", function(x, ...) { # {{{
   rownames(md) <- md$name
   return(md)
 }) # }}}
+
 
 ## EnsDbLite methods
 
@@ -72,6 +73,7 @@ setMethod("show", "EnsDbLite", function(object) { # {{{
   tx <- dbGetQuery(dbconn(object), txsql)[1,1]
   cat(paste0("| ", tx, " transcripts from ", g, " bundles (genes).\n"))
 }) # }}}
+
 
 ## RepDbLite methods
 
