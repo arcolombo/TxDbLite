@@ -1,27 +1,40 @@
-makeRepDbLitePkg <- function(repdbfile, version, author, destDir=".") { 
+#' create a RepDbLite package from sqlite file (usually via repDbLiteFromFasta)
+#'
+#' @param repdblitefile   the sqlite filename
+#' @param author          whose fault this is (with email address)
+#' @param version         version of the package (default is "1.0")
+#' @param destDir         where to put the new package directory (".")
+#' 
+#' @return the name of the package 
+#' 
+#' @export
+#'
+makeRepDbLitePkg <- function(repdblitefile, version, author, destDir=".") { 
   
-  stopifnot(class(repdbfile) == "character")
-  repdb <- RepDbLite(x=repdbfile)
-  con <- dbconn(repdb)
-  pkg <- fetchMetadata(con, "package_name")
-  organism <- fetchMetadata(con, "Organism")
-  ensembl_version <- fetchMetadata(con, "ensembl_version")
+  stopifnot(class(repdblitefile) == "character")
+  repdb <- RepDbLite(x=repdblitefile)
+  md <- metadata(ensdb)
+  fetchMeta <- function(x) md[x, "value"]
+  pkg <- fetchMeta("package_name")
+  organism <- fetchMeta("organism")
+  repbase_version <- as.character(fetchMeta("repbase_version"))
   template_path <- system.file("repdblite", package="TxDbLite")
-  source_url <- paste0("ftp://ftp.ensembl.org/pub/release-",
-                       ensembl_version, "/gtf/", tolower(organism))
+  source_url <- paste0("http://www.girinst.org/server/RepBase/protected/",
+                       "RepBase", repbase_version, ".fasta/")
+  release_date <- fetchMeta("creation_time")
   symvals <- list(
-    PKGTITLE="Ensembl-based annotation package",
-    PKGDESCRIPTION="Lightweight annotation DB derived from Ensembl GTF",
+    PKGTITLE="RepBase-based annotation package",
+    PKGDESCRIPTION="Lightweight RepBase transcript annotations",
     PKGVERSION=version,
     AUTHOR=author,
     MAINTAINER=author,
     LIC="Artistic-2.0",
     ORGANISM=organism, 
     SPECIES=organism, 
-    PROVIDER="Ensembl",
-    PROVIDERVERSION=as.character(ensembl_version),
-    RELEASEDATE=fetchMetadata(repdb, "Creation time"),
-    SOURCEURL=fetchMetadata(repdb, "ensembl_host"),
+    PROVIDER="RepBase",
+    PROVIDERVERSION=repbase_version,
+    RELEASEDATE=release_date,
+    SOURCEURL=source_url,
     ORGANISMBIOCVIEW=gsub(" ","_", organism), 
     TXDBOBJNAME=pkg
   )
@@ -34,8 +47,8 @@ makeRepDbLitePkg <- function(repdbfile, version, author, destDir=".") {
   dir.create(paste(c(destDir, pkg, "inst", "extdata"), 
                    collapse=.Platform$file.sep),
              showWarnings=FALSE, recursive=TRUE)
-  db_path <- file.path(destDir, pkg, "inst", "extdata", repdbfile)
-  file.copy(repdbfile, to=db_path)
+  db_path <- file.path(destDir, pkg, "inst", "extdata", repdblitefile)
+  file.copy(repdblitefile, to=db_path)
   return(pkg)
 
 }

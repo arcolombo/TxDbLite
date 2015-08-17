@@ -1,17 +1,30 @@
-makeEnsDbLitePkg <- function(ensdbfile, version, author, destDir=".") { 
+#' create an EnsDbLite package from sqlite file (usually via ensDbLiteFromFasta)
+#'
+#' @param ensdblitefile   the sqlite filename
+#' @param author          whose fault this is (with email address)
+#' @param version         version of the package (default is "1.0")
+#' @param destDir         where to put the new package directory (".")
+#' 
+#' @return the name of the package 
+#' 
+#' @export
+#'
+makeEnsDbLitePkg <- function(ensdblitefile, author, version="1.0", destDir="."){
   
-  stopifnot(class(ensdbfile) == "character")
-  ensdb <- EnsDbLite(x=ensdbfile)
-  con <- dbconn(ensdb)
-  pkg <- fetchMetadata(con, "package_name")
-  organism <- fetchMetadata(con, "Organism")
-  ensembl_version <- fetchMetadata(con, "ensembl_version")
+  stopifnot(class(ensdblitefile) == "character")
+  ensdb <- EnsDbLite(x=ensdblitefile)
+  md <- metadata(ensdb)
+  fetchMeta <- function(x) md[x, "value"]
+  pkg <- fetchMeta("package_name")
+  organism <- fetchMeta("organism")
+  ensembl_version <- md["ensembl_version", "value"]
   template_path <- system.file("ensdblite", package="TxDbLite")
-  source_url <- paste0("ftp://ftp.ensembl.org/pub/release-",
-                       ensembl_version, "/gtf/", tolower(organism))
+  source_url <- paste0("ftp://ftp.ensembl.org/pub/release-", 
+                       ensembl_version)
+  release_date <- fetchMeta("creation_time")
   symvals <- list(
     PKGTITLE="Ensembl-based annotation package",
-    PKGDESCRIPTION="Lightweight annotation DB derived from Ensembl GTF",
+    PKGDESCRIPTION="Lightweight Ensembl transcript annotations",
     PKGVERSION=version,
     AUTHOR=author,
     MAINTAINER=author,
@@ -20,8 +33,8 @@ makeEnsDbLitePkg <- function(ensdbfile, version, author, destDir=".") {
     SPECIES=organism, 
     PROVIDER="Ensembl",
     PROVIDERVERSION=as.character(ensembl_version),
-    RELEASEDATE=fetchMetadata(ensdb, "Creation time"),
-    SOURCEURL=fetchMetadata(ensdb, "ensembl_host"),
+    RELEASEDATE=release_date,
+    SOURCEURL=source_url, 
     ORGANISMBIOCVIEW=gsub(" ","_", organism), 
     TXDBOBJNAME=pkg
   )
@@ -34,8 +47,8 @@ makeEnsDbLitePkg <- function(ensdbfile, version, author, destDir=".") {
   dir.create(paste(c(destDir, pkg, "inst", "extdata"), 
                    collapse=.Platform$file.sep),
              showWarnings=FALSE, recursive=TRUE)
-  db_path <- file.path(destDir, pkg, "inst", "extdata", ensdbfile)
-  file.copy(ensdbfile, to=db_path)
+  db_path <- file.path(destDir, pkg, "inst", "extdata", ensdblitefile)
+  file.copy(ensdblitefile, to=db_path)
   return(pkg)
 
 }

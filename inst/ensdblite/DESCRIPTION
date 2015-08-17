@@ -4,7 +4,7 @@ Description: @PKGDESCRIPTION@
 Version: @PKGVERSION@
 Author: @AUTHOR@
 Maintainer: @AUTHOR@
-Depends: ensembldb
+Depends: TxDbLite
 Imports: GenomicFeatures
 License: @LIC@
 organism: @ORGANISM@
