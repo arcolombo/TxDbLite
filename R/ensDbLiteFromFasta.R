@@ -108,6 +108,7 @@ ensDbLiteFromFasta <- function(organism, fastaFiles, version, verbose=TRUE){#{{{
   gxs$gene <- as.integer(sub(gxpre, "", names(gxs)))
   gxBiotype <- squash(txs$gene_biotype, by=list(txs$gene_id), FUN=unique)
   gxs$gene_biotype <- gxBiotype[names(gxs)] 
+  gxs$gene_biotype_id <- as.numeric(as.factor(gxs$gene_biotype))
   gxMedLen <- squash(txs$tx_length, by=list(txs$gene_id), FUN=median)
   gxs$median_length <- gxMedLen[names(gxs)]
   gxs$entrezid <- getEntrezIDs(gxs)[names(gxs)]
@@ -124,9 +125,10 @@ ensDbLiteFromFasta <- function(organism, fastaFiles, version, verbose=TRUE){#{{{
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Writing the gene table...") # {{{
-  gx <- as(gxs, "data.frame")[, c("seqnames", "start", "end", "strand",
-                                  "gene", "gene_id", "gene_biotype_id",
-                                  "entrezid", "gene_name", "median_length")] 
+  gxcols <- c("seqnames", "start", "end", "strand",
+              "gene", "gene_id", "gene_biotype_id",
+              "entrezid", "gene_name", "median_length")
+  gx <- as(gxs, "data.frame")[, gxcols] 
   dbWriteTable(con, name="gene", gx, overwrite=T, row.names=F)
   rm(gx)
   if (verbose) cat("done.\n") # }}}
