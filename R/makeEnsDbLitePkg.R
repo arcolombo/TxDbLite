@@ -9,7 +9,7 @@
 #' 
 #' @export
 #'
-makeEnsDbLitePkg <- function(ensdblitefile, author, version="1.0", destDir="."){
+makeEnsDbLitePkg <- function(ensdblitefile, author, version="1.0", destDir=".", ...){
   
   stopifnot(class(ensdblitefile) == "character")
   ensdb <- EnsDbLite(x=ensdblitefile)
@@ -43,7 +43,8 @@ makeEnsDbLitePkg <- function(ensdblitefile, author, version="1.0", destDir="."){
   createPackage(pkgname=pkg,
                 destinationDir=destDir,
                 originDir=template_path,
-                symbolValues=symvals)
+                symbolValues=symvals, 
+                ...)
   dir.create(paste(c(destDir, pkg, "inst", "extdata"), 
                    collapse=.Platform$file.sep),
              showWarnings=FALSE, recursive=TRUE)

@@ -9,7 +9,7 @@
 #' 
 #' @export
 #'
-makeRepDbLitePkg <- function(repdblitefile, version, author, destDir=".") { 
+makeRepDbLitePkg <- function(repdblitefile, author, version="1.0", destDir=".", ...) {
   
   stopifnot(class(repdblitefile) == "character")
   repdb <- RepDbLite(x=repdblitefile)
@@ -43,7 +43,8 @@ makeRepDbLitePkg <- function(repdblitefile, version, author, destDir=".") {
   createPackage(pkgname=pkg,
                 destinationDir=destDir,
                 originDir=template_path,
-                symbolValues=symvals)
+                symbolValues=symvals,
+                ...)
   dir.create(paste(c(destDir, pkg, "inst", "extdata"), 
                    collapse=.Platform$file.sep),
              showWarnings=FALSE, recursive=TRUE)
