@@ -112,13 +112,8 @@ ensDbLiteFromFasta <- function(organism, fastaFiles, version, verbose=TRUE){#{{{
   gxs$median_length <- gxMedLen[names(gxs)]
   gxs$entrezid <- getEntrezIDs(gxs)[names(gxs)]
   gxs$gene_name <- getSymbols(gxs)[names(gxs)]
+  txs$gene <- as.integer(sub(gxpre, "", txs$gene_id))
   if (verbose) cat("...done.\n") # }}}
-
-  if (verbose) cat("Tabulating gene biotypes...") # {{{
-  gene_biotypes <- data.frame(id=seq_along(levels(as.factor(txs$gene_biotype))),
-                              gene_biotype=levels(as.factor(txs$gene_biotype)))
-  gxs$gene_biotype_id <- as.numeric(as.factor(gxs$gene_biotype))
-  if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Creating the database...") # {{{
   txVersion <- paste0("v", version)
@@ -129,11 +124,17 @@ ensDbLiteFromFasta <- function(organism, fastaFiles, version, verbose=TRUE){#{{{
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Writing the gene table...") # {{{
-  gx <- as.data.frame(gxs)[, c("seqnames", "start", "end", "strand",
-                               "gene", "gene_id", "gene_biotype_id",
-                               "entrezid", "gene_name", "median_length")] 
+  gx <- as(gxs, "data.frame")[, c("seqnames", "start", "end", "strand",
+                                  "gene", "gene_id", "gene_biotype_id",
+                                  "entrezid", "gene_name", "median_length")] 
   dbWriteTable(con, name="gene", gx, overwrite=T, row.names=F)
   rm(gx)
+  if (verbose) cat("done.\n") # }}}
+
+  if (verbose) cat("Tabulating gene biotypes...") # {{{
+  gene_biotypes <- data.frame(id=seq_along(levels(as.factor(txs$gene_biotype))),
+                              gene_biotype=levels(as.factor(txs$gene_biotype)))
+  gxs$gene_biotype_id <- as.numeric(as.factor(gxs$gene_biotype))
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Writing the gene_biotype table...") # {{{
@@ -144,9 +145,15 @@ ensDbLiteFromFasta <- function(organism, fastaFiles, version, verbose=TRUE){#{{{
 
   if (verbose) cat("Writing the tx table...") # {{{
   txcols <- c("start", "end", "tx_id", "tx_length", "tx_biotype_id", "gene")
-  tx <- as.data.frame(txs)[, txcols]
+  tx <- as(txs, "data.frame")[, txcols]
   dbWriteTable(con, name="tx", tx, overwrite=TRUE, row.names=FALSE)
   rm(tx)
+  if (verbose) cat("done.\n") # }}}
+
+  if (verbose) cat("Tabulating transcript biotypes...") # {{{
+  gene_biotypes <- data.frame(id=seq_along(levels(as.factor(txs$gene_biotype))),
+                              gene_biotype=levels(as.factor(txs$gene_biotype)))
+  gxs$gene_biotype_id <- as.numeric(as.factor(gxs$gene_biotype))
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Writing the tx_biotype table...") # {{{

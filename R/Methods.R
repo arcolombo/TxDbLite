@@ -72,11 +72,11 @@ setMethod("show", "EnsDbLite", function(object) { # {{{
   tx <- dbGetQuery(dbconn(object), txsql)[1,1]
   cat(paste0("| ", tx, " transcripts from ", g, " bundles (genes).\n"))
 }) # }}}
-setGeneric("repeats", function(object) standardGeneric("repeats"))
 
 ## RepDbLite methods
 
-## FIXME: allow for expansion to genomic coordinates? (a huge pain in the ass)
+setGeneric("repeats", function(x) standardGeneric("repeats"))
+
 setMethod("repeats", "RepDbLite", function(x) { # {{{
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), "select * from repeat"),
                                   keep.extra.columns=TRUE)
