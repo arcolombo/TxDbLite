@@ -2,6 +2,7 @@
 
 export(EnsDbLite)
 export(TxDbLite)
+export(addBiotypeClasses)
 export(ensDbLiteFromFasta)
 export(makeEnsDbLitePkg)
 export(makeRepDbLitePkg)
