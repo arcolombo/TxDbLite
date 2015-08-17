@@ -14,4 +14,3 @@
     namespaceExport(ns, objname)
   }
 }
-
