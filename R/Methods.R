@@ -52,11 +52,11 @@ setMethod("transcriptsBy", "EnsDbLite", function(x, by=c("gene")) { # {{{
 }) # }}} 
 
 setMethod("listGenebiotypes", "EnsDbLite", function(x, ...){ # {{{
-  return(dbGetQuery(dbconn(x), "select * from gene_biotypes")[,"gene_biotype"])
+  return(dbGetQuery(dbconn(x), "select * from gene_biotype")[,"gene_biotype"])
 }) # }}}
 
 setMethod("listTxbiotypes", "EnsDbLite", function(x, ...){ # {{{
-  return(dbGetQuery(dbconn(x), "select * from tx_biotypes")[,"tx_biotype"])
+  return(dbGetQuery(dbconn(x), "select * from tx_biotype")[,"tx_biotype"])
 }) # }}}
 
 setMethod("promoters", "EnsDbLite", function(x, upstream=2000, downstream=200, ...) { # {{{
