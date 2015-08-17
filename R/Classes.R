@@ -7,6 +7,10 @@ setClass("TxDbLite",
   prototype=list(con=NULL, tables=list())
 )
 
+#' @export
+#'
 setClass("EnsDbLite", contains="TxDbLite")
 
+#' @export
+#'
 setClass("RepDbLite", contains="TxDbLite")
