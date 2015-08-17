@@ -33,8 +33,8 @@ setMethod("genes", "EnsDbLite", function(x) { # {{{
 
 setMethod("transcripts", "EnsDbLite", function(x) { # {{{
   sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
-               "       tx_length, tx_id, tx_biotype,",
-               "       gene_id, gene_name, gene_biotype, entrezid",
+               "       tx_length, tx_id, gene_id, gene_name, entrezid,",
+               "       tx_biotype, gene_biotype",
                "  from gene, tx, gene_biotype, tx_biotype",
                " where gene.gene = tx.gene",
                "   and gene.gene_biotype_id = gene_biotype.id",
