@@ -6,10 +6,10 @@
 \alias{getEntrezIDs}
 \alias{getSymbols}
 \title{Function to create an EnsDbLite object (a stripped-down SQLite db) from
-specified Ensembl FASTA files for a given version, species, and type(s).
+a specified Ensembl FASTA file for a given version, species, and type(s).
 Note that this is shockingly easier than the same process for the GTF...}
 \usage{
-ensDbLiteFromFasta(organism, fastaFiles, version, verbose = TRUE)
+ensDbLiteFromFasta(fastaFile, verbose = TRUE)
 
 getEntrezIDs(gxs)
 
@@ -18,11 +18,7 @@ getSymbols(gxs)
 ensDbLiteMetadata(packageName, genomeVersion, sourceFile)
 }
 \arguments{
-\item{organism}{the organism involved (Homo_sapiens, Mus_musculus, etc.)}
-
-\item{fastaFiles}{the FASTA files to collate into a EnsDbLite instance}
-
-\item{version}{the Ensembl build (e.g. 81)}
+\item{fastaFile}{the FASTA file to collate into a EnsDbLite instance}
 
 \item{verbose}{make a lot of noise? (TRUE)}
 
@@ -45,7 +41,7 @@ a data.frame of metadata suitable for cramming into the database
 }
 \description{
 Function to create an EnsDbLite object (a stripped-down SQLite db) from
-specified Ensembl FASTA files for a given version, species, and type(s).
+a specified Ensembl FASTA file for a given version, species, and type(s).
 Note that this is shockingly easier than the same process for the GTF...
 }
 \section{Functions}{
