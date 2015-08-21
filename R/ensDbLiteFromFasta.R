@@ -1,10 +1,8 @@
 #' Function to create an EnsDbLite object (a stripped-down SQLite db) from
-#' specified Ensembl FASTA files for a given version, species, and type(s).
+#' a specified Ensembl FASTA file for a given version, species, and type(s).
 #' Note that this is shockingly easier than the same process for the GTF...
 #' 
-#' @param organism      the organism involved (Homo_sapiens, Mus_musculus, etc.)
-#' @param fastaFiles    the FASTA files to collate into a EnsDbLite instance
-#' @param version       the Ensembl build (e.g. 81)
+#' @param fastaFile     the FASTA file to collate into a EnsDbLite instance
 #' @param verbose       make a lot of noise? (TRUE) 
 #' 
 #' @import GenomicRanges
@@ -13,15 +11,12 @@
 #' 
 #' @export
 #'
-ensDbLiteFromFasta <- function(organism, fastaFiles, version, verbose=TRUE){#{{{
+ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
   require(Biostrings) 
   require(GenomicRanges)
   options(useFancyQuotes=FALSE)
   options(stringsAsFactors=FALSE)
-  organism <- sub("\\.", "_", ## try & be robust
-                  sub("Mmusculus", "Mus_musculus", 
-                      sub("Hsapiens", "Homo_sapiens", organism)))
 
   ## utility functions for parsing ENSEMBL FASTAs
   splt <- function(x, y=" ") strsplit(x, y)[[1]]
@@ -30,12 +25,42 @@ ensDbLiteFromFasta <- function(organism, fastaFiles, version, verbose=TRUE){#{{{
   grab <- function(x, y=" ", i=1) splt(x, y)[i]
   shift <- function(x, y=" ") grab(x, y, i=1)
 
-  if (organism == "Homo_sapiens") { ## {{{ prefixes differ by organism 
+  ## {{{ map Ensembl FASTA org names
+  abbr <- c(Danio_rerio="Drerio",
+            Homo_sapiens="Hsapiens", 
+            Mus_musculus="Mmusculus",
+            Pan_troglodytes="Ptroglodytes",
+            Caenorhabditis_elegans="Celegans",
+            Saccharomyces_cerevisiae="Scerevisiae",
+            Drosophila_melanogaster="Dmelanogaster")
+  ## }}}
+
+  ## .cdna.all is canonical cDNA transcriptome; .ncrna is canonical ncRNA {{{
+  fastaStub <- sub("\\.gz", "", sub("\\.fa", "", fastaFile))
+  tokens <- strsplit(fastaStub, "\\.")[[1]]
+  organism <- tokens[1] 
+  organism <- sub("\\.", "_", ## try & be robust
+                  sub("Mmusculus", "Mus_musculus", 
+                      sub("Hsapiens", "Homo_sapiens", organism)))
+  genomeVersion <- tokens[2]
+  version <- tokens[3]
+  ## }}}
+
+  if (organism == "Homo_sapiens") { ## {{{ tx/gene prefixes by organism 
     txpre <- "ENST"
     gxpre <- "ENSG"
   } else if (organism == "Mus_musculus") {
     txpre <- "ENSMUST"
     gxpre <- "ENSMUSG"
+  } else if (organism == "Caenorhabditis_elegans") {
+    txpre <- ""
+    gxpre <- "WBGene"
+  } else if (organism == "Drosophila_melanogaster") {
+    txpre <- "FBtr"
+    gxpre <- "FBgn"
+  } else if (organism == "Saccharomyces_cerevisiae") {
+    txpre <- ""
+    gxpre <- ""
   } else {
     stop("Currently supporting Homo_sapiens & Mus_musculus... patches welcome!")
   } # }}}
@@ -82,7 +107,7 @@ ensDbLiteFromFasta <- function(organism, fastaFiles, version, verbose=TRUE){#{{{
   ## retrieved as factors, with levels set from db
   if (verbose) cat("done.\n") # }}}
 
-  message("FIXME: add pre-stored biotype classes!")
+  message("FIXME: add pregenerated biotype hierarchy with addBiotypeClasses()!")
 
   squash <- function(x, by, FUN) { # {{{
     xx <- aggregate(x=x, by=by, FUN=FUN)
@@ -118,8 +143,7 @@ ensDbLiteFromFasta <- function(organism, fastaFiles, version, verbose=TRUE){#{{{
 
   if (verbose) cat("Creating the database...") # {{{
   txVersion <- paste0("v", version)
-  abbr <- c(Homo_sapiens="Hsapiens", Mus_musculus="Mmusculus")
-  outstub <- paste("EnsDbLite", abbr[organism], txVersion, sep=".")
+  outstub <- paste0("EnsDbLite.", fastaStub)
   dbname <- paste(outstub, "sqlite", sep=".") 
   con <- dbConnect(dbDriver("SQLite"), dbname=dbname)
   if (verbose) cat("done.\n") # }}}
@@ -166,8 +190,7 @@ ensDbLiteFromFasta <- function(organism, fastaFiles, version, verbose=TRUE){#{{{
   ## write metadata table # {{{ 
   Metadata <- ensDbLiteMetadata(packageName=outstub, 
                                 genomeVersion=txVersion,
-                                sourceFile=paste(sub(".gz$", "", fastaFiles),
-                                                     collapse="+"))
+                                sourceFile=fastaFile)
   dbWriteTable(con, name="metadata", Metadata, overwrite=TRUE, row.names=FALSE)
   # }}}
 
