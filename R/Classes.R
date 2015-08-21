@@ -14,3 +14,7 @@ setClass("EnsDbLite", contains="TxDbLite")
 #' @export
 #'
 setClass("RepDbLite", contains="TxDbLite")
+
+#' @export
+#'
+setClass("ErccDbLite", contains="TxDbLite")

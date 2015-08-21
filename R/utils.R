@@ -8,10 +8,29 @@
 #' 
 #' @export
 #'
-getFastaStub <- function(fastaFile) { 
+getFastaStub <- function(fastaFile) { # {{{
   sub("\\.fa$", "", sub("\\.fasta$", "", sub(".gz$", "", fastaFile)))
-}
+} # }}}
 
+#' @describeIn utils
+#' 
+#' figure out what type of annotation package to create
+#' 
+#' @export
+#'
+getAnnotationType <- function(fastaFile) {  # {{{
+  if (grepl("GRC", fastaFile) && ## ENSEMBL fasta, or an impostor
+      (grepl("cdna", fastaFile) || grep("ncrna", fastaFile))) {
+    type <- "EnsDbLite"
+  } else if (grepl("RepBase", fastaFile)) {
+    type <- "RepDbLite"
+  } else if (grepl("ERCC", fastaFile)) { 
+    type <- "ErccDbLite"
+  } else {
+    type <- NULL
+  }
+  return(type)
+} # }}}
 
 #' @describeIn utils
 #' 
@@ -24,27 +43,24 @@ getFastaStub <- function(fastaFile) {
 #' 
 #' @export
 #'
-createAnnotationPackage <- function(fastaFile, author) {
-  if (grepl("GRC", fastaFile) && ## ENSEMBL fasta, or an impostor
-      (grepl("cdna", fastaFile) || grep("ncrna", fastaFile))) {
-    type <- "EnsDbLite"
+createAnnotationPackage <- function(fastaFile, author) { # {{{
+
+  type <- getAnnotationType(fastaFile) 
+  if (type == "EnsDbLite") { 
     ensdblitefile <- ensDbLiteFromFasta(fastaFile)
     pkg <- makeEnsDbLitePkg(ensdblitefile, author)
-    message(pkg, " was created in ", getwd(), "... please install it.")
-    return(pkg)
-  } else if (grepl("RepBase", fastaFile)) {
-    type <- "RepDbLite"
+  } else if (type == "RepDbLite") {
     repdblitefile <- repDbLiteFromFasta(fastaFile)
     pkg <- makeRepDbLitePkg(repdblitefile, author)
-    message(pkg, " was created in ", getwd(), "... please install it.")
-    return(pkg)
   } else if (grepl("ERCC", fastaFile)) { 
-    message("ERCC annotations are avalable in TxDbLite.ERCC.fa, skipping...")
-    return(NULL)
+    erccdblitefile <- erccDbLiteFromFasta(fastaFile)
+    pkg <- makeErccDbLitePkg(erccdblitefile, author)
   } else {
     message("Don't know how to annotate ", fastaFile, ", skipping...")
     return(NULL)
   }
-  setwd(oldwd)
-}
 
+  message(pkg, " was created in ", getwd(), "... please install it.")
+  return(pkg)
+
+} # }}}
