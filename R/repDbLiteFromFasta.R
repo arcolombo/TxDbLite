@@ -49,7 +49,7 @@ repDbLiteFromFasta <- function(organism, fastaFile, version) {
 
   if (verbose) cat("Writing the biotype_class table...") # {{{
   data(repeat_biotypes, package="TxDbLite")
-  dbWriteTable(con, name="biotype_class", repeat_biotypes, 
+  dbWriteTable(con, name="biotype_class", as(repeat_biotypes, "data.frame"), 
                overwrite=T, row.names=F)
   rm(repeat_biotypes)
   if (verbose) cat("done.\n") # }}}
