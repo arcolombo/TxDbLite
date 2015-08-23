@@ -44,10 +44,10 @@ getTxDbLiteName <- function(fastaFile) { # {{{
   fastaStub <- getFastaStub(fastaFile)
 
   if (type == "ErccDbLite") {
-    return("ErccDbLite.ERCC.97") ## autoinstall?
+    return("ErccDbLite.ERCC.97.all") ## autoinstall?
   } else if(!is.null(type)) {
-    shortName <- paste(strsplit(fastaStub, "\\.")[[1]][c(1,3)], collapse=".")
-    return(paste(type, ".", shortName))
+    shortName <- paste(strsplit(fastaStub, "\\.")[[1]][c(1,3,4)], collapse=".")
+    return(paste(type, shortName, sep="."))
   } else {
     return(NULL)
   }

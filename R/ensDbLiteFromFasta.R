@@ -185,9 +185,9 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
   if (verbose) cat("Writing the biotype_class table...") # {{{
   data(ensembl_biotypes, package="TxDbLite")
-  dbWriteTable(con, name="biotype_class", as(ensembl_biotypes, "data.frame"), 
+  if (class(ensembl_biotypes) != "data.frame") browser()
+  dbWriteTable(con, name="biotype_class", ensembl_biotypes,
                overwrite=T, row.names=F)
-  rm(ensembl_biotypes)
   if (verbose) cat("done.\n") # }}}
 
   ## write metadata table # {{{ 
