@@ -2,11 +2,15 @@
 % Please edit documentation in R/erccDbLiteFromFasta.R
 \name{erccDbLiteFromFasta}
 \alias{erccDbLiteFromFasta}
-\title{create an ERCC annotation DB from the FASTA file}
+\title{create an ERCC annotation DB from the FASTA file
+NOTE: we probably shouldn't even bother exporting this.
+If ERCC spike-ins change radically, we'll need to build an entirely new one.}
 \usage{
 erccDbLiteFromFasta(fastaFile, verbose = TRUE)
 }
 \description{
 create an ERCC annotation DB from the FASTA file
+NOTE: we probably shouldn't even bother exporting this.
+If ERCC spike-ins change radically, we'll need to build an entirely new one.
 }
 

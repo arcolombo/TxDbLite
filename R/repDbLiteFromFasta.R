@@ -9,6 +9,8 @@
 #'
 repDbLiteFromFasta <- function(organism, fastaFiles, version) {
  
+  message("FIXME: add biotype_class for all RepDbLite instances!")
+
   verbose <- TRUE 
   options(useFancyQuotes=FALSE)
   organism <- sub("\\.", "_", ## try & be robust
@@ -22,9 +24,8 @@ repDbLiteFromFasta <- function(organism, fastaFiles, version) {
   combinedSeqinfo <- Reduce(merge, lapply(faFiles, seqinfo)) 
 
   ## create the SQLite database... 
-  repVersion <- paste0("RepBase", gsub("Repbase","", ignore.case=TRUE, version))
-  abbr <- c(Homo_sapiens="Hsapiens", Mus_musculus="Mmusculus")
-  outstub <- paste("RepDbLite", abbr[organism], repVersion, sep=".")
+  repVersion <- gsub("Repbase","", ignore.case=TRUE, version)
+  outstub <- getTxDbLiteName(fastaFile)
   dbname <- paste(outstub, "sqlite", sep=".") 
   con <- dbConnect(dbDriver("SQLite"), dbname=dbname)
 

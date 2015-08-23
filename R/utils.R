@@ -2,14 +2,51 @@
 #' 
 #' get the "stub" of a FASTA filename (no .fa, no .fasta, no .gz)
 #' 
-#' @param fastaFile the filename
-#' 
-#' @return a string
-#' 
 #' @export
 #'
 getFastaStub <- function(fastaFile) { # {{{
   sub("\\.fa$", "", sub("\\.fasta$", "", sub(".gz$", "", fastaFile)))
+} # }}}
+
+#' @describeIn utils
+#' 
+#' Get the abbreviation for an organism (among those with which we're familiar)
+#' 
+#' @export
+#'
+getOrganismAbbreviation <- function(organism) { # {{{
+
+  organism <- sub("\\.", "_", organism)
+  abbrs <- c(Danio_rerio="Drerio",
+             Homo_sapiens="Hsapiens",                  ## primary
+             Mus_musculus="Mmusculus",                 ## primary
+             Rattus_norvegicus="Rnorvegicus",          ## primary
+             Caenorhabditis_elegans="Celegans",
+             Saccharomyces_cerevisiae="Scerevisiae",
+             Drosophila_melanogaster="Dmelanogaster")
+  return(abbrs[organism])
+
+} # }}}
+
+#' @describeIn utils
+#' 
+#' get the name of the package/sqlite file for a FASTA-based annotation
+#' 
+#' @export
+#'
+getTxDbLiteName <- function(fastaFile) { # {{{
+
+  type <- getAnnotationType(fastaFile)
+
+  if (type == "ErccDbLite") {
+    return("ErccDbLite.ERCC.97") ## autoinstall?
+  } else if(!is.null(type)) {
+    shortName <- paste(strsplit(fastaStub, "\\.")[[1]][c(1,3)], collapse=".")
+    return(paste(type, ".", shortName))
+  } else {
+    return(NULL)
+  }
+
 } # }}}
 
 #' @describeIn utils
@@ -19,7 +56,7 @@ getFastaStub <- function(fastaFile) { # {{{
 #' @export
 #'
 getAnnotationType <- function(fastaFile) {  # {{{
-  if (grepl("GRC", fastaFile) && ## ENSEMBL fasta, or an impostor
+  if (grepl("(GRC|Rnor|BDGP|WBcel|R64)", fastaFile) && ## common ENSEMBL genomes
       (grepl("cdna", fastaFile) || grep("ncrna", fastaFile))) {
     type <- "EnsDbLite"
   } else if (grepl("RepBase", fastaFile)) {

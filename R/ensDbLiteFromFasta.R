@@ -13,6 +13,8 @@
 #'
 ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
+  message("FIXME: add biotype_class for all EnsDbLite instances!")
+
   require(Biostrings) 
   require(GenomicRanges)
   options(useFancyQuotes=FALSE)
@@ -24,16 +26,6 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   pop <- function(x, y=" ") popx(splt(x, y))
   grab <- function(x, y=" ", i=1) splt(x, y)[i]
   shift <- function(x, y=" ") grab(x, y, i=1)
-
-  ## {{{ map Ensembl FASTA org names
-  abbr <- c(Danio_rerio="Drerio",
-            Homo_sapiens="Hsapiens", 
-            Mus_musculus="Mmusculus",
-            Pan_troglodytes="Ptroglodytes",
-            Caenorhabditis_elegans="Celegans",
-            Saccharomyces_cerevisiae="Scerevisiae",
-            Drosophila_melanogaster="Dmelanogaster")
-  ## }}}
 
   ## .cdna.all is canonical cDNA transcriptome; .ncrna is canonical ncRNA {{{
   fastaStub <- sub("\\.gz", "", sub("\\.fa", "", fastaFile))
@@ -49,9 +41,15 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   if (organism == "Homo_sapiens") { ## {{{ tx/gene prefixes by organism 
     txpre <- "ENST"
     gxpre <- "ENSG"
+  } else if (organism == "Danio_rerio") {
+    txpre <- "ENSDART"
+    gxpre <- "ENSDARG"
   } else if (organism == "Mus_musculus") {
     txpre <- "ENSMUST"
     gxpre <- "ENSMUSG"
+  } else if (organism == "Rattus_norvegicus") {
+    txpre <- "ENSRNOT"
+    gxpre <- "ENSRNOG"
   } else if (organism == "Caenorhabditis_elegans") {
     txpre <- ""
     gxpre <- "WBGene"
@@ -142,8 +140,8 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   if (verbose) cat("...done.\n") # }}}
 
   if (verbose) cat("Creating the database...") # {{{
-  txVersion <- paste0("v", version)
-  outstub <- paste0("EnsDbLite.", fastaStub)
+  txVersion <- gsub("^v", "", version)
+  outstub <- getTxDbLiteName(fastaFile)
   dbname <- paste(outstub, "sqlite", sep=".") 
   con <- dbConnect(dbDriver("SQLite"), dbname=dbname)
   if (verbose) cat("done.\n") # }}}
