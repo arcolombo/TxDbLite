@@ -41,6 +41,7 @@ getOrganismAbbreviation <- function(organism) { # {{{
 getTxDbLiteName <- function(fastaFile) { # {{{
 
   type <- getAnnotationType(fastaFile)
+  fastaStub <- getFastaStub(fastaFile)
 
   if (type == "ErccDbLite") {
     return("ErccDbLite.ERCC.97") ## autoinstall?
