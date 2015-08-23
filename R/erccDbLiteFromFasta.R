@@ -63,7 +63,7 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
 
 .erccDbLiteMetadata <- function(packageName, sourceFile) { # {{{
 
-  MetaData <- data.frame(matrix(ncol=2, nrow=9))
+  MetaData <- data.frame(matrix(ncol=2, nrow=8))
   colnames(MetaData) <- c("name", "value")
   MetaData[1,] <- c("package_name", packageName)
   MetaData[2,] <- c("db_type", "ErccDbLite")
@@ -72,8 +72,7 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   MetaData[5,] <- c("creation_time", date())
   MetaData[6,] <- c("organism", "N/A")
   MetaData[7,] <- c("genome_build", "N/A")
-  MetaData[8,] <- c("ensembl_version", "N/A")
-  MetaData[9,] <- c("source_file", sourceFile)
+  MetaData[8,] <- c("source_file", sourceFile)
   return(MetaData)
 
 } # }}}

@@ -2,20 +2,36 @@
 % Please edit documentation in R/repDbLiteFromFasta.R
 \name{repDbLiteFromFasta}
 \alias{repDbLiteFromFasta}
+\alias{repDbLiteMetadata}
 \title{functions to create a RepDbLite object (a stripped-down SQLite db) from
-specified RepBase FASTA files for a given version, species, and type(s)}
+a specified RepBase FASTA file for a given version, species, and type(s)}
 \usage{
-repDbLiteFromFasta(organism, fastaFiles, version)
+repDbLiteFromFasta(organism, fastaFile, version)
+
+repDbLiteMetadata(packageName, genomeVersion, sourceFile)
 }
 \arguments{
 \item{organism}{the organism involved (Homo_sapiens, Mus_musculus, etc.)}
 
-\item{fastaFiles}{the FASTA files to collate into a RepDbLite instance}
+\item{fastaFile}{the FASTA file to collate into a RepDbLite instance}
 
 \item{version}{the RepBase build (e.g. 20_07)}
+
+\item{packageName}{the name of the annotation package to be built}
+
+\item{genomeVersion}{name of genome assembly for coordinates, e.g. "20_07"}
+
+\item{sourceFile}{name of FASTA file(s) whence it was built, as a string}
+}
+\value{
+a data.frame of metadata suitable for cramming into the database
 }
 \description{
 functions to create a RepDbLite object (a stripped-down SQLite db) from
-specified RepBase FASTA files for a given version, species, and type(s)
+a specified RepBase FASTA file for a given version, species, and type(s)
 }
+\section{Functions}{
+\itemize{
+\item \code{repDbLiteMetadata}: create metadata for a RepDbLite instance
+}}
 

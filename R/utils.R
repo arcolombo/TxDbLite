@@ -1,3 +1,7 @@
+#' utility functions
+#'
+utils <- NULL
+
 #' @describeIn utils
 #' 
 #' get the "stub" of a FASTA filename (no .fa, no .fasta, no .gz)

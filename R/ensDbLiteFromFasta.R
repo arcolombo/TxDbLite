@@ -13,8 +13,6 @@
 #'
 ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
-  message("FIXME: add biotype_class for all EnsDbLite instances!")
-
   require(Biostrings) 
   require(GenomicRanges)
   options(useFancyQuotes=FALSE)
@@ -64,12 +62,12 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   } # }}}
 
   if (verbose) cat("Extracting transcript lengths...") # {{{
-  txLen <- do.call(c, lapply(fastaFiles, fasta.seqlengths))
+  txLen <- fasta.seqlengths(fastaFile)
   names(txLen) <- sapply(sapply(names(txLen), shift), pop, y="\\.")
   if (verbose) cat("done.\n") # }}}
   
   if (verbose) cat("Extracting transcript descriptions...") # {{{
-  txDesc <- do.call(c, lapply(lapply(fastaFiles, fasta.seqlengths), names))
+  txDesc <- names(fasta.seqlengths(fastaFile))
   names(txDesc) <- sapply(txDesc, shift)
   if (verbose) cat("done.\n") # }}}
 
@@ -185,6 +183,13 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   rm(tx_biotypes)
   if (verbose) cat("done.\n") # }}}
 
+  if (verbose) cat("Writing the biotype_class table...") # {{{
+  data(ensembl_biotypes, package="TxDbLite")
+  dbWriteTable(con, name="biotype_class", ensembl_biotypes, 
+               overwrite=T, row.names=F)
+  rm(ensembl_biotypes)
+  if (verbose) cat("done.\n") # }}}
+
   ## write metadata table # {{{ 
   Metadata <- ensDbLiteMetadata(packageName=outstub, 
                                 genomeVersion=txVersion,
@@ -197,6 +202,8 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   dbGetQuery(con, "create index gene_idx on gene (gene);")
   dbGetQuery(con, "create index txb_id_idx on tx_biotype (id);")
   dbGetQuery(con, "create index gxb_id_idx on gene_biotype (id);")
+  dbGetQuery(con, "create index class_id_idx on biotype_class (class);")
+  dbGetQuery(con, "create index biotype_id_idx on biotype_class (biotype);")
   # }}}
 
   ## finish 
@@ -261,10 +268,9 @@ getSymbols <- function(gxs) { # {{{
 ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
 
   tokens <- strsplit(packageName, "\\.")[[1]]
-  organism <- c(Hsapiens="homo_sapiens", Mmusculus="mus_musculus")[tokens[2]]  
-  ensemblVersion <- sub("v", "", tokens[3])
+  organism <- getOrganismAbbreviation(tokens[2])
 
-  MetaData <- data.frame(matrix(ncol=2, nrow=9))
+  MetaData <- data.frame(matrix(ncol=2, nrow=8))
   colnames(MetaData) <- c("name", "value")
   MetaData[1,] <- c("package_name", packageName)
   MetaData[2,] <- c("db_type", "EnsDbLite")
@@ -273,8 +279,7 @@ ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
   MetaData[5,] <- c("creation_time", date())
   MetaData[6,] <- c("organism", organism )
   MetaData[7,] <- c("genome_build", genomeVersion)
-  MetaData[8,] <- c("ensembl_version", ensemblVersion)
-  MetaData[9,] <- c("source_file", sourceFile)
+  MetaData[8,] <- c("source_file", sourceFile)
   return(MetaData)
 
 } # }}}
