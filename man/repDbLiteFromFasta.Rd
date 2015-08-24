@@ -6,22 +6,20 @@
 \title{functions to create a RepDbLite object (a stripped-down SQLite db) from
 a specified RepBase FASTA file for a given version, species, and type(s)}
 \usage{
-repDbLiteFromFasta(organism, fastaFile, version)
+repDbLiteFromFasta(fastaFile, verbose = TRUE)
 
-repDbLiteMetadata(packageName, genomeVersion, sourceFile)
+repDbLiteMetadata(packageName, sourceFile)
 }
 \arguments{
-\item{organism}{the organism involved (Homo_sapiens, Mus_musculus, etc.)}
-
 \item{fastaFile}{the FASTA file to collate into a RepDbLite instance}
 
-\item{version}{the RepBase build (e.g. 20_07)}
+\item{verbose}{make a lot of noise? (TRUE)}
 
 \item{packageName}{the name of the annotation package to be built}
 
-\item{genomeVersion}{name of genome assembly for coordinates, e.g. "20_07"}
-
 \item{sourceFile}{name of FASTA file(s) whence it was built, as a string}
+
+\item{genomeVersion}{name of genome assembly for coordinates, e.g. "20_07"}
 }
 \value{
 a data.frame of metadata suitable for cramming into the database

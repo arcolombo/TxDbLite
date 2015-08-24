@@ -26,7 +26,7 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   shift <- function(x, y=" ") grab(x, y, i=1)
 
   ## .cdna.all is canonical cDNA transcriptome; .ncrna is canonical ncRNA {{{
-  fastaStub <- sub("\\.gz", "", sub("\\.fa", "", fastaFile))
+  fastaStub <- getFastaStub(fastaFile)
   tokens <- strsplit(fastaStub, "\\.")[[1]]
   organism <- tokens[1] 
   organism <- sub("\\.", "_", ## try & be robust
