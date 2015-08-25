@@ -16,14 +16,23 @@ setMethod("metadata", "TxDbLite", function(x, ...) { # {{{
   return(md)
 }) # }}}
 
+setMethod("transcripts", "TxDbLite", function(x) { # {{{
+  res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), "select * from tx"),
+                                  keep.extra.columns=TRUE)
+  names(res) <- res$tx_id
+  return(res)
+}) # }}}
+
 
 ## EnsDbLite methods
 
 setMethod("genes", "EnsDbLite", function(x) { # {{{
   sql <- paste("select seqnames, start, end, strand, median_length,",
-               "       gene_id, gene_name, gene_biotype, entrezid", 
-               "  from gene, gene_biotype",
+               "       gene_id, gene_name, gene_biotype, ",
+               "       class as biotype_class, entrezid", 
+               "  from gene, gene_biotype, biotype_class",
                " where gene.gene_biotype_id = gene_biotype.id",
+               "   and gene_biotype.gene_biotype = biotype_class.biotype",
                " order by gene_id asc")
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql),
                                   keep.extra.columns=TRUE)
@@ -34,11 +43,12 @@ setMethod("genes", "EnsDbLite", function(x) { # {{{
 setMethod("transcripts", "EnsDbLite", function(x) { # {{{
   sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
                "       tx_length, tx_id, gene_id, gene_name, entrezid,",
-               "       tx_biotype, gene_biotype",
-               "  from gene, tx, gene_biotype, tx_biotype",
+               "       tx_biotype, gene_biotype, class as biotype_class",
+               "  from gene, tx, gene_biotype, tx_biotype, biotype_class",
                " where gene.gene = tx.gene",
-               "   and gene.gene_biotype_id = gene_biotype.id",
                "   and tx.tx_biotype_id = tx_biotype.id",
+               "   and gene.gene_biotype_id = gene_biotype.id",
+               "   and gene_biotype.gene_biotype = biotype_class.biotype",
                " order by tx_id asc")
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql),
                                   keep.extra.columns=TRUE)
@@ -75,28 +85,26 @@ setMethod("show", "EnsDbLite", function(object) { # {{{
 }) # }}}
 
 
-## RepDbLite methods
-
-setGeneric("repeats", function(x) standardGeneric("repeats"))
-
-setMethod("repeats", "RepDbLite", function(x) { # {{{
-  res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), "select * from repeat"),
-                                  keep.extra.columns=TRUE)
-  names(res) <- res$repeat_id
-  return(res)
-}) # }}}
-
-setGeneric("repeatFamilies", function(x) standardGeneric("repeatFamilies"))
-
-setMethod("repeatFamilies", "RepDbLite", function(x) { # {{{
-  dbGetQuery(dbconn(x), "select * from repeat_family")
-}) # }}}
+## RepDbLite show method
 
 setMethod("show", "RepDbLite", function(object) { # {{{
   callNextMethod() ## TxDbLite show method -- basic information on the db  
-  famsql <- "select count(distinct family_id) from repeat_family"
-  repsql <- "select count(distinct repeat_id) from repeat"
+  famsql <- "select count(distinct tx_biotype) from tx"
+  repsql <- "select count(distinct tx_id) from tx"
   rpts <- dbGetQuery(dbconn(object), repsql)[1,1]
   fam <- dbGetQuery(dbconn(object), famsql)[1,1]
   cat(paste0("| ", rpts, " repeat exemplars from ", fam, " repeat families.\n"))
+}) # }}}
+
+
+## ErccDbLite show method
+
+setMethod("show", "ErccDbLite", function(object) { # {{{
+  callNextMethod() ## TxDbLite show method -- basic information on the db  
+  ctlsql <- "select count(distinct tx_id) from tx"
+  grpsql <- "select count(distinct tx_biotype) from tx"
+  ctl <- dbGetQuery(dbconn(object), ctlsql)[1,1]
+  grp <- dbGetQuery(dbconn(object), grpsql)[1,1]
+  ## subtract 1 from the number of subgroups as "unannotated" is in there
+  cat(paste0("| ", ctl, " spike-in controls from ", grp - 1, " subgroups.\n"))
 }) # }}}

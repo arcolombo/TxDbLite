@@ -6,8 +6,8 @@
 #' 
 #' @export
 #' 
-EnsDbLite <- function (x) {
-  ensdb <- TxDbLite(x)
+EnsDbLite <- function (x, ...) {
+  ensdb <- TxDbLite(x, ...)
   class(ensdb) <- "EnsDbLite"
   return(ensdb)
 }

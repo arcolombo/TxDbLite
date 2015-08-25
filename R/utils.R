@@ -40,11 +40,11 @@ getOrganismAbbreviation <- function(organism) { # {{{
 #'
 getTxDbLiteName <- function(fastaFile) { # {{{
 
-  type <- getAnnotationType(fastaFile)
   fastaStub <- getFastaStub(fastaFile)
+  type <- getAnnotationType(fastaStub)
 
   if (type == "ErccDbLite") {
-    return("ErccDbLite.ERCC.97.all") ## autoinstall?
+    return("ErccDbLite.ERCC.97") ## autoinstall?
   } else if(!is.null(type)) {
     shortName <- paste(strsplit(fastaStub, "\\.")[[1]][c(1,3,4)], collapse=".")
     return(paste(type, shortName, sep="."))
