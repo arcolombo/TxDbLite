@@ -4,7 +4,7 @@
 \alias{EnsDbLite}
 \title{Constructor for an EnsDbLite object.}
 \usage{
-EnsDbLite(x)
+EnsDbLite(x, ...)
 }
 \arguments{
 \item{x}{the name of the sqlite file}

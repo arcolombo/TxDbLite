@@ -18,8 +18,6 @@ repDbLiteMetadata(packageName, sourceFile)
 \item{packageName}{the name of the annotation package to be built}
 
 \item{sourceFile}{name of FASTA file(s) whence it was built, as a string}
-
-\item{genomeVersion}{name of genome assembly for coordinates, e.g. "20_07"}
 }
 \value{
 a data.frame of metadata suitable for cramming into the database
