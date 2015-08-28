@@ -50,7 +50,7 @@ if(missing(email)){
 
   maintainer<-paste(author,email,sep=" ")
   organism <- fetchMeta("organism")
-  repbase_version <- as.character(fetchMeta("repbase_version"))
+  repbase_version <- as.character(fetchMeta("genome_build"))
   template_path <- system.file("repdblite", package="TxDbLite")
   source_url <- paste0("http://www.girinst.org/server/RepBase/protected/",
                        "RepBase", repbase_version, ".fasta/")

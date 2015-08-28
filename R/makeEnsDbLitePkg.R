@@ -47,7 +47,7 @@ if(missing(email)){
    }
   maintainer<-paste(author,email,sep=" ")
   organism <- fetchMeta("organism")
-  ensembl_version <- md["ensembl_version", "value"]
+  ensembl_version <- md["genome_build", "value"]
   template_path <- system.file("ensdblite", package="TxDbLite")
   source_url <- paste0("ftp://ftp.ensembl.org/pub/release-", 
                        ensembl_version)
