@@ -3,7 +3,7 @@ Title: @PKGTITLE@
 Description: @PKGDESCRIPTION@
 Version: @PKGVERSION@
 Author: @AUTHOR@
-Maintainer: @AUTHOR@
+Maintainer: @MAINTAINER@
 Depends: TxDbLite
 Imports: GenomicFeatures, RSQLite
 License: @LIC@
