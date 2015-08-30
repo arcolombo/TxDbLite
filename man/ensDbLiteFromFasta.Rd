@@ -4,6 +4,7 @@
 \alias{ensDbLiteFromFasta}
 \alias{ensDbLiteMetadata}
 \alias{getEntrezIDs}
+\alias{getOrgDetails}
 \alias{getSymbols}
 \title{Function to create an EnsDbLite object (a stripped-down SQLite db) from
 a specified Ensembl FASTA file for a given version, species, and type(s).
@@ -11,11 +12,13 @@ Note that this is shockingly easier than the same process for the GTF...}
 \usage{
 ensDbLiteFromFasta(fastaFile, verbose = TRUE)
 
-getEntrezIDs(gxs)
+getEntrezIDs(gxs, organism)
 
-getSymbols(gxs)
+getSymbols(gxs, organism)
 
 ensDbLiteMetadata(packageName, genomeVersion, sourceFile)
+
+getOrgDetails(organism)
 }
 \arguments{
 \item{fastaFile}{the FASTA file to collate into a EnsDbLite instance}
@@ -23,6 +26,8 @@ ensDbLiteMetadata(packageName, genomeVersion, sourceFile)
 \item{verbose}{make a lot of noise? (TRUE)}
 
 \item{gxs}{a GRanges of genes}
+
+\item{organism}{what kind of organism these genes are from}
 
 \item{packageName}{the name of the annotation package to be built}
 
@@ -51,5 +56,7 @@ Note that this is shockingly easier than the same process for the GTF...
 \item \code{getSymbols}: add symbols for Ensembl genes
 
 \item \code{ensDbLiteMetadata}: create metadata for an EnsDbLite instance
+
+\item \code{getOrgDetails}: helper fn that handles a number of annoying tasks
 }}
 
