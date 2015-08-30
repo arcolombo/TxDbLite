@@ -1,7 +1,8 @@
 #' create a RepDbLite package from sqlite file (usually via repDbLiteFromFasta)
 #'
 #' @param repdblitefile   the sqlite filename
-#' @param author          whose fault this is (with email address)
+#' @param author          whose fault this is
+#' @param email           email address 
 #' @param version         version of the package (default is "1.0")
 #' @param destDir         where to put the new package directory (".")
 #' 
@@ -9,25 +10,57 @@
 #' 
 #' @export
 #'
-makeRepDbLitePkg <- function(repdblitefile, author, version="1.0", destDir=".", ...) {
+makeRepDbLitePkg <- function(repdblitefile, author,email, version="1.0", destDir=".", ...) {
   
   stopifnot(class(repdblitefile) == "character")
   repdb <- RepDbLite(x=repdblitefile)
-  md <- metadata(ensdb)
+  md <- metadata(repdb)
   fetchMeta <- function(x) md[x, "value"]
   pkg <- fetchMeta("package_name")
+
+pkg <- fetchMeta("package_name")
+   if (grepl("_",pkg)){
+   pkg<-gsub("_","",pkg)
+  }
+   if (grepl(".",pkg)){
+   pkg<-strsplit(pkg,split='.',fixed=TRUE)[[1]][1]
+  }
+
+if(missing(email)){
+   email<-"TommyTrojan@update.com"
+  
+}
+ #type checking the email parameter, and defaulting if it fails
+#weak regex for email additions
+ if(grepl("<",email)==TRUE || grepl(">",email)==TRUE) {
+    email<-gsub("<","",email)
+    email<-gsub(">","",email)
+ }  
+
+ if(grepl("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}",email)==TRUE){
+    message("email has format ASCII@ASCII.ACII ...")
+    email<-paste0("<",email)
+    email<-paste0(email,">")
+  
+   } 
+   if( grepl("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", email)==FALSE){
+    email<-"<TommyTrojan@update.com>"
+   }
+
+
+  maintainer<-paste(author,email,sep=" ")
   organism <- fetchMeta("organism")
-  repbase_version <- as.character(fetchMeta("repbase_version"))
+  repbase_version <- as.character(fetchMeta("genome_build"))
   template_path <- system.file("repdblite", package="TxDbLite")
   source_url <- paste0("http://www.girinst.org/server/RepBase/protected/",
                        "RepBase", repbase_version, ".fasta/")
   release_date <- fetchMeta("creation_time")
   symvals <- list(
     PKGTITLE="RepBase-based annotation package",
-    PKGDESCRIPTION="Lightweight RepBase transcript annotations",
+    PKGDESCRIPTION="lightweight RepBase transcript annotations",
     PKGVERSION=version,
     AUTHOR=author,
-    MAINTAINER=author,
+    MAINTAINER=maintainer,
     LIC="Artistic-2.0",
     ORGANISM=organism, 
     SPECIES=organism, 

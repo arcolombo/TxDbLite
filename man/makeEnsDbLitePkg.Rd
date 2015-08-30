@@ -4,12 +4,15 @@
 \alias{makeEnsDbLitePkg}
 \title{create an EnsDbLite package from sqlite file (usually via ensDbLiteFromFasta)}
 \usage{
-makeEnsDbLitePkg(ensdblitefile, author, version = "1.0", destDir = ".", ...)
+makeEnsDbLitePkg(ensdblitefile, author, email, version = "1.0",
+  destDir = ".", ...)
 }
 \arguments{
 \item{ensdblitefile}{the sqlite filename}
 
-\item{author}{whose fault this is (with email address)}
+\item{author}{whose fault this is}
+
+\item{email}{adding maintainer's email}
 
 \item{version}{version of the package (default is "1.0")}
 

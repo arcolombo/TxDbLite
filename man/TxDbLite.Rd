@@ -4,10 +4,12 @@
 \alias{TxDbLite}
 \title{Create a TxDbLite object (usually called by subclass constructors)}
 \usage{
-TxDbLite(x)
+TxDbLite(x, path = ".", ...)
 }
 \arguments{
-\item{x}{name of the sqlite file from which the TxDbLite should be created}
+\item{x}{name of the sqlite file whence the TxDbLite should be created}
+
+\item{path}{where it lives (default: ".")}
 }
 \value{
 a TxDbLite object

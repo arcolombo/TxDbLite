@@ -1,13 +1,13 @@
 Package: TxDbLite
 Type: Package
 Title: Lightweight SQLite-based annotation classes/packages for use with artemis
-Version: 1.9.15
-Date: 2015-08-25
-Author: Tim Triche, Jr.
+Version: 1.9.16
+Date: 2015-08-28
+Author: Tim Triche, Jr., Anthony Colombo
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: More about what it does (maybe more than one line)
-Depends: DBI, RSQLite, ensembldb, rtracklayer, Biobase
+Depends: DBI, RSQLite, ensembldb, rtracklayer, knitr, Rsamtools,Biobase
 Imports: Biostrings, GenomicRanges, OrganismDbi
-Suggests: artemis, stringdist
+Suggests: artemis, stringdist, BiocStyle
 VignetteBuilder: knitr
 License: LGPL
