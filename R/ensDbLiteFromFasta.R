@@ -25,13 +25,11 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   grab <- function(x, y=" ", i=1) splt(x, y)[i]
   shift <- function(x, y=" ") grab(x, y, i=1)
 
-  ## .cdna.all is canonical cDNA transcriptome; .ncrna is canonical ncRNA {{{
   txDbLiteName <- getTxDbLiteName(fastaFile)
-  tokens <- strsplit(txDbLiteName, "\\.")[[1]]
   genomeVersion <- strsplit(fastaFile, "\\.")[[1]][1]
-  organism <- tokens[1] 
-  version <- tokens[2]
-  ## }}}
+  tokens <- strsplit(txDbLiteName, "\\.")[[1]]
+  organism <- tokens[2] 
+  version <- tokens[3]
 
   org <- getOrgDetails(organism) 
   if (!require(org$package, character.only=TRUE)) {
