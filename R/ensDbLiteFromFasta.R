@@ -25,41 +25,16 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   grab <- function(x, y=" ", i=1) splt(x, y)[i]
   shift <- function(x, y=" ") grab(x, y, i=1)
 
-  ## .cdna.all is canonical cDNA transcriptome; .ncrna is canonical ncRNA {{{
-  fastaStub <- getFastaStub(fastaFile)
-  tokens <- strsplit(fastaStub, "\\.")[[1]]
-  organism <- tokens[1] 
-  organism <- sub("\\.", "_", ## try & be robust
-                  sub("Mmusculus", "Mus_musculus", 
-                      sub("Hsapiens", "Homo_sapiens", organism)))
-  genomeVersion <- tokens[2]
+  txDbLiteName <- getTxDbLiteName(fastaFile)
+  genomeVersion <- strsplit(fastaFile, "\\.")[[1]][1]
+  tokens <- strsplit(txDbLiteName, "\\.")[[1]]
+  organism <- tokens[2] 
   version <- tokens[3]
-  ## }}}
 
-  if (organism == "Homo_sapiens") { ## {{{ tx/gene prefixes by organism 
-    txpre <- "ENST"
-    gxpre <- "ENSG"
-  } else if (organism == "Danio_rerio") {
-    txpre <- "ENSDART"
-    gxpre <- "ENSDARG"
-  } else if (organism == "Mus_musculus") {
-    txpre <- "ENSMUST"
-    gxpre <- "ENSMUSG"
-  } else if (organism == "Rattus_norvegicus") {
-    txpre <- "ENSRNOT"
-    gxpre <- "ENSRNOG"
-  } else if (organism == "Caenorhabditis_elegans") {
-    txpre <- ""
-    gxpre <- "WBGene"
-  } else if (organism == "Drosophila_melanogaster") {
-    txpre <- "FBtr"
-    gxpre <- "FBgn"
-  } else if (organism == "Saccharomyces_cerevisiae") {
-    txpre <- ""
-    gxpre <- ""
-  } else {
-    stop("Currently supporting Homo_sapiens & Mus_musculus... patches welcome!")
-  } # }}}
+  org <- getOrgDetails(organism) 
+  if (!require(org$package, character.only=TRUE)) {
+    stop("Please install the", org$package, "package, then try again. Thanks!")
+  } 
 
   if (verbose) cat("Extracting transcript lengths...") # {{{
   txLen <- fasta.seqlengths(fastaFile)
@@ -80,10 +55,21 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
     message(paste(genomeVersion, collapse=", "))
     stop("Aborting construction of annotation database.")
   }
+
+matrixStrand<-ifelse(txCoords["strand",]=="1","+","-") #class matrix 1 X N mtx
+
+  #converting to named character class for proper strand conversion. 
+  characterStrand<-as.character(matrixStrand)
+  names(characterStrand)<-colnames(matrixStrand)
+  stopifnot(identical(length(matrixStrand),length(characterStrand))) #lengths must match
+  stopifnot(identical(Rle(strand(characterStrand)),strand(Rle(characterStrand)))) #this is a sanity check enforcing strand conservation.
+
+
+
   txs <- GRanges(seqnames=as.character(txCoords["seqnames",]),
                  ranges=IRanges(start=as.integer(txCoords["start",]),
                                 end=as.integer(txCoords["end",])),
-                 strand=ifelse(txCoords["strand",] == "1", "+", "-"))
+                 strand=characterStrand)
   names(txs) <- names(txCoords)
   genome(txs) <- genomeVersion
   if (verbose) cat("done.\n") # }}}
@@ -103,13 +89,22 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   ## retrieved as factors, with levels set from db
   if (verbose) cat("done.\n") # }}}
 
-  message("FIXME: add pregenerated biotype hierarchy with addBiotypeClasses()!")
-
   squash <- function(x, by, FUN) { # {{{
     xx <- aggregate(x=x, by=by, FUN=FUN)
-    x <- xx[,2]
-    names(x) <- xx[,1]
-    x
+    
+     if(all(sapply(xx[,2],length)==1)=="TRUE") { 
+     x <- xx[,2]
+     names(x) <- xx[,1]
+     }
+
+ if(!all(sapply(xx[,2],length)==1)=="TRUE"){
+    idx<-which(sapply(xx[,2],length)>1)
+    xx[idx,2]<-sapply(xx[idx,2],function(x) x<-"*")
+    stopifnot(all(sapply(xx[,2],length)==1))
+    x<-xx[,2]
+    names(x)<-xx[,1] 
+      }
+   x
   } # }}}
 
   if (verbose) cat("Tabulating genes...") # {{{
@@ -119,22 +114,31 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   gxEnd <- squash(end(txs), by=list(txs$gene_id), FUN=max)
   stopifnot(identical(names(gxChr), names(gxEnd)))
   gxStrand <- squash(as.character(strand(txs)), by=list(txs$gene_id),FUN=unique)
+  
+
   stopifnot(identical(names(gxChr), names(gxStrand)))
-  gxs <- GRanges(seqnames=gxChr,
+  gxCharacterStrand<-as.character(gxStrand)
+  names(gxCharacterStrand)<-names(gxStrand)
+  stopifnot(identical(Rle(strand(gxCharacterStrand)),strand(Rle(gxCharacterStrand))))  
+  stopifnot(identical(names(gxCharacterStrand),names(gxChr)))
+
+
+   gxs <- GRanges(seqnames=gxChr,
                  ranges=IRanges(start=gxStart, end=gxEnd),
-                 strand=gxStrand)
+                 strand=gxCharacterStrand)
   genome(gxs) <- genomeVersion
   names(gxs) <- names(gxChr)
   gxs$gene_id <- names(gxs)
-  gxs$gene <- as.integer(sub(gxpre, "", names(gxs)))
+  gxs$gene <- as.integer(sub(org$gxpre, "", names(gxs)))
   gxBiotype <- squash(txs$gene_biotype, by=list(txs$gene_id), FUN=unique)
   gxs$gene_biotype <- gxBiotype[names(gxs)] 
   gxs$gene_biotype_id <- as.numeric(as.factor(gxs$gene_biotype))
   gxMedLen <- squash(txs$tx_length, by=list(txs$gene_id), FUN=median)
   gxs$median_length <- gxMedLen[names(gxs)]
-  gxs$entrezid <- getEntrezIDs(gxs)[names(gxs)]
-  gxs$gene_name <- getSymbols(gxs)[names(gxs)]
-  txs$gene <- as.integer(sub(gxpre, "", txs$gene_id))
+  gxs$entrezid <- getEntrezIDs(gxs, organism)[names(gxs)]
+  gxs$gene_name <- getSymbols(gxs, organism)[names(gxs)]
+  txs$gene <- as.integer(sub(org$gxpre, "", txs$gene_id))
+  gxs$gene<-as.integer(sub(org$gxpre,"",gxs$gene_id))
   if (verbose) cat("...done.\n") # }}}
 
   if (verbose) cat("Creating the database...") # {{{
@@ -218,19 +222,15 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 #' add EntrezGene IDs for Ensembl genes
 #'
 #' @param gxs       a GRanges of genes
+#' @param organism  what kind of organism these genes are from
 #' 
 #' @return  entrez_id values for the genes, where found
 #'
-getEntrezIDs <- function(gxs) { # {{{
-  if (substr(unique(genome(gxs)), 1, 4) == "GRCh") {
-    orgDb <- "Homo.sapiens"
-  } else if (substr(unique(genome(gxs)), 1, 4) == "GRCm") {
-    orgDb <- "Mus.musculus"
-  } else {
-    stop("Could not determine organism from genome of gxs.  Patches welcome!")
-  } 
-  library(orgDb, character.only=TRUE) 
-  mapIds(get(orgDb), keys=gxs$gene_id, column="ENTREZID", keytype="ENSEMBL") 
+getEntrezIDs <- function(gxs, organism) { # {{{
+  org <- getOrgDetails(organism)
+  library(org$package, character.only=TRUE) 
+  mapIds(get(org$package), keys=gxs$gene_id, 
+         column="ENTREZID", keytype=org$keytype)
 } # }}}
 
 
@@ -242,16 +242,11 @@ getEntrezIDs <- function(gxs) { # {{{
 #' 
 #' @return  symbols for the genes, where found 
 #'
-getSymbols <- function(gxs) { # {{{
-  if (substr(unique(genome(gxs)), 1, 4) == "GRCh") {
-    orgDb <- "Homo.sapiens"
-  } else if (substr(unique(genome(gxs)), 1, 4) == "GRCm") {
-    orgDb <- "Mus.musculus"
-  } else {
-    stop("Could not determine organism from genome of gxs.  Patches welcome!")
-  } 
-  library(orgDb, character.only=TRUE) 
-  mapIds(get(orgDb), keys=gxs$gene_id, column="SYMBOL", keytype="ENSEMBL") 
+getSymbols <- function(gxs, organism) { # {{{
+  org <- getOrgDetails(organism)
+  library(org$package, character.only=TRUE) 
+  mapIds(get(org$package), keys=gxs$gene_id, 
+         column=org$symbol, keytype=org$keytype) 
 } # }}}
 
 
@@ -281,5 +276,67 @@ ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
   MetaData[7,] <- c("genome_build", genomeVersion)
   MetaData[8,] <- c("source_file", sourceFile)
   return(MetaData)
+
+} # }}}
+
+
+#' @describeIn ensDbLiteFromFasta
+#' 
+#' helper fn that handles a number of annoying tasks
+#' 
+getOrgDetails <- function(organism) { # {{{
+
+  if (organism == "Homo_sapiens") { ## {{{ tx/gene prefixes by organism 
+    package <- "org.Hs.eg.db"
+    keytype <- "ENSEMBL"
+    symbol <- "SYMBOL"
+    txpre <- "ENST"
+    gxpre <- "ENSG"
+  } else if (organism == "Danio_rerio") {
+    package <- "org.Dr.eg.db"
+    keytype <- "ENSEMBL"
+    symbol <- "SYMBOL"
+    txpre <- "ENSDART"
+    gxpre <- "ENSDARG"
+  } else if (organism == "Mus_musculus") {
+    package <- "org.Mm.eg.db"
+    keytype <- "ENSEMBL"
+    symbol <- "SYMBOL"
+    txpre <- "ENSMUST"
+    gxpre <- "ENSMUSG"
+  } else if (organism == "Rattus_norvegicus") {
+    package <- "org.Rn.eg.db"
+    keytype <- "ENSEMBL"
+    symbol <- "SYMBOL"
+    txpre <- "ENSRNOT"
+    gxpre <- "ENSRNOG"
+  } else if (organism == "Caenorhabditis_elegans") {
+    package <- "org.Ce.eg.db"
+    keytype <- "WORMBASE"
+    symbol <- "SYMBOL"
+    txpre <- ""
+    gxpre <- "WBGene"
+  } else if (organism == "Drosophila_melanogaster") {
+    package <- "org.Dm.eg.db"
+    keytype <- "FLYBASE"
+    symbol <- "SYMBOL"
+    txpre <- "FBtr"
+    gxpre <- "FBgn"
+  } else if (organism == "Saccharomyces_cerevisiae") {
+    package <- "org.Sc.sgd.db"
+    keytype <- "GENENAME"
+    symbol <- "GENENAME"
+    txpre <- ""
+    gxpre <- ""
+  } else {
+    stop("Unable to find annotation support for",organism,"...patches welcome!")
+  } # }}}
+
+  org <- list(package=package, 
+              txpre=txpre, 
+              gxpre=gxpre, 
+              keytype=keytype,
+              symbol=symbol)
+  return(org)
 
 } # }}}

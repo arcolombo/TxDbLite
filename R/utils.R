@@ -9,7 +9,8 @@ utils <- NULL
 #' @export
 #'
 getFastaStub <- function(fastaFile) { # {{{
-  sub("\\.fa$", "", sub("\\.fasta$", "", sub(".gz$", "", fastaFile)))
+  xx <- sub("\\.fa$", "", sub("\\.fasta$", "", sub(".gz$", "", fastaFile)))
+  sub("cdna\\.all", "cdna", xx)
 } # }}}
 
 #' @describeIn utils
@@ -46,8 +47,20 @@ getTxDbLiteName <- function(fastaFile) { # {{{
   if (type == "ErccDbLite") {
     return("ErccDbLite.ERCC.97") ## autoinstall?
   } else if(!is.null(type)) {
-    shortName <- paste(strsplit(fastaStub, "\\.")[[1]][c(1,3,4)], collapse=".")
-    return(paste(type, shortName, sep="."))
+    tokens <- strsplit(fastaStub, "\\.")[[1]]
+    organism <- tokens[1] 
+    organism <- sub("\\.", "_", ## try & be robust
+                    sub("Mmusculus", "Mus_musculus", 
+                        sub("Hsapiens", "Homo_sapiens", organism)))
+    genomeVersion <- tokens[2]
+    if (length(tokens) > 3) {
+      version <- tokens[3]
+      what <- tokens[4]
+    } else { 
+      version <- tokens[2]
+      what <- tokens[3]
+    }
+    return(paste(type, organism, version, what, sep="."))
   } else {
     return(NULL)
   }
