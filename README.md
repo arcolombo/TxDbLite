@@ -1,4 +1,4 @@
-TxDbLite is a minimalist annotation package generator, designed to extract annotations from FASTA files.  It relies upon some Bioconductor infrastructure and a few filthy tricks.  Installation instructions:  
+TxDbLite is a minimalist annotation package generator, designed to extract annotations from FASTA files.  It relies upon some R/Bioconductor infrastructure packages and a few filthy tricks.  Installation instructions:  
 
 ```r
 source("http://bioconductor.org/biocLite.R")
