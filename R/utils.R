@@ -103,13 +103,13 @@ createAnnotationPackage <- function(fastaFile, author) { # {{{
   type <- getAnnotationType(fastaFile) 
   if (type == "EnsDbLite") { 
     ensdblitefile <- ensDbLiteFromFasta(fastaFile)
-    pkg <- makeEnsDbLitePkg(ensdblitefile, author)
+    pkg <- makeEnsDbLitePkg(ensdblitefile, author,email)
   } else if (type == "RepDbLite") {
     repdblitefile <- repDbLiteFromFasta(fastaFile)
-    pkg <- makeRepDbLitePkg(repdblitefile, author)
+    pkg <- makeRepDbLitePkg(repdblitefile, author, email)
   } else if (grepl("ERCC", fastaFile)) { 
     erccdblitefile <- erccDbLiteFromFasta(fastaFile)
-    pkg <- makeErccDbLitePkg(erccdblitefile, author)
+    pkg <- makeErccDbLitePkg(erccdblitefile, author, email)
   } else {
     message("Don't know how to annotate ", fastaFile, ", skipping...")
     return(NULL)
