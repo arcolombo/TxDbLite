@@ -17,13 +17,13 @@ makeRepDbLitePkg <- function(repdblitefile, author,email, version="1.0", destDir
   md <- metadata(repdb)
   fetchMeta <- function(x) md[x, "value"]
   pkg <- fetchMeta("package_name")
+  organism <- fetchMeta("organism")
 
-pkg <- fetchMeta("package_name")
    if (grepl("_",pkg)){
    pkg<-gsub("_","",pkg)
   }
    if (grepl(".",pkg)){
-   pkg<-strsplit(pkg,split='.',fixed=TRUE)[[1]][1]
+   pkg<-paste0(organism,strsplit(pkg,split='.',fixed=TRUE)[[1]][1])
   }
 
 if(missing(email)){
@@ -49,7 +49,6 @@ if(missing(email)){
 
 
   maintainer<-paste(author,email,sep=" ")
-  organism <- fetchMeta("organism")
   repbase_version <- as.character(fetchMeta("genome_build"))
   template_path <- system.file("repdblite", package="TxDbLite")
   source_url <- paste0("http://www.girinst.org/server/RepBase/protected/",

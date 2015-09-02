@@ -22,7 +22,7 @@ getTxDbLiteName(fastaFile)
 
 getAnnotationType(fastaFile)
 
-createAnnotationPackage(fastaFile, author)
+createAnnotationPackage(fastaFile, author, email)
 }
 \arguments{
 \item{fastaFile}{the filename}
