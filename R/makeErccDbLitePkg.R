@@ -22,11 +22,9 @@ stopifnot(class(erccdblitefile) == "character")
   
  
    if (grepl("_",pkg)){
-   pkg<-gsub("_","",pkg)
+   pkg<-gsub("_",".",pkg)
   }
-   if (grepl(".",pkg)){
-   pkg<-strsplit(pkg,split='.',fixed=TRUE)[[1]][1]
-  }
+  
 
 if(missing(email)){
    email<-"TommyTrojan@update.com"

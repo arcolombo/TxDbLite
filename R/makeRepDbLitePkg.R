@@ -20,11 +20,9 @@ makeRepDbLitePkg <- function(repdblitefile, author,email, version="1.0", destDir
   organism <- fetchMeta("organism")
 
    if (grepl("_",pkg)){
-   pkg<-gsub("_","",pkg)
+   pkg<-gsub("_",".",pkg)
   }
-   if (grepl(".",pkg)){
-   pkg<-paste0(organism,strsplit(pkg,split='.',fixed=TRUE)[[1]][1])
-  }
+  
 
 if(missing(email)){
    email<-"TommyTrojan@update.com"
