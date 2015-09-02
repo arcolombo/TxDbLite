@@ -23,7 +23,7 @@ makeEnsDbLitePkg <- function(ensdblitefile, author,email, version="1.0", destDir
    pkg<-gsub("_","",pkg)
   }
    if (grepl(".",pkg)){
-   pkg<-paste(organism,strsplit(pkg,split='.',fixed=TRUE)[[1]][1],sep="-")
+   pkg<-paste0(organism,strsplit(pkg,split='.',fixed=TRUE)[[1]][1])
   }
 
 if(missing(email)){
