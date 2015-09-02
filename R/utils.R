@@ -98,7 +98,7 @@ getAnnotationType <- function(fastaFile) {  # {{{
 #' 
 #' @export
 #'
-createAnnotationPackage <- function(fastaFile, author) { # {{{
+createAnnotationPackage <- function(fastaFile, author,email) { # {{{
 
   type <- getAnnotationType(fastaFile) 
   if (type == "EnsDbLite") { 

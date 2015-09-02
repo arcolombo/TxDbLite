@@ -2,7 +2,7 @@
 #'
 #' @param erccdblitefile    the sqlite filename
 #' @param author            whose fault this is
-#' @param email             adding maintainer's email e.g. myemail@some.com
+#' @param email             adding maintainer's email 
 #' @param version           version of the package (default is "1.0")
 #' @param destDir           where to put the new package directory (".")
 
