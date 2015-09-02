@@ -17,12 +17,13 @@ makeEnsDbLitePkg <- function(ensdblitefile, author,email, version="1.0", destDir
   md <- metadata(ensdb)
   fetchMeta <- function(x) md[x, "value"]
   pkg <- fetchMeta("package_name")
+  organism <- fetchMeta("organism")
  
    if (grepl("_",pkg)){
    pkg<-gsub("_","",pkg)
   }
    if (grepl(".",pkg)){
-   pkg<-strsplit(pkg,split='.',fixed=TRUE)[[1]][1]
+   pkg<-paste(organism,strsplit(pkg,split='.',fixed=TRUE)[[1]][1],sep="-")
   }
 
 if(missing(email)){
@@ -46,7 +47,6 @@ if(missing(email)){
     email<-"<TommyTrojan@update.com>"
    }
   maintainer<-paste(author,email,sep=" ")
-  organism <- fetchMeta("organism")
   ensembl_version <- md["genome_build", "value"]
   template_path <- system.file("ensdblite", package="TxDbLite")
   source_url <- paste0("ftp://ftp.ensembl.org/pub/release-", 
