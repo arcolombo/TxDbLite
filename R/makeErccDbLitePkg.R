@@ -19,6 +19,7 @@ stopifnot(class(erccdblitefile) == "character")
   md <- metadata(erccdb)
   fetchMeta <- function(x) md[x, "value"]
   pkg <- fetchMeta("package_name")
+  
  
    if (grepl("_",pkg)){
    pkg<-gsub("_","",pkg)
