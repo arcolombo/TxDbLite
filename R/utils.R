@@ -177,30 +177,30 @@ getAnnotationType <- function(fastaFile) {  # {{{
 #' create an annotation package for a FASTA file (try to figure out what kind)
 #' 
 #' @param fastaFile the filename
-#' @param author    the author (with email address)
 #' 
 #' @return the name of the annotation package, or NULL if uncertain how to do it
 #' 
 #' @export
 #'
-createAnnotationPackage <- function(fastaFile, author) { # {{{
+createAnnotationPackage <- function(fastaFile, ...) { # {{{
 
   type <- getAnnotationType(fastaFile) 
   if (type == "EnsDbLite") { 
-    ensdblitefile <- ensDbLiteFromFasta(fastaFile)
-    pkg <- makeEnsDbLitePkg(ensdblitefile, author)
+    db <- ensDbLiteFromFasta(fastaFile)
+    pkg <- makeEnsDbLitePkg(db, ...)
   } else if (type == "RepDbLite") {
-    repdblitefile <- repDbLiteFromFasta(fastaFile)
-    pkg <- makeRepDbLitePkg(repdblitefile, author)
+    db <- repDbLiteFromFasta(fastaFile)
+    pkg <- makeRepDbLitePkg(db, ...)
   } else if (grepl("ERCC", fastaFile)) { 
-    erccdblitefile <- erccDbLiteFromFasta(fastaFile)
-    pkg <- makeErccDbLitePkg(erccdblitefile, author)
+    db <- erccDbLiteFromFasta(fastaFile)
+    pkg <- makeErccDbLitePkg(db, ...) 
   } else {
     message("Don't know how to annotate ", fastaFile, ", skipping...")
     return(NULL)
   }
 
-  message(pkg, " was created in ", getwd(), "... please install it.")
+  cmd <- paste("R CMD INSTALL", pkg)
+  system(cmd)
   return(pkg)
 
 } # }}}
