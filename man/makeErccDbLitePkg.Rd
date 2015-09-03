@@ -2,17 +2,19 @@
 % Please edit documentation in R/makeErccDbLitePkg.R
 \name{makeErccDbLitePkg}
 \alias{makeErccDbLitePkg}
-\title{create an ErccDbLite packate from an erccDbLite.sqlite (usually via erccDbLiteFromFasta)}
+\title{create a ErccDbLite package from sqlite file (usually via repDbLiteFromFasta)}
 \usage{
-makeErccDbLitePkg(erccdblitefile, author, email, version = "1.0",
-  destDir = ".", ...)
+makeErccDbLitePkg(erccdblitefile, author = "Nobody", email = "dev@null.com",
+  version = "1.0", destDir = ".", ...)
+
 }
 \arguments{
 \item{erccdblitefile}{the sqlite filename}
 
 \item{author}{whose fault this is}
 
-\item{email}{adding maintainer's email}
+\item{email}{email address}
+>>>>>>> 6069cb06980ff47e70507146a92ca8f3e63bb981
 
 \item{version}{version of the package (default is "1.0")}
 
@@ -22,6 +24,6 @@ makeErccDbLitePkg(erccdblitefile, author, email, version = "1.0",
 the name of the package
 }
 \description{
-create an ErccDbLite packate from an erccDbLite.sqlite (usually via erccDbLiteFromFasta)
+create a ErccDbLite package from sqlite file (usually via repDbLiteFromFasta)
 }
 

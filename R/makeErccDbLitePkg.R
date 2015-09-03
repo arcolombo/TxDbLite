@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #' create an ErccDbLite packate from an erccDbLite.sqlite (usually via erccDbLiteFromFasta)
 #'
 #' @param erccdblitefile    the sqlite filename
@@ -15,10 +16,28 @@
 makeErccDbLitePkg<- function(erccdblitefile,author,email,version="1.0",destDir=".", ...) {
 
 stopifnot(class(erccdblitefile) == "character")
+=======
+#' create a ErccDbLite package from sqlite file (usually via repDbLiteFromFasta)
+#'
+#' @param erccdblitefile   the sqlite filename
+#' @param author          whose fault this is
+#' @param email           email address 
+#' @param version         version of the package (default is "1.0")
+#' @param destDir         where to put the new package directory (".")
+#' 
+#' @return the name of the package 
+#' 
+#' @export
+#'
+makeErccDbLitePkg <- function(erccdblitefile, author="Nobody", email="dev@null.com", version="1.0", destDir=".", ...) {
+  
+  stopifnot(class(erccdblitefile) == "character")
+>>>>>>> 6069cb06980ff47e70507146a92ca8f3e63bb981
   erccdb <- ErccDbLite(x=erccdblitefile)
   md <- metadata(erccdb)
   fetchMeta <- function(x) md[x, "value"]
   pkg <- fetchMeta("package_name")
+<<<<<<< HEAD
   
  
    if (grepl("_",pkg)){
@@ -55,10 +74,20 @@ if(missing(email)){
   symvals <- list(
     PKGTITLE="Ercc-based annotation package",
     PKGDESCRIPTION="Lightweight Ercc transcript annotations",
+=======
+
+  maintainer<-paste(author,email,sep=" ")
+  template_path <- system.file("erccdblite", package="TxDbLite")
+  release_date <- fetchMeta("creation_time")
+  symvals <- list(
+    PKGTITLE="ERCC annotation package",
+    PKGDESCRIPTION="lightweight ERCC spike-in annotations",
+>>>>>>> 6069cb06980ff47e70507146a92ca8f3e63bb981
     PKGVERSION=version,
     AUTHOR=author,
     MAINTAINER=maintainer,
     LIC="Artistic-2.0",
+<<<<<<< HEAD
     ORGANISM=organism, 
     SPECIES=organism, 
     PROVIDER="ERCC",
@@ -66,6 +95,15 @@ if(missing(email)){
     RELEASEDATE=release_date,
     SOURCEURL=source_url, 
     ORGANISMBIOCVIEW=gsub(" ","_", organism), 
+=======
+    ORGANISM="N/A", 
+    SPECIES="N/A", 
+    PROVIDER="ERCC/NIST",
+    PROVIDERVERSION="N/A",
+    RELEASEDATE=release_date,
+    SOURCEURL="http://www.nist.gov/mml/bbd/ercc.cfm",
+    ORGANISMBIOCVIEW="ERCC",
+>>>>>>> 6069cb06980ff47e70507146a92ca8f3e63bb981
     TXDBOBJNAME=pkg
   )
 
@@ -73,7 +111,11 @@ if(missing(email)){
   createPackage(pkgname=pkg,
                 destinationDir=destDir,
                 originDir=template_path,
+<<<<<<< HEAD
                 symbolValues=symvals, 
+=======
+                symbolValues=symvals,
+>>>>>>> 6069cb06980ff47e70507146a92ca8f3e63bb981
                 ...)
   dir.create(paste(c(destDir, pkg, "inst", "extdata"), 
                    collapse=.Platform$file.sep),
@@ -83,6 +125,7 @@ if(missing(email)){
   return(pkg)
 
 }
+<<<<<<< HEAD
 
 
 
@@ -92,3 +135,5 @@ if(missing(email)){
 
 
 
+=======
+>>>>>>> 6069cb06980ff47e70507146a92ca8f3e63bb981

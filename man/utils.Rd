@@ -5,7 +5,9 @@
 \alias{createAnnotationPackage}
 \alias{getAnnotationType}
 \alias{getFastaStub}
+\alias{getOrgDetails}
 \alias{getOrganismAbbreviation}
+\alias{getSupportedAbbreviations}
 \alias{getTxDbLiteName}
 \alias{utils}
 \title{utility functions}
@@ -16,7 +18,11 @@ utils
 
 getFastaStub(fastaFile)
 
+getSupportedAbbreviations()
+
 getOrganismAbbreviation(organism)
+
+getOrgDetails(organism)
 
 getTxDbLiteName(fastaFile)
 
@@ -39,7 +45,11 @@ utility functions
 \itemize{
 \item \code{getFastaStub}: get the "stub" of a FASTA filename (no .fa, no .fasta, no .gz)
 
+\item \code{getSupportedAbbreviations}: supported organism abbreviations
+
 \item \code{getOrganismAbbreviation}: Get the abbreviation for an organism (among those with which we're familiar)
+
+\item \code{getOrgDetails}: helper fn that handles a number of annoying tasks
 
 \item \code{getTxDbLiteName}: get the name of the package/sqlite file for a FASTA-based annotation
 
