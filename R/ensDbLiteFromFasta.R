@@ -197,8 +197,8 @@ matrixStrand<-ifelse(txCoords["strand",]=="1","+","-") #class matrix 1 X N mtx
   if (verbose) cat("done.\n") # }}}
 
   ## write metadata table # {{{ ing pseudogenes, NMD and the like. See the file names 
-explanation below for different subsets of both known and predicted 
-transcripts.
+#explanation below for different subsets of both known and predicted 
+#transcripts.
   Metadata <- ensDbLiteMetadata(packageName=outstub, 
                                 genomeVersion=txVersion,
                                 sourceFile=fastaFile)
