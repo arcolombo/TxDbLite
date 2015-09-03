@@ -21,6 +21,15 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
                   sub("Mmusculus", "Mus_musculus", 
                       sub("Hsapiens", "Homo_sapiens", organism)))
 
+ #for purposes of building a package, the name can not have underscore
+  
+   if (grepl("_",fastaFile)){
+   fastaFile<-gsub("_",".",fastaFile)
+  }
+ 
+
+
+
   ## utility functions for parsing FASTAs
   splt <- function(x, y=" ") strsplit(x, y)[[1]]
   popx <- function(x) x[length(x)] 
