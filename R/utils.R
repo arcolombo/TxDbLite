@@ -42,7 +42,7 @@ getSupportedAbbreviations <- function() { # {{{
 #'
 getOrganismAbbreviation <- function(organism) { # {{{
   organism <- sub("\\.", "_", organism)
-  abbr <- getSupprtedAbbreviations()
+  abbr <- getSupportedAbbreviations()
   if (organism %in% names(abbr)) {
     return(abbr[organism])
   } else { 
@@ -54,8 +54,10 @@ getOrganismAbbreviation <- function(organism) { # {{{
 #' 
 #' helper fn that handles a number of annoying tasks
 #' 
+#' @export
+#'
 getOrgDetails <- function(organism) { # {{{
-  abbr <- getSupprtedAbbreviations()
+  abbr <- getSupportedAbbreviations()
   if (organism %in% names(abbr)) organism <- abbr[organism] 
   if (organism == "Hsapiens") { 
     package <- "org.Hs.eg.db"
