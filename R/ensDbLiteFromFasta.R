@@ -32,17 +32,6 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   tokens <- strsplit(txDbLiteName, "\\.")[[1]]
   organism <- tokens[2] 
   version <- tokens[3]
-
-  #FIXME: need to parse out trailing underscores
-  if(grepl("_",txDbLiteName)==TRUE){
-  List<-strsplit(txDbLiteName,"_") #split out the trailing "_"
-  first<-List[[1]][1] 
-  for(i in 2:length(List[[1]])){
-   first<-paste(first,List[[1]][i],sep=".")
-    } #for
-  txDbLiteName<-first
-} #if there are trailing underscores
-
   org <- getOrgDetails(organism) 
   if (!require(org$package, character.only=TRUE)) {
     stop("Please install the", org$package, "package, then try again. Thanks!")

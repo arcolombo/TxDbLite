@@ -145,9 +145,17 @@ getTxDbLiteName <- function(fastaFile) { # {{{
     if (length(tokens) > 3) {
       version <- tokens[3]
       what <- tokens[4]
+     if(grepl("_",what)=="TRUE"){
+     what<-gsub("_",".",what)
+  }
+    
     } else { 
       version <- tokens[2]
-      what <- tokens[3]
+      what <- tokens[3] 
+      if(grepl("_",what)=="TRUE"){
+      what<-gsub("_",".",what)
+    }
+    
     }
     return(paste(type, organism, version, what, sep="."))
   } else {
