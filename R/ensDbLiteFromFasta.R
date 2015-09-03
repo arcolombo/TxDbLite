@@ -25,14 +25,11 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   grab <- function(x, y=" ", i=1) splt(x, y)[i]
   shift <- function(x, y=" ") grab(x, y, i=1)
 
-   
-  if (grepl("_",fastaFile)){
-   fastaFileDBName<-gsub("_",".",fastaFile)
-  }   
+     
 
-  txDbLiteName <- getTxDbLiteName(fastaFileDBName)
+  txDbLiteName <- getTxDbLiteName(fastaFile)
   genomeVersion <- strsplit(fastaFile, "\\.")[[1]][1]
-  tokens <- strsplit(getTxDbLiteName(fastaFile), "\\.")[[1]]
+  tokens <- strsplit(txDbLiteName, "\\.")[[1]]
   organism <- tokens[2] 
   version <- tokens[3]
 
@@ -199,7 +196,9 @@ matrixStrand<-ifelse(txCoords["strand",]=="1","+","-") #class matrix 1 X N mtx
                overwrite=T, row.names=F)
   if (verbose) cat("done.\n") # }}}
 
-  ## write metadata table # {{{ 
+  ## write metadata table # {{{ ing pseudogenes, NMD and the like. See the file names 
+explanation below for different subsets of both known and predicted 
+transcripts.
   Metadata <- ensDbLiteMetadata(packageName=outstub, 
                                 genomeVersion=txVersion,
                                 sourceFile=fastaFile)
@@ -321,7 +320,7 @@ getOrgDetails <- function(organism) { # {{{
     symbol <- "SYMBOL"
     txpre <- ""
     gxpre <- "WBGene"
-  } else if (organism == "Drosophila_melanogaster") {
+  } else if (grepl(organism,"Drosophila") || grepl(organism,"Drosophila_melanogaster")) {
     package <- "org.Dm.eg.db"
     keytype <- "FLYBASE"
     symbol <- "SYMBOL"

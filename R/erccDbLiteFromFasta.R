@@ -25,10 +25,7 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
  
   #for purpsoses of building the package, the name can not have an underscore
 
-   if (grepl("_",fastaFile)){
-   fastaFile<-gsub("_",".",fastaFile)
-  }
- 
+   
 
 
  outstub <- getTxDbLiteName(fastaFile)
