@@ -26,14 +26,13 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   shift <- function(x, y=" ") grab(x, y, i=1)
 
    
-   if (grepl("_",fastaFile)){
+  if (grepl("_",fastaFile)){
    fastaFileDBName<-gsub("_",".",fastaFile)
-  }
- 
+  }   
 
   txDbLiteName <- getTxDbLiteName(fastaFileDBName)
   genomeVersion <- strsplit(fastaFile, "\\.")[[1]][1]
-  tokens <- strsplit(txDbLiteName, "\\.")[[1]]
+  tokens <- strsplit(getTxDbLiteName(fastaFile), "\\.")[[1]]
   organism <- tokens[2] 
   version <- tokens[3]
 
