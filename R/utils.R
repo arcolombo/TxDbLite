@@ -43,7 +43,9 @@ getSupportedAbbreviations <- function() { # {{{
 getOrganismAbbreviation <- function(organism) { # {{{
   organism <- sub("\\.", "_", organism)
   abbr <- getSupportedAbbreviations()
-  if (organism %in% names(abbr)) {
+  if (organism %in% abbr) {
+    return(abbr)
+  } else if (organism %in% names(abbr)) {
     return(abbr[organism])
   } else { 
     stop(paste(organism, "is not recognized... pull requests accepted!")) 
