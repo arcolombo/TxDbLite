@@ -11,6 +11,10 @@ utils <- NULL
 getFastaStub <- function(fastaFile) { # {{{
   xx <- sub("\\.fa$", "", sub("\\.fasta$", "", sub(".gz$", "", fastaFile)))
   sub("cdna\\.all", "cdna", xx)
+  ## repbase FASTAs can have dupes
+  sub("\\.humsub", ".merged", xx)
+  sub("\\.humrep", ".merged", xx)
+  sub("\\.merged", "", xx)
 } # }}}
 
 #' @describeIn utils
