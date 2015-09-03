@@ -18,7 +18,7 @@ makeErccDbLitePkg <- function(erccdblitefile, author="Nobody", email="dev@null.c
   fetchMeta <- function(x) md[x, "value"]
   pkg <- fetchMeta("package_name")
 
-  maintainer<-paste(author,email,sep=" ")
+  maintainer <- paste0(author, " <", email, ">")
   template_path <- system.file("erccdblite", package="TxDbLite")
   release_date <- fetchMeta("creation_time")
   symvals <- list(
