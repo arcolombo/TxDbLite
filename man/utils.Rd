@@ -28,12 +28,10 @@ getTxDbLiteName(fastaFile)
 
 getAnnotationType(fastaFile)
 
-createAnnotationPackage(fastaFile, author)
+createAnnotationPackage(fastaFile, ...)
 }
 \arguments{
 \item{fastaFile}{the filename}
-
-\item{author}{the author (with email address)}
 }
 \value{
 the name of the annotation package, or NULL if uncertain how to do it
@@ -52,6 +50,7 @@ utility functions
 \item \code{getOrgDetails}: helper fn that handles a number of annoying tasks
 
 \item \code{getTxDbLiteName}: get the name of the package/sqlite file for a FASTA-based annotation
+NOTE: as of 1.9.25, this is based on DbType.Org.Version
 
 \item \code{getAnnotationType}: figure out what type of annotation package to create
 

@@ -116,11 +116,11 @@ getOrgDetails <- function(organism) { # {{{
 
 } # }}}
 
-
 #' @describeIn utils
 #' 
 #' get the name of the package/sqlite file for a FASTA-based annotation
-#' 
+#' NOTE: as of 1.9.25, this is based on DbType.Org.Version
+#'
 #' @export
 #'
 getTxDbLiteName <- function(fastaFile) { # {{{
@@ -145,7 +145,7 @@ getTxDbLiteName <- function(fastaFile) { # {{{
       version <- tokens[2]
       what <- tokens[3]
     }
-    return(gsub("_", "", paste(type, organism, version, what, sep=".")))
+    return(gsub("_", "", paste(type, organism, version, sep=".")))
   } else {
     return(NULL)
   }
@@ -153,7 +153,7 @@ getTxDbLiteName <- function(fastaFile) { # {{{
 } # }}}
 
 #' @describeIn utils
-#' 
+#'
 #' figure out what type of annotation package to create
 #' 
 #' @export
