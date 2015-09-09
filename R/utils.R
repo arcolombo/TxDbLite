@@ -17,6 +17,14 @@ getFastaStub <- function(fastaFile) { # {{{
   sub("\\.merged", "", xx)
 } # }}}
 
+#' @describeIn utils
+#' 
+#' get a column of a data.frame _complete_with_rownames_ as a vector 
+#' 
+#' @export
+#'
+colAsVector <- function(x, y) t(x[, y, drop=FALSE])[1,]
+
 #' @describeIn utils 
 #' 
 #' supported organism abbreviations
@@ -24,14 +32,8 @@ getFastaStub <- function(fastaFile) { # {{{
 #' @export
 #' 
 getSupportedAbbreviations <- function() { # {{{
-  abbrs <- c(Danio_rerio="Drerio",
-             Homo_sapiens="Hsapiens",                  ## primary
-             Mus_musculus="Mmusculus",                 ## primary
-             Rattus_norvegicus="Rnorvegicus",          ## primary
-             Caenorhabditis_elegans="Celegans",
-             Saccharomyces_cerevisiae="Scerevisiae",
-             Drosophila_melanogaster="Dmelanogaster")
-  return(abbrs)
+  data(supportedOrganismsForTxDbLite, package="TxDbLite")
+  colAsVector(supportedOrganismsForTxDbLite, "abbreviation")
 } # }}}
 
 #' @describeIn utils
@@ -48,72 +50,24 @@ getOrganismAbbreviation <- function(organism) { # {{{
   } else if (organism %in% names(abbr)) {
     return(abbr[organism])
   } else { 
-    stop(paste(organism, "is not recognized... pull requests accepted!")) 
+    message(organism, " was not found in data(supportedOrganismsForTxDbLite)")
+    message("Currently we support:") 
+    for (i in names(abbr)) message("  ", i, " (", abbr[i], " in package names)")
+    stop(paste(organism, "was not matched... but pull requests are accepted!"))
   }
 } # }}}
 
 #' @describeIn utils
 #' 
-#' helper fn that handles a number of annoying tasks
+#' helper fn that handles a number of annoying tasks using saved data
 #' 
 #' @export
 #'
 getOrgDetails <- function(organism) { # {{{
   abbr <- getSupportedAbbreviations()
-  if (organism %in% names(abbr)) organism <- abbr[organism] 
-  if (organism == "Hsapiens") { 
-    package <- "org.Hs.eg.db"
-    keytype <- "ENSEMBL"
-    symbol <- "SYMBOL"
-    txpre <- "ENST"
-    gxpre <- "ENSG"
-  } else if (organism == "Drerio") {
-    package <- "org.Dr.eg.db"
-    keytype <- "ENSEMBL"
-    symbol <- "SYMBOL"
-    txpre <- "ENSDART"
-    gxpre <- "ENSDARG"
-  } else if (organism == "Mmusculus") {
-    package <- "org.Mm.eg.db"
-    keytype <- "ENSEMBL"
-    symbol <- "SYMBOL"
-    txpre <- "ENSMUST"
-    gxpre <- "ENSMUSG"
-  } else if (organism == "Rnorvegicus") {
-    package <- "org.Rn.eg.db"
-    keytype <- "ENSEMBL"
-    symbol <- "SYMBOL"
-    txpre <- "ENSRNOT"
-    gxpre <- "ENSRNOG"
-  } else if (organism == "Celegans") {
-    package <- "org.Ce.eg.db"
-    keytype <- "WORMBASE"
-    symbol <- "SYMBOL"
-    txpre <- ""
-    gxpre <- "WBGene"
-  } else if (organism == "Dmelanogaster") {
-    package <- "org.Dm.eg.db"
-    keytype <- "FLYBASE"
-    symbol <- "SYMBOL"
-    txpre <- "FBtr"
-    gxpre <- "FBgn"
-  } else if (organism == "Scerevisiae") {
-    package <- "org.Sc.sgd.db"
-    keytype <- "GENENAME"
-    symbol <- "GENENAME"
-    txpre <- ""
-    gxpre <- ""
-  } else {
-    stop("Unable to find annotation support for",organism,"...patches welcome!")
-  }
-
-  org <- list(package=package, 
-              txpre=txpre, 
-              gxpre=gxpre, 
-              keytype=keytype,
-              symbol=symbol)
-  return(org)
-
+  if (organism %in% abbr) organism <- names(abbr)[which(abbr == organism)] 
+  data(supportedOrganismsForTxDbLite, package="TxDbLite")
+  return(supportedOrganismsForTxDbLite[organism,])
 } # }}}
 
 #' @describeIn utils
@@ -160,7 +114,9 @@ getTxDbLiteName <- function(fastaFile) { # {{{
 #'
 getAnnotationType <- function(fastaFile) {  # {{{
   if (grepl("(GRC|Rnor|BDGP|WBcel|R64)", fastaFile) && ## common ENSEMBL genomes
-      (grepl("cdna", fastaFile) || grep("ncrna", fastaFile))) {
+      (grepl("cdna", fastaFile) || 
+       grepl("ncrna", fastaFile) || 
+       grepl("merged", fastaFile))) {
     type <- "EnsDbLite"
   } else if (grepl("RepBase", fastaFile)) {
     type <- "RepDbLite"
