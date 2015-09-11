@@ -236,8 +236,10 @@ getSymbols <- function(gxs, organism) { # {{{
 #'
 ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
 
-  tokens <- strsplit(packageName, "\\.")[[1]]
-  organism <- getOrganismAbbreviation(tokens[2])
+  tokens <- strsplit(getFastaStub(sourceFile), "\\.")[[1]]
+  names(tokens)[1:3] <- c("organism", "genome", "version")
+  organism <- getOrgDetails(tokens["organism"])
+  build <- tokens["genome"]
 
   MetaData <- data.frame(matrix(ncol=2, nrow=8))
   colnames(MetaData) <- c("name", "value")
@@ -246,8 +248,8 @@ ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
   MetaData[3,] <- c("type_of_gene_id", "Ensembl Gene ID")
   MetaData[4,] <- c("created_by", paste("TxDbLite", packageVersion("TxDbLite")))
   MetaData[5,] <- c("creation_time", date())
-  MetaData[6,] <- c("organism", organism )
-  MetaData[7,] <- c("genome_build", genomeVersion)
+  MetaData[6,] <- c("organism", organism$name)
+  MetaData[7,] <- c("genome_build", )
   MetaData[8,] <- c("source_file", sourceFile)
   return(MetaData)
 

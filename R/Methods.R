@@ -19,6 +19,7 @@ setMethod("metadata", "TxDbLite", function(x, ...) { # {{{
 setMethod("transcripts", "TxDbLite", function(x) { # {{{
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), "select * from tx"),
                                   keep.extra.columns=TRUE)
+  genome(res) <- metadata(x)["genome_build","value"]
   names(res) <- res$tx_id
   return(res)
 }) # }}}
@@ -31,6 +32,7 @@ setMethod("genes", "TxDbLite", function(x) { # {{{
                "  from tx")
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql), 
                                   keep.extra.columns=TRUE)
+  genome(res) <- metadata(x)["genome_build","value"]
   names(res) <- res$gene_id
   return(res)
 }) # }}}
@@ -49,6 +51,7 @@ setMethod("genes", "EnsDbLite", function(x) { # {{{
                " order by gene_id asc")
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql),
                                   keep.extra.columns=TRUE)
+  genome(res) <- metadata(x)["genome_build","value"]
   names(res) <- res$gene_id
   return(res)
 }) # }}}
@@ -66,13 +69,17 @@ setMethod("transcripts", "EnsDbLite", function(x) { # {{{
                " order by tx_id asc")
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql),
                                   keep.extra.columns=TRUE)
+  genome(res) <- metadata(x)["genome_build","value"]
   names(res) <- res$tx_id
   return(res)
 }) # }}}
 
-setMethod("transcriptsBy", "EnsDbLite", function(x, by=c("gene")) { # {{{
+setMethod("transcriptsBy", "EnsDbLite", function(x,by=c("gene","promoter")){#{{{
+  by <- match.arg(by)
   txs <- transcripts(x)
-  split(txs, txs$gene_id)
+  switch(by,
+         gene=split(txs, txs$gene_id),
+         promoter=split(txs, start(txs)))
 }) # }}} 
 
 setMethod("listGenebiotypes", "EnsDbLite", function(x, ...){ # {{{
