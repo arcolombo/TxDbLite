@@ -24,6 +24,22 @@ setMethod("transcripts", "TxDbLite", function(x) { # {{{
   return(res)
 }) # }}}
 
+setMethod("transcriptsBy", "TxDbLite", function(x, # {{{
+                                                by=c("gene",
+                                                     "promoter",
+                                                     "tx_biotype",
+                                                     "gene_biotype",
+                                                     "biotype_class")) {
+  by <- match.arg(by)
+  txs <- transcripts(x)
+  switch(by,
+         gene=split(txs, txs$gene_id),
+         promoter=split(txs, start(txs)),
+         tx_biotype=split(txs, txs$tx_biotype),
+         gene_biotype=split(txs, txs$gene_biotype),
+         biotype_class=split(txs, txs$biotype_class))
+}) # }}} 
+
 setMethod("genes", "TxDbLite", function(x) { # {{{
   sql <- paste("select seqnames, start, end, strand, ",
                "       tx_length, 'NA' as gc_content, 'NA' as tx_id,",
@@ -36,6 +52,7 @@ setMethod("genes", "TxDbLite", function(x) { # {{{
   names(res) <- res$gene_id
   return(res)
 }) # }}}
+
 
 ## EnsDbLite methods
 
@@ -73,14 +90,6 @@ setMethod("transcripts", "EnsDbLite", function(x) { # {{{
   names(res) <- res$tx_id
   return(res)
 }) # }}}
-
-setMethod("transcriptsBy", "EnsDbLite", function(x,by=c("gene","promoter")){#{{{
-  by <- match.arg(by)
-  txs <- transcripts(x)
-  switch(by,
-         gene=split(txs, txs$gene_id),
-         promoter=split(txs, start(txs)))
-}) # }}} 
 
 setMethod("listGenebiotypes", "EnsDbLite", function(x, ...){ # {{{
   return(dbGetQuery(dbconn(x), "select * from gene_biotype")[,"gene_biotype"])
