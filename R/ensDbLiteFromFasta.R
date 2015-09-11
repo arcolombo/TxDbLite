@@ -249,7 +249,7 @@ ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
   MetaData[4,] <- c("created_by", paste("TxDbLite", packageVersion("TxDbLite")))
   MetaData[5,] <- c("creation_time", date())
   MetaData[6,] <- c("organism", organism$name)
-  MetaData[7,] <- c("genome_build", )
+  MetaData[7,] <- c("genome_build", build)
   MetaData[8,] <- c("source_file", sourceFile)
   return(MetaData)
 
