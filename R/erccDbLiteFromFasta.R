@@ -14,6 +14,7 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   txs <- scanFaIndex(faFile)
   names(txs) <- seqnames(txs)
   mcols(txs) <- DataFrame(tx_length=width(txs),
+                          gc_content=GCcontent(scanFa(fastaFile)),
                           tx_id=names(txs),
                           gene_id=rep(NA, length(txs)),
                           gene_name=rep(NA, length(txs)),
@@ -29,7 +30,8 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
 
   if (verbose) cat("Writing the spike-in tables...") # {{{
   txcols <- c("seqnames", "start", "end", "strand",
-              "tx_length", "tx_id", "gene_id", "gene_name", "entrezid", 
+              "tx_length", "gc_content", 
+              "tx_id", "gene_id", "gene_name", "entrezid", 
               "tx_biotype", "gene_biotype", "biotype_class")
   tx <- as(txs, "data.frame")[, txcols] 
   dbWriteTable(con, name="tx", tx, overwrite=T, row.names=F)

@@ -25,8 +25,8 @@ setMethod("transcripts", "TxDbLite", function(x) { # {{{
 
 setMethod("genes", "TxDbLite", function(x) { # {{{
   sql <- paste("select seqnames, start, end, strand, ",
-               "       tx_length, 'NA' as tx_id, tx_id as gene_id, ",
-               "       'NA' as gene_name, 'NA' as entrezid, ",
+               "       tx_length, 'NA' as gc_content, 'NA' as tx_id,",
+               "       tx_id as gene_id, 'NA' as gene_name, 'NA' as entrezid, ",
                "       'NA' as tx_biotype, gene_biotype, biotype_class", 
                "  from tx")
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql), 
@@ -39,9 +39,10 @@ setMethod("genes", "TxDbLite", function(x) { # {{{
 
 setMethod("genes", "EnsDbLite", function(x) { # {{{
   sql <- paste("select seqnames, start, end, strand, ",
-               "       median_length as tx_length, 'NA' as tx_id, ",
-               "       gene_id, gene_name, entrezid, 'NA' as tx_biotype, ",
-               "       gene_biotype, class as biotype_class", 
+               "       median_length as tx_length, 'NA' as gc_content,",
+               "       'NA' as tx_id, gene_id, gene_name, entrezid,",
+               "       'NA' as tx_biotype, gene_biotype,",
+               "       class as biotype_class", 
                "  from gene, gene_biotype, biotype_class",
                " where gene.gene_biotype_id = gene_biotype.id",
                "   and gene_biotype.gene_biotype = biotype_class.biotype",
@@ -54,8 +55,9 @@ setMethod("genes", "EnsDbLite", function(x) { # {{{
 
 setMethod("transcripts", "EnsDbLite", function(x) { # {{{
   sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
-               "       tx_length, tx_id, gene_id, gene_name, entrezid,",
-               "       tx_biotype, gene_biotype, class as biotype_class",
+               "       tx_length, gc_content, tx_id, gene_id, gene_name,",
+               "       entrezid, tx_biotype, gene_biotype,",
+               "       class as biotype_class",
                "  from gene, tx, gene_biotype, tx_biotype, biotype_class",
                " where gene.gene = tx.gene",
                "   and tx.tx_biotype_id = tx_biotype.id",

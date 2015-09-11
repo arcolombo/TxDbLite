@@ -71,6 +71,10 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
                           gene_biotype=sapply(sapply(txDesc,grab,i=5), pop,":"))
   if (verbose) cat("done.\n") # }}}
 
+  if (verbose) cat("Tabulating GC content...") # {{{
+  txs$gc_content <- GCcontent(scanFa(fastaFile))
+  if (verbose) cat("done.\n") # }}}
+
   if (verbose) cat("Tabulating transcript biotypes...") # {{{
   tx_biotypes <- data.frame(id=seq_along(levels(as.factor(txs$tx_biotype))),
                             tx_biotype=levels(as.factor(txs$tx_biotype)))
@@ -139,7 +143,8 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Writing the tx table...") # {{{
-  txcols <- c("start", "end", "tx_id", "tx_length", "tx_biotype_id", "gene")
+  txcols <- c("start", "end", 
+              "tx_id", "tx_length", "gc_content", "tx_biotype_id", "gene")
   tx <- as(txs, "data.frame")[, txcols]
   dbWriteTable(con, name="tx", tx, overwrite=TRUE, row.names=FALSE)
   rm(tx)

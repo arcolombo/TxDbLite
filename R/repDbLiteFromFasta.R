@@ -218,10 +218,10 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   dbname <- paste(outstub, "sqlite", sep=".") 
   con <- dbConnect(dbDriver("SQLite"), dbname=dbname)
 
-  ## write repeat table 
   if (verbose) cat("Creating the database...") # {{{
   rpt <- as.data.frame(txs)
   rpt$tx_length <- txLen
+  rpt$gc_content <- GCcontent(scanFa(fastaFile))
   rpt$tx_id <- names(txLen)
   rpt$gene_id <- NA 
   rpt$gene_name <- NA 
@@ -230,7 +230,8 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   rpt$gene_biotype <- repeat_biotypes[rownames(rpt), "gene_biotype"]
   rpt$biotype_class <- "repeat"
   txcols <- c("seqnames", "start", "end", "strand",
-              "tx_length", "tx_id", "gene_id", "gene_name", "entrezid", 
+              "tx_length", "gc_content", 
+              "tx_id", "gene_id", "gene_name", "entrezid", 
               "tx_biotype", "gene_biotype", "biotype_class")
   dbWriteTable(con, name="tx", rpt[,txcols], overwrite=T, row.names=F)
   if (verbose) cat("done.\n") # }}}
