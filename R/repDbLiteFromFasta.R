@@ -263,9 +263,11 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
 #'
 repDbLiteMetadata <- function(packageName, sourceFile) { # {{{
 
-  tokens <- strsplit(packageName, "\\.")[[1]]
-  organism <- getOrganismAbbreviation(tokens[2])
-  version <- tokens[3]
+  tokens <- strsplit(getFastaStub(sourceFile), "\\.")[[1]]
+  names(tokens)[1:3] <- c("organism", "genome", "version")
+  organism <- getOrgDetails(tokens["organism"])
+  build <- paste0(tokens["genome"], tokens["version"])
+  version <- tokens["version"]
 
   MetaData <- data.frame(matrix(ncol=2, nrow=8))
   colnames(MetaData) <- c("name", "value")
@@ -274,8 +276,8 @@ repDbLiteMetadata <- function(packageName, sourceFile) { # {{{
   MetaData[3,] <- c("type_of_gene_id", "RepBase identifiers")
   MetaData[4,] <- c("created_by", paste("TxDbLite", packageVersion("TxDbLite")))
   MetaData[5,] <- c("creation_time", date())
-  MetaData[6,] <- c("organism", organism )
-  MetaData[7,] <- c("genome_build", paste0("RepBase_", version))
+  MetaData[6,] <- c("organism", organism$name)
+  MetaData[7,] <- c("genome_build", build)
   MetaData[8,] <- c("source_file", sourceFile)
   return(MetaData)
 
