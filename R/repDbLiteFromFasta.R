@@ -249,7 +249,7 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   dbDisconnect(con)
   return(dbname)
 
-} # }}}
+}
 
 
 #' @describeIn repDbLiteFromFasta
