@@ -81,7 +81,9 @@ getTxDbLiteName <- function(fastaFile) { # {{{
   fastaStub <- getFastaStub(fastaFile)
   type <- getAnnotationType(fastaStub)
 
-  if (type == "ErccDbLite") {
+  if (is.null(type)) {
+    return(NULL)
+  } else if (type == "ErccDbLite") {
     return("ErccDbLite.ERCC.97") ## autoinstall?
   } else if(!is.null(type)) {
     tokens <- strsplit(fastaStub, "\\.")[[1]]
@@ -140,7 +142,10 @@ getAnnotationType <- function(fastaFile) {  # {{{
 createAnnotationPackage <- function(fastaFile, ...) { # {{{
 
   type <- getAnnotationType(fastaFile) 
-  if (type == "EnsDbLite") { 
+  if (is.null(type)) {
+    message("Couldn't find a known type for ", fastaFile, ", skipping...")
+    return(NULL)
+  } else if (type == "EnsDbLite") { 
     db <- ensDbLiteFromFasta(fastaFile)
     pkg <- makeEnsDbLitePkg(db, ...)
   } else if (type == "RepDbLite") {

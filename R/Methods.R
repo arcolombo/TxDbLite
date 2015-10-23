@@ -1,5 +1,6 @@
 ## TxDbLite methods (inherited by all subclasses)
 
+#' @export
 setMethod("dbconn", "TxDbLite", function(x) return(x@con))
 
 setMethod("show", "TxDbLite", function(object) { # {{{
