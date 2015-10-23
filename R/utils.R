@@ -42,15 +42,15 @@ getSupportedAbbreviations <- function() { # {{{
 #' @export
 #'
 getOrganismAbbreviation <- function(organism) { # {{{
-  organism <- sub("\\.", "_", organism)
+  org <- sub(" ", "_", sub("\\.", "_", organism))
   abbr <- getSupportedAbbreviations()
-  if (organism %in% abbr) {
+  if (org %in% abbr) {
     return(abbr)
-  } else if (organism %in% names(abbr)) {
-    return(abbr[organism])
+  } else if (org %in% names(abbr)) {
+    return(abbr[org])
   } else { 
     message(organism, " was not found in data(supportedOrganismsForTxDbLite)")
-    message("Currently we support:") 
+    message("Supported as 'Genus.species', 'Genus_species' or 'Genus species':")
     for (i in names(abbr)) message("  ", i, " (", abbr[i], " in package names)")
     stop(paste(organism, "was not matched... but pull requests are accepted!"))
   }

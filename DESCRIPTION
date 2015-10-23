@@ -1,8 +1,8 @@
 Package: TxDbLite
 Type: Package
 Title: Lightweight SQLite-based annotation classes/packages for use with artemis
-Version: 1.9.35
-Date: 2015-10-08
+Version: 1.9.36
+Date: 2015-10-23
 Author: Tim Triche, Jr., Anthony Colombo
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: Package to make very lightweight annotation packages from FASTAs
