@@ -23,7 +23,7 @@ findDupes <- function(...) {
   }
   chrs <- function(fastaFile) {
     indexIfNoneFound(fastaFile)
-    idx <- scanFxIndex(FaFile(fastaFile))
+    idx <- scanFaIndex(FaFile(fastaFile))
     data.frame(seqnames=seqlevels(idx), fastaFile=rep(fastaFile, length(chrs)))
   }
   getDupeSeq <- function(duperow) { 
