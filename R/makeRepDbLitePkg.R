@@ -9,7 +9,6 @@
 #' @return the name of the package 
 #' 
 #' @export
-#'
 makeRepDbLitePkg <- function(repdblitefile, author="Nobody", email="dev@null.com", version="1.0", destDir=".", ...) {
   
   stopifnot(class(repdblitefile) == "character")

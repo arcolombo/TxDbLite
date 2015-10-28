@@ -10,7 +10,6 @@
 #' @import Biostrings
 #' 
 #' @export
-#'
 ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
   require(Biostrings) 
@@ -200,6 +199,7 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 #' 
 #' @return  entrez_id values for the genes, where found
 #'
+#' @export
 getEntrezIDs <- function(gxs, organism) { # {{{
   org <- getOrgDetails(organism)
   library(org$package, character.only=TRUE) 
@@ -216,6 +216,7 @@ getEntrezIDs <- function(gxs, organism) { # {{{
 #' 
 #' @return  symbols for the genes, where found 
 #'
+#' @export
 getSymbols <- function(gxs, organism) { # {{{
   org <- getOrgDetails(organism)
   library(org$package, character.only=TRUE) 
@@ -234,6 +235,7 @@ getSymbols <- function(gxs, organism) { # {{{
 #' 
 #' @return a data.frame of metadata suitable for cramming into the database
 #'
+#' @export
 ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
 
   tokens <- strsplit(getFastaStub(sourceFile), "\\.")[[1]]

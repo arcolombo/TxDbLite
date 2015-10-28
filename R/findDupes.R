@@ -8,7 +8,6 @@
 #' @import Rsamtools
 #' 
 #' @export
-#'
 findDupes <- function(...) { 
 
   if (is.character(list(...)[[1]]) && length(list(...)[[1]]) > 1) {
