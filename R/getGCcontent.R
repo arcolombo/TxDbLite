@@ -7,7 +7,6 @@
 #' @import Rsamtools
 #' 
 #' @export
-#' 
 getGCcontent <- function(fastaFile) { 
   if (!file.exists(paste0(fastaFile, ".fai"))) indexFa(fastaFile)
   gr <- scanFaIndex(fastaFile)
@@ -27,7 +26,6 @@ getGCcontent <- function(fastaFile) {
 #' @import Biostrings
 #' 
 #' @export
-#' 
 GCcontent <- function(seqs) {
   rowSums(alphabetFrequency(seqs, as.prob=TRUE)[,c("C","G")])
 }

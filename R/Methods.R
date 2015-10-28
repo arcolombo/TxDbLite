@@ -1,4 +1,5 @@
-## TxDbLite methods (inherited by all subclasses)
+# TxDbLite methods (inherited by all subclasses)
+# FIXME: get rid of dependencies on ensembldb 
 
 #' @export
 setMethod("dbconn", "TxDbLite", function(x) return(x@con))
@@ -41,7 +42,6 @@ setMethod("promoters", "TxDbLite", function(x,upstream=2000,downstream=200,...){
 #' @return a GRangesList
 #' 
 #' @export
-#'
 setMethod("transcriptsBy", "TxDbLite", function(x, # {{{
                                                 by=c("gene",
                                                      "promoter",
@@ -90,7 +90,6 @@ setGeneric("genesBy", function(x,by=c("gene_biotype","biotype_class"), ...){#{{{
 #' @return a GRangesList
 #' 
 #' @export
-#'
 setMethod("genesBy", "TxDbLite", function(x, by=c("gene_biotype","biotype_class")) { # {{{
   by <- match.arg(by)
   gxs <- genes(x)

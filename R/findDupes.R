@@ -8,36 +8,12 @@
 #' @import Rsamtools
 #' 
 #' @export
-#'
 findDupes <- function(...) { 
 
-  if (is.character(list(...)[[1]]) && length(list(...)[[1]]) > 1) {
-    fastaFiles <- as.list(do.call(c, list(...)))
-  } else { 
-    fastaFiles <- list(...)
-  }
-  indexIfNoneFound <- function(fastaFile) {
-    if (!file.exists(paste0(fastaFile, ".fai"))) {
-      message("Indexing ", fastaFile, " to extract sequence names...")
-      invisible(indexFa(fastaFile))
-    }
-  }
-  chrs <- function(fastaFile) {
-    indexIfNoneFound(fastaFile)
-    chrs <- seqlevels(FaFile(fastaFile))
-    data.frame(seqnames=chrs, fastaFile=rep(fastaFile, length(chrs)))
-  }
-  getDupeSeq <- function(duperow) { 
-    seqname <- duperow[1]
-    fasta <- duperow[2]
-    namedGr <- function(gr) { 
-      names(gr) <- seqnames(gr)
-      return(gr) 
-    }
-    faFile <- FaFile(fasta)
-    gr <- namedGr(scanFaIndex(faFile))[seqname]
-    as.character(getSeq(faFile, gr))
-  }
+  fastaFiles <- list(...)
+  if (is.character(fastaFiles[[1]]) && length(fastaFiles[[1]]) > 1)
+    fastaFiles <- as.list(do.call(c, fastaFiles))
+   
   allChrs <- do.call(rbind, lapply(fastaFiles, chrs))
   if (anyDuplicated(allChrs$seqnames)) {
     dupes <- allChrs$seqnames[duplicated(allChrs$seqnames)]
@@ -48,7 +24,8 @@ findDupes <- function(...) {
                            function(ds) all(ds == ds[1]))
     duped$allIdentical <- allIdentical[duped$seqname] 
     return(duped)
-  } else { 
-    return(NULL)
   }
+
+  # if no dupes,
+  return(NULL)
 }

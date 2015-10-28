@@ -5,7 +5,6 @@
 #' @return an ErccDbLite object.
 #' 
 #' @export
-#' 
 ErccDbLite <- function (x, ...) {
   erccdb <- TxDbLite(x, ...)
   class(erccdb) <- "ErccDbLite"

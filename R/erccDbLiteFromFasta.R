@@ -5,7 +5,6 @@
 #' @import Rsamtools
 #'
 #' @export
-#' 
 erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE) { 
 
   if (verbose) cat("Extracting spike-in associations...")

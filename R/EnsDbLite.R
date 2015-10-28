@@ -5,7 +5,6 @@
 #' @return an EnsDbLite object.
 #' 
 #' @export
-#' 
 EnsDbLite <- function (x, ...) {
   ensdb <- TxDbLite(x, ...)
   class(ensdb) <- "EnsDbLite"
