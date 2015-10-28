@@ -11,9 +11,9 @@
 findDupes <- function(...) { 
 
   fastaFiles <- list(...)
-  if (is.character(fastaFiles[[1]]) && length(fastaFiles[[1]]) > 1) {
+  if (is.character(fastaFiles[[1]]) && length(fastaFiles[[1]]) > 1)
     fastaFiles <- as.list(do.call(c, fastaFiles))
-  } 
+   
   allChrs <- do.call(rbind, lapply(fastaFiles, chrs))
   if (anyDuplicated(allChrs$seqnames)) {
     dupes <- allChrs$seqnames[duplicated(allChrs$seqnames)]
@@ -24,7 +24,8 @@ findDupes <- function(...) {
                            function(ds) all(ds == ds[1]))
     duped$allIdentical <- allIdentical[duped$seqname] 
     return(duped)
-  } else { 
-    return(NULL)
   }
+
+  # if no dupes,
+  return(NULL)
 }
