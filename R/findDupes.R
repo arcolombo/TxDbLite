@@ -20,10 +20,17 @@ findDupes <- function(...) {
     duped <- allChrs[which(allChrs$seqnames %in% dupes),]
     duped <- duped[order(duped$seqnames),] 
     dupeSeqs <- DNAStringSet(apply(duped, 1, getDupeSeq))
-    allIdentical <- sapply(split(dupeSeqs, duped$seqname),
-                           function(ds) all(ds == ds[1]))
-    duped$allIdentical <- allIdentical[duped$seqname] 
-    return(duped)
+         indexRep<-vector()
+    for(i in 1:length(names(dupeSeqs))){
+    indexRep[i]<-which(rownames(duped)==names(dupeSeqs))[i]
+       }
+    #correcting rep seq names in DNAStringSet
+    names(dupeSeqs)<-duped$seqnames[indexRep]
+    #creates a list each entry has duplicated sequence under the sequence name
+    splitDupe<-split(dupeSeqs,duped$seqname)[duped$seqnames]
+    allIdentical<-sapply(splitDupe,function(x) all(x==x[1]))
+    stopifnot(all(allIdentical=="TRUE")=="TRUE")
+     return(duped)
   }
 
   # if no dupes,
