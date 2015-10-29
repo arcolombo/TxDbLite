@@ -61,12 +61,15 @@ findDupes <- function(...) {
  
 
 .printIdentical<-function(splitDupe){
-df<-sapply(splitDupe,function(x) length(x))
+
+uniqueDupe<-splitDupe[!duplicated(names(splitDupe))]
+df<-sapply(uniqueDupe,function(x) length(x))
   for(j in 1:length(df)){  
    for( i in 1:df[j]){
- stopifnot(lapply(splitDupe[j],function(x) setequal(x[1],x[i]))==TRUE)
- message(paste0("The duplicated repeats ", names(df)[j]  ," at row number ", names(splitDupe[[j]])[i], " have identical sequences: ",lapply(splitDupe[j],function(x) setequal(x[1],x[i]))==TRUE))
+ stopifnot(lapply(uniqueDupe[j],function(x) setequal(x[1],x[i]))==TRUE)
+ message(paste0("The duplicated repeats ", names(df)[j]  ," at row number ", names(uniqueDupe[[j]])[i], " have identical sequences: ",lapply(uniqueDupe[j],function(x) setequal(x[1],x[i]))==TRUE))
   }# for i 
 }#for j
 
 }#{{{ printIdentical main
+
