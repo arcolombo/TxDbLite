@@ -1,5 +1,7 @@
-## TxDbLite methods (inherited by all subclasses)
+# TxDbLite methods (inherited by all subclasses)
+# FIXME: get rid of dependencies on ensembldb 
 
+#' @export
 setMethod("dbconn", "TxDbLite", function(x) return(x@con))
 
 setMethod("show", "TxDbLite", function(object) { # {{{
@@ -19,31 +21,107 @@ setMethod("metadata", "TxDbLite", function(x, ...) { # {{{
 setMethod("transcripts", "TxDbLite", function(x) { # {{{
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), "select * from tx"),
                                   keep.extra.columns=TRUE)
+  genome(res) <- metadata(x)["genome_build","value"]
   names(res) <- res$tx_id
   return(res)
 }) # }}}
 
+setMethod("promoters", "TxDbLite", function(x,upstream=2000,downstream=200,...){ # {{{
+  trim(suppressWarnings(promoters(transcripts(x, ...),
+                                  upstream=upstream,
+                                  downstream=downstream)))
+}) # }}}
+
+#' @describeIn TxDbLite
+#' 
+#' get transcripts by gene, promoter, tx_biotype, gene_biotype, or biotype_class
+#'
+#' @param x   the TxDbLite instance
+#' @param by  how to split the transcripts 
+#'
+#' @return a GRangesList
+#' 
+#' @export
+setMethod("transcriptsBy", "TxDbLite", function(x, # {{{
+                                                by=c("gene",
+                                                     "promoter",
+                                                     "tx_biotype",
+                                                     "gene_biotype",
+                                                     "biotype_class")) {
+  by <- match.arg(by)
+  txs <- transcripts(x)
+  name <- function(x) paste0(seqnames(x),":",start(x),"-",end(x),":",strand(x)) 
+  proms <- promoters(x)
+  seqlevelsStyle(proms) <- "UCSC" # else names can potentially break downstream
+  promoterNames <- name(proms)
+  switch(by,
+         gene=split(txs, txs$gene_id),
+         promoter=split(txs, promoterNames),
+         tx_biotype=split(txs, txs$tx_biotype),
+         gene_biotype=split(txs, txs$gene_biotype),
+         biotype_class=split(txs, txs$biotype_class))
+}) # }}} 
+
+setMethod("genes", "TxDbLite", function(x) { # {{{
+  sql <- paste("select seqnames, start, end, strand, ",
+               "       tx_length, 'NA' as gc_content, 'NA' as tx_id,",
+               "       tx_id as gene_id, 'NA' as gene_name, 'NA' as entrezid, ",
+               "       'NA' as tx_biotype, gene_biotype, biotype_class", 
+               "  from tx")
+  res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql), 
+                                  keep.extra.columns=TRUE)
+  genome(res) <- metadata(x)["genome_build","value"]
+  names(res) <- res$gene_id
+  return(res)
+}) # }}}
+
+# new generic 
+setGeneric("genesBy", function(x,by=c("gene_biotype","biotype_class"), ...){#{{{
+             standardGeneric("genesBy")
+           }) # }}}
+
+#' @describeIn TxDbLite
+#' 
+#' get genes by gene_biotype or biotype_class
+#'
+#' @param x   the TxDbLite instance
+#' @param by  how to split the genes 
+#'
+#' @return a GRangesList
+#' 
+#' @export
+setMethod("genesBy", "TxDbLite", function(x, by=c("gene_biotype","biotype_class")) { # {{{
+  by <- match.arg(by)
+  gxs <- genes(x)
+  switch(by,
+         gene_biotype=split(gxs, gxs$gene_biotype),
+         biotype_class=split(gxs, gxs$biotype_class))
+}) # }}} 
 
 ## EnsDbLite methods
 
 setMethod("genes", "EnsDbLite", function(x) { # {{{
-  sql <- paste("select seqnames, start, end, strand, median_length,",
-               "       gene_id, gene_name, gene_biotype, ",
-               "       class as biotype_class, entrezid", 
+  sql <- paste("select seqnames, start, end, strand, ",
+               "       median_length as tx_length, 'NA' as gc_content,",
+               "       'NA' as tx_id, gene_id, gene_name, entrezid,",
+               "       'NA' as tx_biotype, gene_biotype,",
+               "       class as biotype_class", 
                "  from gene, gene_biotype, biotype_class",
                " where gene.gene_biotype_id = gene_biotype.id",
                "   and gene_biotype.gene_biotype = biotype_class.biotype",
                " order by gene_id asc")
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql),
                                   keep.extra.columns=TRUE)
+  genome(res) <- metadata(x)["genome_build","value"]
   names(res) <- res$gene_id
   return(res)
 }) # }}}
 
 setMethod("transcripts", "EnsDbLite", function(x) { # {{{
   sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
-               "       tx_length, tx_id, gene_id, gene_name, entrezid,",
-               "       tx_biotype, gene_biotype, class as biotype_class",
+               "       tx_length, gc_content, tx_id, gene_id, gene_name,",
+               "       entrezid, tx_biotype, gene_biotype,",
+               "       class as biotype_class",
                "  from gene, tx, gene_biotype, tx_biotype, biotype_class",
                " where gene.gene = tx.gene",
                "   and tx.tx_biotype_id = tx_biotype.id",
@@ -52,14 +130,10 @@ setMethod("transcripts", "EnsDbLite", function(x) { # {{{
                " order by tx_id asc")
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql),
                                   keep.extra.columns=TRUE)
+  genome(res) <- metadata(x)["genome_build","value"]
   names(res) <- res$tx_id
   return(res)
 }) # }}}
-
-setMethod("transcriptsBy", "EnsDbLite", function(x, by=c("gene")) { # {{{
-  txs <- transcripts(x)
-  split(txs, txs$gene_id)
-}) # }}} 
 
 setMethod("listGenebiotypes", "EnsDbLite", function(x, ...){ # {{{
   return(dbGetQuery(dbconn(x), "select * from gene_biotype")[,"gene_biotype"])
@@ -69,14 +143,8 @@ setMethod("listTxbiotypes", "EnsDbLite", function(x, ...){ # {{{
   return(dbGetQuery(dbconn(x), "select * from tx_biotype")[,"tx_biotype"])
 }) # }}}
 
-setMethod("promoters", "EnsDbLite", function(x, upstream=2000, downstream=200, ...) { # {{{
-  trim(suppressWarnings(promoters(transcripts(x, ...),
-                                  upstream=upstream,
-                                  downstream=downstream)))
-}) # }}}
-
 setMethod("show", "EnsDbLite", function(object) { # {{{
-  callNextMethod() ## TxDbLite show method -- basic information on the db  
+  callNextMethod() # TxDbLite show method -- basic information on the db  
   genesql <- "select count(distinct gene) from gene"
   g <- dbGetQuery(dbconn(object), genesql)[1,1]
   txsql <- "select count(distinct tx_id) from tx"
@@ -86,25 +154,33 @@ setMethod("show", "EnsDbLite", function(object) { # {{{
 
 
 ## RepDbLite show method
-
 setMethod("show", "RepDbLite", function(object) { # {{{
-  callNextMethod() ## TxDbLite show method -- basic information on the db  
-  famsql <- "select count(distinct tx_biotype) from tx"
+  callNextMethod() # TxDbLite show method -- basic information on the db  
   repsql <- "select count(distinct tx_id) from tx"
+  famsql <- "select count(distinct tx_biotype) from tx"
   rpts <- dbGetQuery(dbconn(object), repsql)[1,1]
   fam <- dbGetQuery(dbconn(object), famsql)[1,1]
-  cat(paste0("| ", rpts, " repeat exemplars from ", fam, " repeat families.\n"))
+  cat(paste0("| ", rpts, " repeat exemplars from ", 
+                   fam, " repeat families (no known genes).\n"))
 }) # }}}
+
+## RepDbLite objects have no genes in them
+setMethod("genes", "RepDbLite", function(x) callNextMethod()[0] ) ## no genes
+setMethod("promoters", "RepDbLite", function(x) callNextMethod()[0] ) ## none
 
 
 ## ErccDbLite show method
-
 setMethod("show", "ErccDbLite", function(object) { # {{{
-  callNextMethod() ## TxDbLite show method -- basic information on the db  
+  callNextMethod() # TxDbLite show method -- basic information on the db  
   ctlsql <- "select count(distinct tx_id) from tx"
   grpsql <- "select count(distinct tx_biotype) from tx"
   ctl <- dbGetQuery(dbconn(object), ctlsql)[1,1]
   grp <- dbGetQuery(dbconn(object), grpsql)[1,1]
   ## subtract 1 from the number of subgroups as "unannotated" is in there
-  cat(paste0("| ", ctl, " spike-in controls from ", grp - 1, " subgroups.\n"))
+  cat(paste0("| ", ctl, " spike-in controls from ", 
+                   grp - 1, " subgroups (no known genes).\n"))
 }) # }}}
+
+## ErccDbLite objects have no genes in them
+setMethod("genes", "ErccDbLite", function(x) callNextMethod()[0] ) ## no genes
+setMethod("promoters", "ErccDbLite", function(x) callNextMethod()[0] ) ## none

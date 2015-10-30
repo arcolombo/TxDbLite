@@ -218,10 +218,10 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   dbname <- paste(outstub, "sqlite", sep=".") 
   con <- dbConnect(dbDriver("SQLite"), dbname=dbname)
 
-  ## write repeat table 
   if (verbose) cat("Creating the database...") # {{{
   rpt <- as.data.frame(txs)
   rpt$tx_length <- txLen
+  rpt$gc_content <- GCcontent(scanFa(fastaFile))
   rpt$tx_id <- names(txLen)
   rpt$gene_id <- NA 
   rpt$gene_name <- NA 
@@ -230,7 +230,8 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   rpt$gene_biotype <- repeat_biotypes[rownames(rpt), "gene_biotype"]
   rpt$biotype_class <- "repeat"
   txcols <- c("seqnames", "start", "end", "strand",
-              "tx_length", "tx_id", "gene_id", "gene_name", "entrezid", 
+              "tx_length", "gc_content", 
+              "tx_id", "gene_id", "gene_name", "entrezid", 
               "tx_biotype", "gene_biotype", "biotype_class")
   dbWriteTable(con, name="tx", rpt[,txcols], overwrite=T, row.names=F)
   if (verbose) cat("done.\n") # }}}
@@ -248,7 +249,7 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   dbDisconnect(con)
   return(dbname)
 
-} # }}}
+}
 
 
 #' @describeIn repDbLiteFromFasta
@@ -262,9 +263,11 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
 #'
 repDbLiteMetadata <- function(packageName, sourceFile) { # {{{
 
-  tokens <- strsplit(packageName, "\\.")[[1]]
-  organism <- getOrganismAbbreviation(tokens[2])
-  version <- tokens[3]
+  tokens <- strsplit(getFastaStub(sourceFile), "\\.")[[1]]
+  names(tokens)[1:3] <- c("organism", "genome", "version")
+  organism <- getOrgDetails(tokens["organism"])
+  build <- paste0(tokens["genome"], tokens["version"])
+  version <- tokens["version"]
 
   MetaData <- data.frame(matrix(ncol=2, nrow=8))
   colnames(MetaData) <- c("name", "value")
@@ -273,8 +276,8 @@ repDbLiteMetadata <- function(packageName, sourceFile) { # {{{
   MetaData[3,] <- c("type_of_gene_id", "RepBase identifiers")
   MetaData[4,] <- c("created_by", paste("TxDbLite", packageVersion("TxDbLite")))
   MetaData[5,] <- c("creation_time", date())
-  MetaData[6,] <- c("organism", organism )
-  MetaData[7,] <- c("genome_build", paste0("RepBase_", version))
+  MetaData[6,] <- c("organism", organism$name)
+  MetaData[7,] <- c("genome_build", build)
   MetaData[8,] <- c("source_file", sourceFile)
   return(MetaData)
 

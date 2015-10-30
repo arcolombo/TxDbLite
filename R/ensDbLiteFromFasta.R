@@ -10,7 +10,6 @@
 #' @import Biostrings
 #' 
 #' @export
-#'
 ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
   require(Biostrings) 
@@ -80,6 +79,10 @@ matrixStrand<-ifelse(txCoords["strand",]=="1","+","-") #class matrix 1 X N mtx
                           gene_id=sapply(sapply(txDesc,grab,i=4), pop, ":"),
                           tx_biotype=sapply(sapply(txDesc,grab,i=6), pop,":"),
                           gene_biotype=sapply(sapply(txDesc,grab,i=5), pop,":"))
+  if (verbose) cat("done.\n") # }}}
+
+  if (verbose) cat("Tabulating GC content...") # {{{
+  txs$gc_content <- GCcontent(scanFa(fastaFile))
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Tabulating transcript biotypes...") # {{{
@@ -170,7 +173,8 @@ matrixStrand<-ifelse(txCoords["strand",]=="1","+","-") #class matrix 1 X N mtx
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Writing the tx table...") # {{{
-  txcols <- c("start", "end", "tx_id", "tx_length", "tx_biotype_id", "gene")
+  txcols <- c("start", "end", 
+              "tx_id", "tx_length", "gc_content", "tx_biotype_id", "gene")
   tx <- as(txs, "data.frame")[, txcols]
   dbWriteTable(con, name="tx", tx, overwrite=TRUE, row.names=FALSE)
   rm(tx)
@@ -226,6 +230,7 @@ matrixStrand<-ifelse(txCoords["strand",]=="1","+","-") #class matrix 1 X N mtx
 #' 
 #' @return  entrez_id values for the genes, where found
 #'
+#' @export
 getEntrezIDs <- function(gxs, organism) { # {{{
   org <- getOrgDetails(organism)
   library(org$package, character.only=TRUE) 
@@ -242,6 +247,7 @@ getEntrezIDs <- function(gxs, organism) { # {{{
 #' 
 #' @return  symbols for the genes, where found 
 #'
+#' @export
 getSymbols <- function(gxs, organism) { # {{{
   org <- getOrgDetails(organism)
   library(org$package, character.only=TRUE) 
@@ -260,10 +266,13 @@ getSymbols <- function(gxs, organism) { # {{{
 #' 
 #' @return a data.frame of metadata suitable for cramming into the database
 #'
+#' @export
 ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
 
-  tokens <- strsplit(packageName, "\\.")[[1]]
-  organism <- getOrganismAbbreviation(tokens[2])
+  tokens <- strsplit(getFastaStub(sourceFile), "\\.")[[1]]
+  names(tokens)[1:3] <- c("organism", "genome", "version")
+  organism <- getOrgDetails(tokens["organism"])
+  build <- tokens["genome"]
 
   MetaData <- data.frame(matrix(ncol=2, nrow=8))
   colnames(MetaData) <- c("name", "value")
@@ -272,71 +281,9 @@ ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
   MetaData[3,] <- c("type_of_gene_id", "Ensembl Gene ID")
   MetaData[4,] <- c("created_by", paste("TxDbLite", packageVersion("TxDbLite")))
   MetaData[5,] <- c("creation_time", date())
-  MetaData[6,] <- c("organism", organism )
-  MetaData[7,] <- c("genome_build", genomeVersion)
+  MetaData[6,] <- c("organism", organism$name)
+  MetaData[7,] <- c("genome_build", build)
   MetaData[8,] <- c("source_file", sourceFile)
   return(MetaData)
-
-} # }}}
-
-
-#' @describeIn ensDbLiteFromFasta
-#' 
-#' helper fn that handles a number of annoying tasks
-#' 
-getOrgDetails <- function(organism) { # {{{
-
-  if (organism == "Homo_sapiens") { ## {{{ tx/gene prefixes by organism 
-    package <- "org.Hs.eg.db"
-    keytype <- "ENSEMBL"
-    symbol <- "SYMBOL"
-    txpre <- "ENST"
-    gxpre <- "ENSG"
-  } else if (organism == "Danio_rerio") {
-    package <- "org.Dr.eg.db"
-    keytype <- "ENSEMBL"
-    symbol <- "SYMBOL"
-    txpre <- "ENSDART"
-    gxpre <- "ENSDARG"
-  } else if (organism == "Mus_musculus") {
-    package <- "org.Mm.eg.db"
-    keytype <- "ENSEMBL"
-    symbol <- "SYMBOL"
-    txpre <- "ENSMUST"
-    gxpre <- "ENSMUSG"
-  } else if (organism == "Rattus_norvegicus") {
-    package <- "org.Rn.eg.db"
-    keytype <- "ENSEMBL"
-    symbol <- "SYMBOL"
-    txpre <- "ENSRNOT"
-    gxpre <- "ENSRNOG"
-  } else if (organism == "Caenorhabditis_elegans") {
-    package <- "org.Ce.eg.db"
-    keytype <- "WORMBASE"
-    symbol <- "SYMBOL"
-    txpre <- ""
-    gxpre <- "WBGene"
-  } else if (organism == "Drosophila_melanogaster") {
-    package <- "org.Dm.eg.db"
-    keytype <- "FLYBASE"
-    symbol <- "SYMBOL"
-    txpre <- "FBtr"
-    gxpre <- "FBgn"
-  } else if (organism == "Saccharomyces_cerevisiae") {
-    package <- "org.Sc.sgd.db"
-    keytype <- "GENENAME"
-    symbol <- "GENENAME"
-    txpre <- ""
-    gxpre <- ""
-  } else {
-    stop("Unable to find annotation support for",organism,"...patches welcome!")
-  } # }}}
-
-  org <- list(package=package, 
-              txpre=txpre, 
-              gxpre=gxpre, 
-              keytype=keytype,
-              symbol=symbol)
-  return(org)
 
 } # }}}

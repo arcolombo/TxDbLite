@@ -9,43 +9,14 @@
 #' @return the name of the package 
 #' 
 #' @export
-#'
-makeEnsDbLitePkg <- function(ensdblitefile, author,email, version="1.0", destDir=".", ...){
+makeEnsDbLitePkg <- function(ensdblitefile, author="Nobody", email="dev@null.com", version="1.0", destDir=".", ...){
   
   stopifnot(class(ensdblitefile) == "character")
   ensdb <- EnsDbLite(x=ensdblitefile)
   md <- metadata(ensdb)
   fetchMeta <- function(x) md[x, "value"]
   pkg <- fetchMeta("package_name")
- 
-   if (grepl("_",pkg)){
-   pkg<-gsub("_","",pkg)
-  }
-   if (grepl(".",pkg)){
-   pkg<-strsplit(pkg,split='.',fixed=TRUE)[[1]][1]
-  }
-
-if(missing(email)){
-   email<-"TommyTrojan@update.com"
-  
-}
- #type checking the email parameter, and defaulting if it fails
-#weak regex for email additions
- if(grepl("<",email)==TRUE || grepl(">",email)==TRUE) {
-    email<-gsub("<","",email)
-    email<-gsub(">","",email)
- }  
-
-  if(grepl("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}",email)==TRUE){
-    message("email has format ASCII@ASCII.ACII ...")
-    email<-paste0("<",email)
-    email<-paste0(email,">")
-  
-   } 
-   if( grepl("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", email)==FALSE){
-    email<-"<TommyTrojan@update.com>"
-   }
-  maintainer<-paste(author,email,sep=" ")
+  maintainer<-paste0(author, "<", email, ">")
   organism <- fetchMeta("organism")
   ensembl_version <- md["genome_build", "value"]
   template_path <- system.file("ensdblite", package="TxDbLite")
