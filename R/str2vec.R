@@ -6,7 +6,6 @@
 #' @return    the array produced by splitting basename(x) on y
 #'
 #' @export
-#'
 str2vec <- function(x, y=" ") {
   strsplit(basename(x), y)[[1]]
 }

@@ -8,7 +8,6 @@
 #' @return    the element(s) produced by splitting basename(x) on y
 #'
 #' @export
-#'
 strpop <- function(x, y=" ", z=NULL) {
   vec <- str2vec(x, y)
   if (is.null(z)) z <- length(vec)

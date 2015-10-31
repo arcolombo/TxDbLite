@@ -7,7 +7,6 @@ utils <- NULL
 #' get the "stub" of a FASTA filename (no .fa, no .fasta, no .gz)
 #' 
 #' @export
-#'
 getFastaStub <- function(fastaFile) { # {{{
   xx <- sub("\\.fa$", "", sub("\\.fasta$", "", sub(".gz$", "", fastaFile)))
   sub("cdna\\.all", "cdna", xx)
@@ -21,7 +20,6 @@ getFastaStub <- function(fastaFile) { # {{{
 #' get a column of a data.frame _complete_with_rownames_ as a vector 
 #' 
 #' @export
-#'
 colAsVector <- function(x, y) t(x[, y, drop=FALSE])[1,]
 
 #' @describeIn utils 
@@ -29,7 +27,6 @@ colAsVector <- function(x, y) t(x[, y, drop=FALSE])[1,]
 #' supported organism abbreviations
 #'
 #' @export
-#' 
 getSupportedAbbreviations <- function() { # {{{
   data(supportedOrganismsForTxDbLite, package="TxDbLite")
   colAsVector(supportedOrganismsForTxDbLite, "abbreviation")
@@ -40,7 +37,6 @@ getSupportedAbbreviations <- function() { # {{{
 #' Get the abbreviation for an organism (among those with which we're familiar)
 #' 
 #' @export
-#'
 getOrganismAbbreviation <- function(organism) { # {{{
   org <- sub(" ", "_", sub("\\.", "_", organism))
   abbr <- getSupportedAbbreviations()
@@ -61,7 +57,6 @@ getOrganismAbbreviation <- function(organism) { # {{{
 #' helper fn that handles a number of annoying tasks using saved data
 #' 
 #' @export
-#'
 getOrgDetails <- function(organism) { # {{{
   abbr <- getSupportedAbbreviations()
   if (organism %in% abbr) organism <- names(abbr)[which(abbr == organism)] 
@@ -75,7 +70,6 @@ getOrgDetails <- function(organism) { # {{{
 #' NOTE: as of 1.9.25, this is based on DbType.Org.Version
 #'
 #' @export
-#'
 getTxDbLiteName <- function(fastaFile) { # {{{
 
   fastaStub <- getFastaStub(fastaFile)
@@ -112,7 +106,6 @@ getTxDbLiteName <- function(fastaFile) { # {{{
 #' figure out what type of annotation package to create
 #' 
 #' @export
-#'
 getAnnotationType <- function(fastaFile) {  # {{{
   if (grepl("(GRC|Rnor|BDGP|WBcel|R64)", fastaFile) && ## common ENSEMBL genomes
       (grepl("cdna", fastaFile) || 
@@ -138,7 +131,6 @@ getAnnotationType <- function(fastaFile) {  # {{{
 #' @return the name of the annotation package, or NULL if uncertain how to do it
 #' 
 #' @export
-#'
 createAnnotationPackage <- function(fastaFile, ...) { # {{{
 
   type <- getAnnotationType(fastaFile) 
