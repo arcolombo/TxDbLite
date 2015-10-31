@@ -5,7 +5,6 @@
 #' @return a RepDbLite object.
 #' 
 #' @export
-#' 
 RepDbLite <- function (x, ...) {
   repdb <- TxDbLite(x, ...)
   class(repdb) <- "RepDbLite"

@@ -6,7 +6,6 @@
 #' @return   a TxDbLite object 
 #'
 #' @export
-#'
 TxDbLite <- function(x, path=".", ...) { 
   options(useFancyQuotes = FALSE)
   if (!grepl(".sqlite$", x)) x <- paste0(x, ".sqlite")
