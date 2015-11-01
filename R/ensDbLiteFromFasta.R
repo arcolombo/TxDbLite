@@ -24,12 +24,13 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   grab <- function(x, y=" ", i=1) splt(x, y)[i]
   shift <- function(x, y=" ") grab(x, y, i=1)
 
+     
+
   txDbLiteName <- getTxDbLiteName(fastaFile)
   genomeVersion <- strsplit(fastaFile, "\\.")[[1]][1]
   tokens <- strsplit(txDbLiteName, "\\.")[[1]]
   organism <- tokens[2] 
   version <- tokens[3]
-
   org <- getOrgDetails(organism) 
   if (!require(org$package, character.only=TRUE)) {
     stop("Please install the", org$package, "package, then try again. Thanks!")
@@ -54,10 +55,21 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
     message(paste(genomeVersion, collapse=", "))
     stop("Aborting construction of annotation database.")
   }
+
+matrixStrand<-ifelse(txCoords["strand",]=="1","+","-") #class matrix 1 X N mtx
+
+  #converting to named character class for proper strand conversion. 
+  characterStrand<-as.character(matrixStrand)
+  names(characterStrand)<-colnames(matrixStrand)
+  stopifnot(identical(length(matrixStrand),length(characterStrand))) #lengths must match
+  stopifnot(identical(Rle(strand(characterStrand)),strand(Rle(characterStrand)))) #this is a sanity check enforcing strand conservation.
+
+
+
   txs <- GRanges(seqnames=as.character(txCoords["seqnames",]),
                  ranges=IRanges(start=as.integer(txCoords["start",]),
                                 end=as.integer(txCoords["end",])),
-                 strand=ifelse(txCoords["strand",] == "1", "+", "-"))
+                 strand=characterStrand)
   names(txs) <- names(txCoords)
   genome(txs) <- genomeVersion
   if (verbose) cat("done.\n") # }}}
@@ -83,9 +95,20 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
   squash <- function(x, by, FUN) { # {{{
     xx <- aggregate(x=x, by=by, FUN=FUN)
-    x <- xx[,2]
-    names(x) <- xx[,1]
-    x
+    
+     if(all(sapply(xx[,2],length)==1)=="TRUE") { 
+     x <- xx[,2]
+     names(x) <- xx[,1]
+     }
+
+ if(!all(sapply(xx[,2],length)==1)=="TRUE"){
+    idx<-which(sapply(xx[,2],length)>1)
+    xx[idx,2]<-sapply(xx[idx,2],function(x) x<-"*")
+    stopifnot(all(sapply(xx[,2],length)==1))
+    x<-xx[,2]
+    names(x)<-xx[,1] 
+      }
+   x
   } # }}}
 
   if (verbose) cat("Tabulating genes...") # {{{
@@ -95,10 +118,18 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   gxEnd <- squash(end(txs), by=list(txs$gene_id), FUN=max)
   stopifnot(identical(names(gxChr), names(gxEnd)))
   gxStrand <- squash(as.character(strand(txs)), by=list(txs$gene_id),FUN=unique)
+  
+
   stopifnot(identical(names(gxChr), names(gxStrand)))
-  gxs <- GRanges(seqnames=gxChr,
+  gxCharacterStrand<-as.character(gxStrand)
+  names(gxCharacterStrand)<-names(gxStrand)
+  stopifnot(identical(Rle(strand(gxCharacterStrand)),strand(Rle(gxCharacterStrand))))  
+  stopifnot(identical(names(gxCharacterStrand),names(gxChr)))
+
+
+   gxs <- GRanges(seqnames=gxChr,
                  ranges=IRanges(start=gxStart, end=gxEnd),
-                 strand=gxStrand)
+                 strand=gxCharacterStrand)
   genome(gxs) <- genomeVersion
   names(gxs) <- names(gxChr)
   gxs$gene_id <- names(gxs)
@@ -111,6 +142,7 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   gxs$entrezid <- getEntrezIDs(gxs, organism)[names(gxs)]
   gxs$gene_name <- getSymbols(gxs, organism)[names(gxs)]
   txs$gene <- as.integer(sub(org$gxpre, "", txs$gene_id))
+  gxs$gene<-as.integer(sub(org$gxpre,"",gxs$gene_id))
   if (verbose) cat("...done.\n") # }}}
 
   if (verbose) cat("Creating the database...") # {{{
@@ -167,7 +199,9 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
                overwrite=T, row.names=F)
   if (verbose) cat("done.\n") # }}}
 
-  ## write metadata table # {{{ 
+  ## write metadata table # {{{ ing pseudogenes, NMD and the like. See the file names 
+#explanation below for different subsets of both known and predicted 
+#transcripts.
   Metadata <- ensDbLiteMetadata(packageName=outstub, 
                                 genomeVersion=txVersion,
                                 sourceFile=fastaFile)
@@ -256,3 +290,4 @@ ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
   return(MetaData)
 
 } # }}}
+

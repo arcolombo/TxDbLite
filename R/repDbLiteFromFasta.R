@@ -20,6 +20,9 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   organism <- sub("\\.", "_", ## try & be robust
                   sub("Mmusculus", "Mus_musculus", 
                       sub("Hsapiens", "Homo_sapiens", organism)))
+ 
+
+
 
   ## utility functions for parsing FASTAs
   splt <- function(x, y=" ") strsplit(x, y)[[1]]

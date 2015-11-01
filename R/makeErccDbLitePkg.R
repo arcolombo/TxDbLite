@@ -1,5 +1,4 @@
 #' create a ErccDbLite package from sqlite file (usually via repDbLiteFromFasta)
-#'
 #' @param erccdblitefile   the sqlite filename
 #' @param author          whose fault this is
 #' @param email           email address 
@@ -34,6 +33,7 @@ makeErccDbLitePkg <- function(erccdblitefile, author="Nobody", email="dev@null.c
     RELEASEDATE=release_date,
     SOURCEURL="http://www.nist.gov/mml/bbd/ercc.cfm",
     ORGANISMBIOCVIEW="ERCC",
+
     TXDBOBJNAME=pkg
   )
 
@@ -49,5 +49,4 @@ makeErccDbLitePkg <- function(erccdblitefile, author="Nobody", email="dev@null.c
   db_path <- file.path(destDir, pkg, "inst", "extdata", erccdblitefile)
   file.copy(erccdblitefile, to=db_path)
   return(pkg)
-
 }

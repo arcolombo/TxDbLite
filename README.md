@@ -3,7 +3,7 @@ TxDbLite is a minimalist annotation package generator, designed to extract annot
 ```r
 source("http://bioconductor.org/biocLite.R")
 biocLite("devtools")
-biocLite("ttriche/TxDbLite")
+biocLite("ramsinghlab/TxDbLite")
 ```
 
 The underlying assumption is that users want to quantify transcript-level RNA expression, may or may not have a GTF file for each transcriptome, and would like to extract as much information as possible about the transcripts from what they do have.  This in turn allows the artemis package to automatically determine what transcriptomes a dataset came from, whether those are already known to the package, and how to generate certain types of annotation for specific transcriptomes from Ensembl, RepBase, and ERCC (spike-in controls from Ambion).  It turns out that in some cases, biomaRt will not perform the mappings that a user might expect, so we try to take care of that issue here.  

@@ -16,7 +16,6 @@ makeRepDbLitePkg <- function(repdblitefile, author="Nobody", email="dev@null.com
   md <- metadata(repdb)
   fetchMeta <- function(x) md[x, "value"]
   pkg <- fetchMeta("package_name")
-
   maintainer <- paste0(author, " <", email, ">")
   organism <- fetchMeta("organism")
   repbase_version <- as.character(fetchMeta("genome_build"))
