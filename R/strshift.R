@@ -8,7 +8,6 @@
 #' @return    the element(s) [z] produced by splitting basename(x) on y
 #'
 #' @export
-#'
 strshift <- function(x, y=" ", z=1) {
   paste(str2vec(x, y)[z], collapse=y)
 }

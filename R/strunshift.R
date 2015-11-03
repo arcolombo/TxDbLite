@@ -9,7 +9,6 @@
 #' @return    the string produced by shoving x onto str2vec(w, y) after [z]
 #'
 #' @export
-#'
 strunshift <- function(w, x, y=" ", z=0) {
   paste(append(str2vec(w, y), x, z, collapse=y))
 }
