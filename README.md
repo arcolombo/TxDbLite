@@ -1,3 +1,5 @@
+#TxDbLite[![DOI](https://zenodo.org/badge/12352/RamsinghLab/TxDbLite.svg)](https://zenodo.org/badge/latestdoi/12352/RamsinghLab/TxDbLite)  
+
 TxDbLite is a minimalist annotation package generator, designed to extract annotations from FASTA files.  It relies upon some R/Bioconductor infrastructure packages and a few filthy tricks.  To install it, do the following in R:
 
 ```r
