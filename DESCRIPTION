@@ -21,7 +21,8 @@ Imports:
     Rsamtools
 Suggests:
     artemis,
-    BiocStyle
+    BiocStyle,
+    ComplexHeatmap
 VignetteBuilder: knitr
 License: LGPL
 RoxygenNote: 5.0.0

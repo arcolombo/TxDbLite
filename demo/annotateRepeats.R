@@ -1,14 +1,13 @@
 library(artemis) # EISAI release or later
 library(artemisData) # any release should do 
 library(RepDbLite.Hsapiens.2005) # or generate
+library(ComplexHeatmap)
 
 data(NS) # normal vs senescent HSPCs from Capone, Connor, et al 
 DE_repeats <- read.csv(system.file("extdata", "DE_repeats.csv", 
                                    package="TxDbLite", mustWork=TRUE),
                        row.names=1)
 
-library(ComplexHeatmap)
-DE_repeats <- read.csv("DE_repeats.csv", row.names=1)
 DE_repeat_tpm <- tpm(NS)[rownames(DE_repeats), ]
 repeat_colors <- list(repeat_class=c(DNA_element="purple",
                                      LINE="red", SINE="orange",
