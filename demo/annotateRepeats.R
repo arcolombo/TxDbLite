@@ -7,6 +7,7 @@ data(NS) # normal vs senescent HSPCs from Capone, Connor, et al
 DE_repeats <- read.csv(system.file("extdata", "DE_repeats.csv", 
                                    package="TxDbLite", mustWork=TRUE),
                        row.names=1)
+annotations <- transcripts(RepDbLite.Hsapiens.2005)[rownames(DE_repeats)]
 
 DE_repeat_tpm <- tpm(NS)[rownames(DE_repeats), ]
 repeat_colors <- list(repeat_class=c(DNA_element="purple",
@@ -38,7 +39,8 @@ rpt_anno +
 Heatmap(log1p(DE_repeat_tpm), 
         row_title_side="left",
         show_row_dend=FALSE, 
-        top_annotation=anno, 
+        top_annotation=anno,
+        row_names_gp=gpar(fontsize=9),
         name="log(1+TPM)")
 
 bySd <- function(x, k=25) { 
@@ -59,4 +61,5 @@ Heatmap(top10sd,
         row_title_side="left",
         show_row_dend=FALSE, 
         top_annotation=anno, 
+        row_names_gp=gpar(fontsize=9),
         name="log(1+TPM)")
