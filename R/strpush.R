@@ -9,7 +9,6 @@
 #' @return    a string
 #'
 #' @export
-#'
 strpush <- function(w, x, y=" ", z=NULL) {
   vec <- str2vec(w, y)
   if (is.null(z)) z <- length(vec)

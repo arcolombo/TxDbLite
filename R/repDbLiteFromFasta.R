@@ -8,7 +8,6 @@
 #' @import Rsamtools
 #'
 #' @export
-#'
 repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
  
   verbose <- TRUE 
