@@ -22,7 +22,13 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   if (verbose) cat("done.\n")
 
   if (verbose) cat("Creating the database...") # {{{
-  outstub <- getTxDbLiteName(fastaFile)
+ 
+  #for purpsoses of building the package, the name can not have an underscore
+
+   
+
+
+ outstub <- getTxDbLiteName(fastaFile)
   dbname <- paste(outstub, "sqlite", sep=".") 
   con <- dbConnect(dbDriver("SQLite"), dbname=dbname)
   if (verbose) cat("done.\n") # }}}

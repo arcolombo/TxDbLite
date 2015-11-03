@@ -16,7 +16,7 @@ makeEnsDbLitePkg <- function(ensdblitefile, author="Nobody", email="dev@null.com
   md <- metadata(ensdb)
   fetchMeta <- function(x) md[x, "value"]
   pkg <- fetchMeta("package_name")
-  maintainer<-paste0(author, "<", email, ">")
+   maintainer<-paste0(author, "<", email, ">")
   organism <- fetchMeta("organism")
   ensembl_version <- md["genome_build", "value"]
   template_path <- system.file("ensdblite", package="TxDbLite")

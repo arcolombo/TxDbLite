@@ -72,6 +72,7 @@ getOrgDetails <- function(organism) { # {{{
 #' @export
 getTxDbLiteName <- function(fastaFile) { # {{{
 
+
   fastaStub <- getFastaStub(fastaFile)
   type <- getAnnotationType(fastaStub)
 
@@ -84,15 +85,26 @@ getTxDbLiteName <- function(fastaFile) { # {{{
     organism <- tokens[1] 
     organism <- sub("\\.", "_", ## try & be robust
                     sub("Mmusculus", "Mus_musculus", 
-                        sub("Hsapiens", "Homo_sapiens", organism)))
+                        sub("Hsapiens", "Homo_sapiens",
+                          sub("Dmelanogaster","Drosophila_melanogaster", organism))))
+
+
     organism <- getOrganismAbbreviation(organism)
     genomeVersion <- tokens[2]
     if (length(tokens) > 3) {
       version <- tokens[3]
       what <- tokens[4]
+     if(grepl("_",what)=="TRUE"){
+     what<-gsub("_",".",what)
+  }
+    
     } else { 
       version <- tokens[2]
-      what <- tokens[3]
+      what <- tokens[3] 
+      if(grepl("_",what)=="TRUE"){
+      what<-gsub("_",".",what)
+    }
+    
     }
     return(gsub("_", "", paste(type, organism, version, sep=".")))
   } else {

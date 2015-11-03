@@ -24,12 +24,13 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   grab <- function(x, y=" ", i=1) splt(x, y)[i]
   shift <- function(x, y=" ") grab(x, y, i=1)
 
+     
+
   txDbLiteName <- getTxDbLiteName(fastaFile)
   genomeVersion <- strsplit(fastaFile, "\\.")[[1]][1]
   tokens <- strsplit(txDbLiteName, "\\.")[[1]]
   organism <- tokens[2] 
   version <- tokens[3]
-
   org <- getOrgDetails(organism) 
   if (!require(org$package, character.only=TRUE)) {
     stop("Please install the", org$package, "package, then try again. Thanks!")
@@ -198,7 +199,9 @@ matrixStrand<-ifelse(txCoords["strand",]=="1","+","-") #class matrix 1 X N mtx
                overwrite=T, row.names=F)
   if (verbose) cat("done.\n") # }}}
 
-  ## write metadata table # {{{ 
+  ## write metadata table # {{{ ing pseudogenes, NMD and the like. See the file names 
+#explanation below for different subsets of both known and predicted 
+#transcripts.
   Metadata <- ensDbLiteMetadata(packageName=outstub, 
                                 genomeVersion=txVersion,
                                 sourceFile=fastaFile)
@@ -287,3 +290,4 @@ ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
   return(MetaData)
 
 } # }}}
+
