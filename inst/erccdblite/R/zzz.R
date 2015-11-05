@@ -7,7 +7,6 @@
   path <- system.file("extdata", package=pkgname, lib.loc=libname)
   files <- dir(path)
   for(i in seq_len(length(files))){
-<<<<<<< HEAD
    # db <- EnsDbLite(system.file("extdata", files[[i]], package=pkgname,
     #                lib.loc=libname))
     db<-ErccDbLite(files[[i]],path)
