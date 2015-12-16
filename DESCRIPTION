@@ -24,4 +24,4 @@ Suggests:
     BiocStyle
 VignetteBuilder: knitr
 License: LGPL
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1
