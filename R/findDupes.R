@@ -12,7 +12,15 @@
 findDupes <- function(...) { 
 
   fastaFiles <- list(...)
-  if (is.character(fastaFiles[[1]]) && length(fastaFiles[[1]]) > 1)
+   
+    seqs<-lapply(fastaFiles,function(x) readDNAStringSet(x))
+    seqNames<-lapply(seqs,function(x) names(x))
+    dupes<-unlist(lapply(seqNames,function(x) x[duplicated(x)]))
+   return(dupes)
+
+
+  else{  #stuff to delete...  chrs does not work with dupes FIX ME
+
     fastaFiles <- as.list(do.call(c, fastaFiles))
     allChrs <- do.call(rbind, lapply(fastaFiles, chrs))
   if (anyDuplicated(allChrs$seqnames)) {
@@ -33,7 +41,7 @@ findDupes <- function(...) {
   return(NULL)
 }
 
-
+} #{{{ main
 
 .determineIdentical<-function(duped,dupeSeqs)  {   
     
