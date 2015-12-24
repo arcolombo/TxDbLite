@@ -5,17 +5,15 @@
 #'
 #' @return data.frame of duplicate seqnames and fasta filenames, else NULL
 #'
-#' @import Rsamtools
-#' @import Biostrings
+#' @import seqinr
+#' @import
 #' 
 #' @export
 findDupes <- function(...) { 
-
-  fastaFiles <- list(...)
-   
-    seqs<-lapply(fastaFiles,function(x) readDNAStringSet(x))
-    seqNames<-lapply(seqs,function(x) names(x))
-    dupes<-unlist(lapply(seqNames,function(x) x[duplicated(x)]))
+     fastaFiles <- list(...)
+     seqInput<-sapply(fastaFiles,function(x) readDNAStringSet(x)) #read input
+     dupes<-sapply(seqInput,function(x) x[duplicated(names(x))])
+    
    return(dupes)
 
 
@@ -38,8 +36,8 @@ findDupes <- function(...) {
   #}#
 
   # if no dupes,
-  return(NULL)
-}
+#  return(NULL)
+#}
 
 } #{{{ main
 
