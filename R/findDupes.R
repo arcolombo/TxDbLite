@@ -5,7 +5,7 @@
 #'
 #' @return data.frame of duplicate seqnames and fasta filenames, else NULL
 #'
-#' @import seqinr
+#' @import Biostrings
 #' @import
 #' 
 #' @export
