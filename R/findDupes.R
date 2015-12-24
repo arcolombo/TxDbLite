@@ -19,23 +19,23 @@ findDupes <- function(...) {
    return(dupes)
 
 
-  else{  #stuff to delete...  chrs does not work with dupes FIX ME
+#  else{  #stuff to delete...  chrs does not work with dupes FIX ME
 
-    fastaFiles <- as.list(do.call(c, fastaFiles))
-    allChrs <- do.call(rbind, lapply(fastaFiles, chrs))
-  if (anyDuplicated(allChrs$seqnames)) {
-    dupes <- allChrs$seqnames[duplicated(allChrs$seqnames)]
-    duped <- allChrs[which(allChrs$seqnames %in% dupes),]
-    duped <- duped[order(duped$seqnames),]
-    duped$allIdentical<-NA 
-    duped$ID<-rownames(duped)#unique IDs
-    dupeSeqs <- DNAStringSet(apply(duped, 1, getDupeSeq))
-    duped<-.determineIdentical(duped,dupeSeqs)
+ #   fastaFiles <- as.list(do.call(c, fastaFiles))
+  #  allChrs <- do.call(rbind, lapply(fastaFiles, chrs))
+ # if (anyDuplicated(allChrs$seqnames)) {
+  #  dupes <- allChrs$seqnames[duplicated(allChrs$seqnames)]
+  #  duped <- allChrs[which(allChrs$seqnames %in% dupes),]
+  #  duped <- duped[order(duped$seqnames),]
+  #  duped$allIdentical<-NA 
+  #  duped$ID<-rownames(duped)#unique IDs
+  #  dupeSeqs <- DNAStringSet(apply(duped, 1, getDupeSeq))
+  #  duped<-.determineIdentical(duped,dupeSeqs)
     #creates a list each entry has duplicated sequence under the sequence name
-    splitDupe<-split(dupeSeqs,duped$seqname)[duped$seqnames]
-      .printIdentical(splitDupe)
-     return(duped)
-  }
+    #splitDupe<-split(dupeSeqs,duped$seqname)[duped$seqnames]
+    #  .printIdentical(splitDupe)
+   #  return(duped)
+  #}#
 
   # if no dupes,
   return(NULL)
