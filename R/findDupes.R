@@ -9,14 +9,49 @@
 #' @import
 #' 
 #' @export
-findDupes <- function(...) { 
-     fastaFiles <- list(...)
+findDupes <- function(fastaFiles=NULL) { 
+     #repBase names are tab separated.  we defined dupes as matching names and matching sequences
      seqInput<-sapply(fastaFiles,function(x) readDNAStringSet(x)) #read input
-     dupes<-sapply(seqInput,function(x) x[duplicated(names(x))])
-    
-   return(dupes)
+      #find duplicated sequences first 
+     dupeSeqs<-lapply(seqInput,function(x) x[duplicated(x)])
+     tabSplit<-lapply(dupeSeqs,function(x) strsplit(names(x),"\t") )
+     filteredSeqs<-lapply(tabSplit,function(x) (sapply(x,"[", c(1))))
+     spaceSplit<-lapply(filteredSeqs,function(x) strsplit(x," ") )
+     ensemblNames.duplicatedSequences<-lapply(spaceSplit,function(x) (sapply(x,"[",c(1))))
+     #ensemblNames with duplicated sequences
 
 
+
+     #all names that are duplicated 
+     nameSearch<-lapply(seqInput,function(x) strsplit(names(x),"\t") )
+     namesFilter<-lapply(nameSearch,function(x) (sapply(x,"[", c(1))) )
+     dupeNames<-lapply(namesFilter,function(x) x[duplicated(x)])
+     dupeNames<-Filter(length,dupeNames)
+     dupeLengths<-sapply(dupeNames,function(x) length(x) ) 
+     dupeDF<-as.data.frame(dupeNames)
+
+ 
+     if(length(dupeLengths)>0) {#if dupe was detected
+     #FIX ME: a dupe must match the dupe sequence with dupe names. 
+     #find the duplicated names in the list of duplicated sequnces
+     #find set of intersection between dupeNames (dupe names) and filteredSeqs(dupe sequences) 
+     duplicates<- lapply(ensemblNames.duplicatedSequences,function(x) x[which(x==dupeDF)])
+     duplicates<-Filter(length,duplicates)
+     duplicateLengths<-lengths(duplicates)
+     fileName<-names(duplicates)
+     message("there are duplicated sequences: ")
+     print(duplicates)
+     return(duplicates)
+     } #dupeLengths contains a dupe
+
+    if(length(dupeLengths)==0) {
+    message("found no duplicated sequence names .... no dupes found")
+    return(dupeLengths) #0
+
+    }#no dupes were found 
+
+
+}
 #  else{  #stuff to delete...  chrs does not work with dupes FIX ME
 
  #   fastaFiles <- as.list(do.call(c, fastaFiles))
@@ -39,7 +74,7 @@ findDupes <- function(...) {
 #  return(NULL)
 #}
 
-} #{{{ main
+#} #{{{ main
 
 .determineIdentical<-function(duped,dupeSeqs)  {   
     
