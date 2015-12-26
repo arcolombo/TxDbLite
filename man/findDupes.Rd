@@ -5,7 +5,7 @@
 \title{find any duplicate seqnames in FASTA files BEFORE creating an index...
 FIXME: remove them, write out a de-duped merged FASTA, and index that.}
 \usage{
-findDupes(...)
+findDupes(fastaFiles = NULL)
 }
 \arguments{
 \item{...}{the FASTA file names (may be compressed, doesn't matter)}
