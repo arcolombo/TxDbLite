@@ -5,35 +5,76 @@
 #'
 #' @return data.frame of duplicate seqnames and fasta filenames, else NULL
 #'
-#' @import Rsamtools
 #' @import Biostrings
+#'
 #' 
 #' @export
-findDupes <- function(...) { 
+findDupes <- function(fastaFiles=NULL) { 
+     #repBase names are tab separated.  we defined dupes as matching names and matching sequences
+     seqInput<-sapply(fastaFiles,function(x) readDNAStringSet(x)) #read input
+      #find duplicated sequences first 
+     dupeSeqs<-lapply(seqInput,function(x) x[duplicated(x)])
+     tabSplit<-lapply(dupeSeqs,function(x) strsplit(names(x),"\t") )
+     filteredSeqs<-lapply(tabSplit,function(x) (sapply(x,"[", c(1))))
+     spaceSplit<-lapply(filteredSeqs,function(x) strsplit(x," ") )
+     ensemblNames.duplicatedSequences<-lapply(spaceSplit,function(x) (sapply(x,"[",c(1))))
+     #ensemblNames with duplicated sequences
 
-  fastaFiles <- list(...)
-  if (is.character(fastaFiles[[1]]) && length(fastaFiles[[1]]) > 1)
-    fastaFiles <- as.list(do.call(c, fastaFiles))
-    allChrs <- do.call(rbind, lapply(fastaFiles, chrs))
-  if (anyDuplicated(allChrs$seqnames)) {
-    dupes <- allChrs$seqnames[duplicated(allChrs$seqnames)]
-    duped <- allChrs[which(allChrs$seqnames %in% dupes),]
-    duped <- duped[order(duped$seqnames),]
-    duped$allIdentical<-NA 
-    duped$ID<-rownames(duped)#unique IDs
-    dupeSeqs <- DNAStringSet(apply(duped, 1, getDupeSeq))
-    duped<-.determineIdentical(duped,dupeSeqs)
+
+
+     #all names that are duplicated 
+     nameSearch<-lapply(seqInput,function(x) strsplit(names(x),"\t") )
+     namesFilter<-lapply(nameSearch,function(x) (sapply(x,"[", c(1))) )
+     dupeNames<-lapply(namesFilter,function(x) x[duplicated(x)])
+     dupeNames<-Filter(length,dupeNames)
+     dupeLengths<-sapply(dupeNames,function(x) length(x) ) 
+     dupeDF<-as.data.frame(dupeNames)
+
+ 
+     if(length(dupeLengths)>0) {#if dupe was detected
+     #FIX ME: a dupe must match the dupe sequence with dupe names. 
+     #find the duplicated names in the list of duplicated sequnces
+     #find set of intersection between dupeNames (dupe names) and filteredSeqs(dupe sequences) 
+     duplicates<- lapply(ensemblNames.duplicatedSequences,function(x) x[which(x==dupeDF)])
+     duplicates<-Filter(length,duplicates)
+     duplicateLengths<-lengths(duplicates)
+     fileName<-names(duplicates)
+     message("there are duplicated sequences: ")
+     print(duplicates)
+     return(duplicates)
+     } #dupeLengths contains a dupe
+
+    if(length(dupeLengths)==0) {
+    message("found no duplicated sequence names .... no dupes found")
+    return(dupeLengths) #0
+
+    }#no dupes were found 
+
+
+}
+#  else{  #stuff to delete...  chrs does not work with dupes FIX ME
+
+ #   fastaFiles <- as.list(do.call(c, fastaFiles))
+  #  allChrs <- do.call(rbind, lapply(fastaFiles, chrs))
+ # if (anyDuplicated(allChrs$seqnames)) {
+  #  dupes <- allChrs$seqnames[duplicated(allChrs$seqnames)]
+  #  duped <- allChrs[which(allChrs$seqnames %in% dupes),]
+  #  duped <- duped[order(duped$seqnames),]
+  #  duped$allIdentical<-NA 
+  #  duped$ID<-rownames(duped)#unique IDs
+  #  dupeSeqs <- DNAStringSet(apply(duped, 1, getDupeSeq))
+  #  duped<-.determineIdentical(duped,dupeSeqs)
     #creates a list each entry has duplicated sequence under the sequence name
-    splitDupe<-split(dupeSeqs,duped$seqname)[duped$seqnames]
-      .printIdentical(splitDupe)
-     return(duped)
-  }
+    #splitDupe<-split(dupeSeqs,duped$seqname)[duped$seqnames]
+    #  .printIdentical(splitDupe)
+   #  return(duped)
+  #}#
 
   # if no dupes,
-  return(NULL)
-}
+#  return(NULL)
+#}
 
-
+#} #{{{ main
 
 .determineIdentical<-function(duped,dupeSeqs)  {   
     
