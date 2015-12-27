@@ -6,7 +6,6 @@
 #' @return data.frame of duplicate seqnames and fasta filenames, else NULL
 #'
 #' @import Biostrings
-#'
 #' 
 #' @export
 findDupes <- function(fastaFiles=NULL) { 
