@@ -1,7 +1,7 @@
 #' find any duplicate seqnames in FASTA files BEFORE creating an index...
 #' FIXME: remove them, write out a de-duped merged FASTA, and index that.
 #' 
-#' @param  ...        the FASTA file names (may be compressed, doesn't matter)
+#' @param  fastaFiles       vector of the FASTA file names (may be compressed, doesn't matter)
 #'
 #' @return data.frame of duplicate seqnames and fasta filenames, else NULL
 #'
