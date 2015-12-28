@@ -28,20 +28,21 @@ findDupes <- function(fastaFiles=NULL) {
      dupeNames<-lapply(namesFilter,function(x) x[duplicated(x)])
      dupeNames<-Filter(length,dupeNames)
      dupeLengths<-sapply(dupeNames,function(x) length(x) ) 
-     dupeDF<-as.data.frame(dupeNames)
+     
 
  
-     if(length(dupeLengths)>0) {#if dupe was detected
+     if(all(length(dupeLengths)>0)  ) {#if dupe was detected
      #FIX ME: a dupe must match the dupe sequence with dupe names. 
      #find the duplicated names in the list of duplicated sequnces
      #find set of intersection between dupeNames (dupe names) and filteredSeqs(dupe sequences) 
-     duplicates<- lapply(ensemblNames.duplicatedSequences,function(x) x[which(x==dupeDF)])
+     duplicates<- unlist(ensemblNames.duplicatedSequences) %in% unlist(dupeNames) 
+     duplicates<-unlist(ensemblNames.duplicatedSequences)[duplicates]
      duplicates<-Filter(length,duplicates)
-     duplicateLengths<-lengths(duplicates)
-     fileName<-names(duplicates)
+     duplicateDF<-data.frame(duplicates)
+     duplicateLengths<-lengths(duplicateDF)
      message("there are duplicated sequences: ")
-     print(duplicates)
-     return(duplicates)
+     print(duplicateDF)
+     return(duplicateDF)
      } #dupeLengths contains a dupe
 
     if(length(dupeLengths)==0) {
