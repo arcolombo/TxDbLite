@@ -14,7 +14,15 @@ findDupes <- function(fastaFiles=NULL) {
      seqInput<-sapply(fastaFiles,function(x) readDNAStringSet(x)) #read input
       #find duplicated sequences first 
      dupeSeqs<-lapply(seqInput,function(x) x[duplicated(x)])
-     tabSplit<-lapply(dupeSeqs,function(x) strsplit(names(x),"\t") )
+     seqLengths<-lapply(dupeSeqs,function(x) length(x))
+    
+     if(all(seqLengths==0) ) {#no dupe seqs. exit
+    message("found no duplicated sequence names .... no dupes found")
+    return(seqLengths) #0
+    }#no dupes were found 
+
+          
+     tabSplit<-lapply(Filter(length,dupeSeqs),function(x) strsplit(names(x),"\t") )
      filteredSeqs<-lapply(tabSplit,function(x) (sapply(x,"[", c(1))))
      spaceSplit<-lapply(filteredSeqs,function(x) strsplit(x," ") )
      ensemblNames.duplicatedSequences<-lapply(spaceSplit,function(x) (sapply(x,"[",c(1))))
