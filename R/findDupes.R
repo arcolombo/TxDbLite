@@ -19,8 +19,8 @@ findDupes <- function(fastaFiles=NULL) {
      if(all(seqLengths==0) ) {#no dupe seqs. exit
     message("found no duplicated sequence names .... no dupes found")
     duplicateDF<-data.frame(duplicates=unlist(seqLengths))
- 
-    return(duplicateDF) #0
+    duplicateDF<-suppressWarnings(as.data.frame(duplicateDF,stringsAsFactors=FALSE))
+    return(suppressWarnings(duplicateDF)) #0
     }#no dupes were found 
 
           
@@ -49,15 +49,16 @@ findDupes <- function(fastaFiles=NULL) {
      duplicates<-unlist(ensemblNames.duplicatedSequences)[duplicates]
      duplicates<-Filter(length,duplicates)
      duplicateDF<-data.frame(duplicates)
+     duplicateDF<-suppressWarnings(as.data.frame(duplicateDF,stringsAsFactors=FALSE))#factors errors indexKallisto
      duplicateLengths<-lengths(duplicateDF)
      message("there are duplicated sequences: ")
-     print(duplicateDF)
-     return(duplicateDF)
+     #print(duplicateDF)
+     return(suppressWarnings(duplicateDF))
      } #dupeLengths contains a dupe
 
-    if(length(dupeLengths)==0) {
+    if(length(dupeLengths)==0) {#empty list
     message("found no duplicated sequence names .... no dupes found")
-    return(dupeLengths) #0
+    return(data.frame(row.names=names(dupeSeqs),duplicates=0)) #0
 
     }#no dupes were found 
 
