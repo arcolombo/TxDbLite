@@ -58,7 +58,7 @@ findDupes <- function(fastaFiles=NULL) {
 
     if(length(dupeLengths)==0) {#empty list
     message("found no duplicated sequence names .... no dupes found")
-    return(data.frame(row.names=names(dupeSeqs),duplicates=0)) #0
+    return(data.frame(row.names=names(dupeSeqs),duplicates=rep(0,length(names(dupeSeqs))))) #0
 
     }#no dupes were found 
 
