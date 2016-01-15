@@ -7,8 +7,6 @@
 language: c
 
 
-#pandoc: true
-
 
 sudo: required
 dist: trusty
