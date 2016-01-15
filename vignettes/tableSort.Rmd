@@ -1,0 +1,52 @@
+---
+title: "Artemis: Raw Reads To Pathway Analsyes In Much Less Time"
+author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
+output:
+    pdf_document:
+      toc: true
+      number_sections: true
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+#Introduction
+this is a simple test for displaying the table repeat data used in the upcoming paper, and added as a test for TxDbLite.
+
+```{r}
+suppressWarnings(suppressPackageStartupMessages(library(artemis)))
+suppressPackageStartupMessages(library(artemisData))
+jsonFile <- system.file("extdata", "NS.JSON", package="artemis")
+appSession <- fetchAppSession(jsonFile) ## a
+names(appSession$samples) <- appSession$samples ## so column names get set
+appSession$outputPath <- system.file("extdata", "", package="artemisData")
+pathBase<-system.file("extdata",package="artemisData")
+fastaPath <- paste0(pathBase, "/fasta")
+appSession$fastaPath<-fastaPath
+erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
+erccPkg<-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
+#Create a Ensembl Annotation Db with cdna and ncrna
+findDupes(paste0(appSession$fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")) #should return null.
+cd<-getwd()
+setwd(appSession$fastaPath)
+erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
+ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")
+ensPkg<-makeEnsDbLitePkg(ensDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
+repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_07.merged.fa.gz")
+repPkg<-makeRepDbLitePkg(repDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
+library("EnsDbLite.Hsapiens.81",character.only=TRUE)
+library("ErccDbLite.ERCC.97",character.only=TRUE)
+library("RepDbLite.Hsapiens.2007",character.only=TRUE)
+#display the Annotation data bases
+ErccDbLite(erccDb)
+EnsDbLite(ensDb)
+RepDbLite(repDb)
+
+erccTxs<-transcripts(ErccDbLite(erccDb))
+ens81Txs<-transcripts(EnsDbLite(ensDb))
+rep2007Txs<-transcripts(RepDbLite(repDb))
+
+repTable<-as.matrix(table(rep2007Txs$tx_biotype,rep2007Txs$gene_biotype))
+heatmap(repTable,Rowv=NA,Colv=NA,col=colorRampPalette(c("red","yellow","white")(255)))
+
+```
+
+
