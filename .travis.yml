@@ -45,10 +45,7 @@ install:
     - sudo R -e 'library(devtools);install_github("arcolombo/artemis")'
     - sudo R -e 'library(devtools);install_github("arcolombo/artemisData")'
 script:
-    #run the vignette
-     - sudo R -e 'library(rmarkdown);library(artemis);library(artemisData);render("./vignettes/artemis.Rmd")' 
-     - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'
-     - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
+    - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'
 after_failure:
   - sudo ./travis-tool.sh dump_logs
 notifications:
