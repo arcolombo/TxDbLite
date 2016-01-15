@@ -6,7 +6,7 @@
 
 language: c
 
-pandoc: true
+#pandoc: true
 
 sudo: required
 dist: trusty
