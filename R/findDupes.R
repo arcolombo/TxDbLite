@@ -1,7 +1,7 @@
 #' find any duplicate seqnames in FASTA files BEFORE creating an index...
 #' FIXME: remove them, write out a de-duped merged FASTA, and index that.
 #' 
-#' @param  ...        the FASTA file names (may be compressed, doesn't matter)
+#' @param  fastaFiles       vector of the FASTA file names (may be compressed, doesn't matter)
 #'
 #' @return data.frame of duplicate seqnames and fasta filenames, else NULL
 #'
@@ -14,7 +14,17 @@ findDupes <- function(fastaFiles=NULL) {
      seqInput<-sapply(fastaFiles,function(x) readDNAStringSet(x)) #read input
       #find duplicated sequences first 
      dupeSeqs<-lapply(seqInput,function(x) x[duplicated(x)])
-     tabSplit<-lapply(dupeSeqs,function(x) strsplit(names(x),"\t") )
+     seqLengths<-lapply(dupeSeqs,function(x) length(x))
+    
+     if(all(seqLengths==0) ) {#no dupe seqs. exit
+    message("found no duplicated sequence names .... no dupes found")
+    duplicateDF<-data.frame(duplicates=unlist(seqLengths))
+    duplicateDF<-suppressWarnings(as.data.frame(duplicateDF,stringsAsFactors=FALSE))
+    return(suppressWarnings(duplicateDF)) #0
+    }#no dupes were found 
+
+          
+     tabSplit<-lapply(Filter(length,dupeSeqs),function(x) strsplit(names(x),"\t") )
      filteredSeqs<-lapply(tabSplit,function(x) (sapply(x,"[", c(1))))
      spaceSplit<-lapply(filteredSeqs,function(x) strsplit(x," ") )
      ensemblNames.duplicatedSequences<-lapply(spaceSplit,function(x) (sapply(x,"[",c(1))))
@@ -28,25 +38,27 @@ findDupes <- function(fastaFiles=NULL) {
      dupeNames<-lapply(namesFilter,function(x) x[duplicated(x)])
      dupeNames<-Filter(length,dupeNames)
      dupeLengths<-sapply(dupeNames,function(x) length(x) ) 
-     dupeDF<-as.data.frame(dupeNames)
+     
 
  
-     if(length(dupeLengths)>0) {#if dupe was detected
+     if(all(length(dupeLengths)>0)  ) {#if dupe was detected
      #FIX ME: a dupe must match the dupe sequence with dupe names. 
      #find the duplicated names in the list of duplicated sequnces
      #find set of intersection between dupeNames (dupe names) and filteredSeqs(dupe sequences) 
-     duplicates<- lapply(ensemblNames.duplicatedSequences,function(x) x[which(x==dupeDF)])
+     duplicates<- unlist(ensemblNames.duplicatedSequences) %in% unlist(dupeNames) 
+     duplicates<-unlist(ensemblNames.duplicatedSequences)[duplicates]
      duplicates<-Filter(length,duplicates)
-     duplicateLengths<-lengths(duplicates)
-     fileName<-names(duplicates)
+     duplicateDF<-data.frame(duplicates)
+     duplicateDF<-suppressWarnings(as.data.frame(duplicateDF,stringsAsFactors=FALSE))#factors errors indexKallisto
+     duplicateLengths<-lengths(duplicateDF)
      message("there are duplicated sequences: ")
-     print(duplicates)
-     return(duplicates)
+     #print(duplicateDF)
+     return(suppressWarnings(duplicateDF))
      } #dupeLengths contains a dupe
 
-    if(length(dupeLengths)==0) {
+    if(length(dupeLengths)==0) {#empty list
     message("found no duplicated sequence names .... no dupes found")
-    return(dupeLengths) #0
+    return(data.frame(row.names=names(dupeSeqs),duplicates=rep(0,length(names(dupeSeqs))))) #0
 
     }#no dupes were found 
 

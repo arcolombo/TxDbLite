@@ -8,7 +8,7 @@ FIXME: remove them, write out a de-duped merged FASTA, and index that.}
 findDupes(fastaFiles = NULL)
 }
 \arguments{
-\item{...}{the FASTA file names (may be compressed, doesn't matter)}
+\item{fastaFiles}{vector of the FASTA file names (may be compressed, doesn't matter)}
 }
 \value{
 data.frame of duplicate seqnames and fasta filenames, else NULL
