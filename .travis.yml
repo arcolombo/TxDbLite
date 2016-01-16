@@ -93,9 +93,9 @@ bioc_packages:
     - SummarizedExperiment
     - beeswarm 
 r_github_packages:
-    - arcolombo/TxDbLite
-    - arcolombo/artemis
-    - arcolombo/artemisData
+    - RamsinghLab/TxDbLite
+    - RamsinghLab/artemis
+    - RamsinghLab/artemisData
     
 script:
     - sudo R -e 'library(rmarkdown);library(artemis);library(artemisData);library(TxDbLite); render("./vignettes/geneWiseAnalysis.Rmd")'    
