@@ -89,13 +89,18 @@ bioc_packages:
     - RSQLite
     - ensembldb
     - rtracklayer
-    - stringdist 
+    - stringdist
+    - SummarizedExperiment
+    - beeswarm 
 r_github_packages:
+    - arcolombo/TxDbLite
     - arcolombo/artemis
     - arcolombo/artemisData
-    - arcolombo/TxDbLite
+    
 script:
-    - sudo R -e 'library(rmarkdown); library(artemis);library(artemisData);render("./vignettes/geneWiseAnalysis.Rmd")'
+    - sudo R -e 'library(rmarkdown);library(artemis);library(artemisData);render("./vignettes/artemis.Rmd")' 
+    - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
+    - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
 after_failure:
     - sudo ./travis-tool.sh dump_logs
 
