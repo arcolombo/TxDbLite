@@ -98,9 +98,7 @@ r_github_packages:
     - arcolombo/artemisData
     
 script:
-    - sudo R -e 'library(rmarkdown);library(artemis);library(artemisData);render("./vignettes/artemis.Rmd")' 
-    - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
-    - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
+    - sudo R -e 'library(rmarkdown);library(artemis);library(artemisData);library(TxDbLite); render("./vignettes/geneWiseAnalysis.Rmd")'    
 after_failure:
     - sudo ./travis-tool.sh dump_logs
 
