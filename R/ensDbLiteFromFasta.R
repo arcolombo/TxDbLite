@@ -232,7 +232,7 @@ getEntrezIDs <- function(gxs, organism) { # {{{
   org <- getOrgDetails(organism)
   library(org$package, character.only=TRUE) 
   res <- try(mapIds(get(org$package), keys=gxs$gene_id, 
-                column="ENTREZID", keytype=org$keytype), silent == TRUE)
+                column="ENTREZID", keytype=org$keytype), silent=TRUE)
   if (inherits(res, "try-error")) {
     warning("No ENTREZID mappings were found for these genes...")
     return(rep(NA, length(gxs)))
@@ -255,7 +255,7 @@ getSymbols <- function(gxs, organism) { # {{{
   org <- getOrgDetails(organism)
   library(org$package, character.only=TRUE) 
   res <- try(mapIds(get(org$package), keys=gxs$gene_id, 
-                    column=org$symbol, keytype=org$keytype), silent == TRUE)
+                    column=org$symbol, keytype=org$keytype), silent=TRUE)
   if (inherits(res, "try-error")) {
     warning("No SYMBOLS were found for these genes...")
     return(rep(NA, length(gxs)))
