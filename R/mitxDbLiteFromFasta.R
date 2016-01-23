@@ -1,8 +1,8 @@
-#' Function to create an EnsDbLite object (a stripped-down SQLite db) from
-#' a specified Ensembl FASTA file for a given version, species, and type(s).
+#' Function to create an MitxDbLite object (a stripped-down SQLite db) from
+#' a specified miTranscriptome FASTA file for a given version and type(s).
 #' Note that this is shockingly easier than the same process for the GTF...
 #' 
-#' @param fastaFile     the FASTA file to collate into a EnsDbLite instance
+#' @param fastaFile     the FASTA file to collate into a MitxDbLite instance
 #' @param verbose       make a lot of noise? (TRUE) 
 #' 
 #' @import GenomicRanges
@@ -10,21 +10,19 @@
 #' @import Biostrings
 #' 
 #' @export
-ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
+mitxDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
   require(Biostrings) 
   require(GenomicRanges)
   options(useFancyQuotes=FALSE)
   options(stringsAsFactors=FALSE)
 
-  ## utility functions for parsing ENSEMBL FASTAs
+  ## utility functions for parsing miTranscriptome FASTAs
   splt <- function(x, y=" ") strsplit(x, y)[[1]]
   popx <- function(x) x[length(x)] 
   pop <- function(x, y=" ") popx(splt(x, y))
   grab <- function(x, y=" ", i=1) splt(x, y)[i]
   shift <- function(x, y=" ") grab(x, y, i=1)
-
-     
 
   txDbLiteName <- getTxDbLiteName(fastaFile)
   genomeVersion <- strsplit(fastaFile, "\\.")[[1]][1]
@@ -56,12 +54,15 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
     stop("Aborting construction of annotation database.")
   }
 
-  matrixStrand <- ifelse(txCoords["strand",] == "1", "+", "-") # 1xN matrix 
+matrixStrand<-ifelse(txCoords["strand",]=="1","+","-") #class matrix 1 X N mtx
+
   #converting to named character class for proper strand conversion. 
-  characterStrand <- as.character(matrixStrand)
-  names(characterStrand) <- colnames(matrixStrand)
-  stopifnot(identical(length(matrixStrand),length(characterStrand)))
+  characterStrand<-as.character(matrixStrand)
+  names(characterStrand)<-colnames(matrixStrand)
+  stopifnot(identical(length(matrixStrand),length(characterStrand))) #lengths must match
   stopifnot(identical(Rle(strand(characterStrand)),strand(Rle(characterStrand)))) #this is a sanity check enforcing strand conservation.
+
+
 
   txs <- GRanges(seqnames=as.character(txCoords["seqnames",]),
                  ranges=IRanges(start=as.integer(txCoords["start",]),
@@ -92,18 +93,18 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
   squash <- function(x, by, FUN) { # {{{
     xx <- aggregate(x=x, by=by, FUN=FUN)
-    if(all(sapply(xx[,2], length) == 1) == "TRUE") { 
-      x <- xx[,2]
-      names(x) <- xx[,1]
-    }
+    
+     if(all(sapply(xx[,2],length)==1)=="TRUE") { 
+     x <- xx[,2]
+     names(x) <- xx[,1]
+     }
 
-    if(!all(sapply(xx[,2],length) == 1) == "TRUE"){
-      idx <- which(sapply(xx[,2],length) > 1)
-      xx[idx,2] <- sapply(xx[idx, 2], 
-                          function(x) x <- "*") # does this do anything?
-      stopifnot(all(sapply(xx[,2], length) == 1))
-      x <- xx[,2]
-      names(x) <- xx[,1] 
+ if(!all(sapply(xx[,2],length)==1)=="TRUE"){
+    idx<-which(sapply(xx[,2],length)>1)
+    xx[idx,2]<-sapply(xx[idx,2],function(x) x<-"*")
+    stopifnot(all(sapply(xx[,2],length)==1))
+    x<-xx[,2]
+    names(x)<-xx[,1] 
       }
    x
   } # }}}
@@ -115,15 +116,16 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   gxEnd <- squash(end(txs), by=list(txs$gene_id), FUN=max)
   stopifnot(identical(names(gxChr), names(gxEnd)))
   gxStrand <- squash(as.character(strand(txs)), by=list(txs$gene_id),FUN=unique)
+  
 
   stopifnot(identical(names(gxChr), names(gxStrand)))
-  gxCharacterStrand <- as.character(gxStrand)
-  names(gxCharacterStrand) <- names(gxStrand)
-  stopifnot(identical(Rle(strand(gxCharacterStrand)),
-                      strand(Rle(gxCharacterStrand))))  
+  gxCharacterStrand<-as.character(gxStrand)
+  names(gxCharacterStrand)<-names(gxStrand)
+  stopifnot(identical(Rle(strand(gxCharacterStrand)),strand(Rle(gxCharacterStrand))))  
   stopifnot(identical(names(gxCharacterStrand),names(gxChr)))
 
-  gxs <- GRanges(seqnames=gxChr,
+
+   gxs <- GRanges(seqnames=gxChr,
                  ranges=IRanges(start=gxStart, end=gxEnd),
                  strand=gxCharacterStrand)
   genome(gxs) <- genomeVersion
@@ -138,7 +140,7 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   gxs$entrezid <- getEntrezIDs(gxs, organism)[names(gxs)]
   gxs$gene_name <- getSymbols(gxs, organism)[names(gxs)]
   txs$gene <- as.integer(sub(org$gxpre, "", txs$gene_id))
-  gxs$gene <- as.integer(sub(org$gxpre,"",gxs$gene_id))
+  gxs$gene<-as.integer(sub(org$gxpre,"",gxs$gene_id))
   if (verbose) cat("...done.\n") # }}}
 
   if (verbose) cat("Creating the database...") # {{{
@@ -195,14 +197,16 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
                overwrite=T, row.names=F)
   if (verbose) cat("done.\n") # }}}
 
-  # write metadata table # {{{ 
-  Metadata <- ensDbLiteMetadata(packageName=outstub, 
+  ## write metadata table # {{{ ing pseudogenes, NMD and the like. See the file names 
+#explanation below for different subsets of both known and predicted 
+#transcripts.
+  Metadata <- mitxDbLiteMetadata(packageName=outstub, 
                                 genomeVersion=txVersion,
                                 sourceFile=fastaFile)
   dbWriteTable(con, name="metadata", Metadata, overwrite=TRUE, row.names=FALSE)
   # }}}
 
-  # create indices  # {{{
+  ## create indices  # {{{
   dbGetQuery(con, "create index tx_id_idx on tx (tx_id);")
   dbGetQuery(con, "create index gene_idx on gene (gene);")
   dbGetQuery(con, "create index txb_id_idx on tx_biotype (id);")
@@ -218,7 +222,7 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 } # }}}
 
 
-#' @describeIn ensDbLiteFromFasta
+#' @describeIn mitxDbLiteFromFasta
 #' 
 #' add EntrezGene IDs for Ensembl genes
 #'
@@ -231,18 +235,12 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 getEntrezIDs <- function(gxs, organism) { # {{{
   org <- getOrgDetails(organism)
   library(org$package, character.only=TRUE) 
-  res <- try(mapIds(get(org$package), keys=gxs$gene_id, 
-                column="ENTREZID", keytype=org$keytype), silent == TRUE)
-  if (inherits(res, "try-error")) {
-    warning("No ENTREZID mappings were found for these genes...")
-    return(rep(NA, length(gxs)))
-  } else { 
-    return(res)
-  }
+  mapIds(get(org$package), keys=gxs$gene_id, 
+         column="ENTREZID", keytype=org$keytype)
 } # }}}
 
 
-#' @describeIn ensDbLiteFromFasta
+#' @describeIn mitxDbLiteFromFasta
 #' 
 #' add symbols for Ensembl genes
 #'
@@ -254,20 +252,14 @@ getEntrezIDs <- function(gxs, organism) { # {{{
 getSymbols <- function(gxs, organism) { # {{{
   org <- getOrgDetails(organism)
   library(org$package, character.only=TRUE) 
-  res <- try(mapIds(get(org$package), keys=gxs$gene_id, 
-                    column=org$symbol, keytype=org$keytype), silent == TRUE)
-  if (inherits(res, "try-error")) {
-    warning("No SYMBOLS were found for these genes...")
-    return(rep(NA, length(gxs)))
-  } else { 
-    return(res)
-  }
+  mapIds(get(org$package), keys=gxs$gene_id, 
+         column=org$symbol, keytype=org$keytype) 
 } # }}}
 
 
-#' @describeIn ensDbLiteFromFasta
+#' @describeIn mitxDbLiteFromFasta
 #' 
-#' create metadata for an EnsDbLite instance
+#' create metadata for an MitxDbLite instance
 #'
 #' @param packageName   the name of the annotation package to be built 
 #' @param genomeVersion name of genome assembly for coordinates, e.g. "GRCh38"
@@ -276,7 +268,7 @@ getSymbols <- function(gxs, organism) { # {{{
 #' @return a data.frame of metadata suitable for cramming into the database
 #'
 #' @export
-ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
+mitxDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
 
   tokens <- strsplit(getFastaStub(sourceFile), "\\.")[[1]]
   names(tokens)[1:3] <- c("organism", "genome", "version")
@@ -286,8 +278,8 @@ ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
   MetaData <- data.frame(matrix(ncol=2, nrow=8))
   colnames(MetaData) <- c("name", "value")
   MetaData[1,] <- c("package_name", packageName)
-  MetaData[2,] <- c("db_type", "EnsDbLite")
-  MetaData[3,] <- c("type_of_gene_id", "Ensembl Gene ID")
+  MetaData[2,] <- c("db_type", "MitxDbLite")
+  MetaData[3,] <- c("type_of_gene_id", "miTranscriptome gene ID")
   MetaData[4,] <- c("created_by", paste("TxDbLite", packageVersion("TxDbLite")))
   MetaData[5,] <- c("creation_time", date())
   MetaData[6,] <- c("organism", organism$name)

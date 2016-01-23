@@ -3,8 +3,6 @@
 \docType{data}
 \name{utils}
 \alias{colAsVector}
-\alias{createAnnotationPackage}
-\alias{getAnnotationType}
 \alias{getFastaStub}
 \alias{getOrgDetails}
 \alias{getOrganismAbbreviation}
@@ -27,16 +25,6 @@ getOrganismAbbreviation(organism)
 getOrgDetails(organism)
 
 getTxDbLiteName(fastaFile)
-
-getAnnotationType(fastaFile)
-
-createAnnotationPackage(fastaFile, ...)
-}
-\arguments{
-\item{fastaFile}{the filename}
-}
-\value{
-the name of the annotation package, or NULL if uncertain how to do it
 }
 \description{
 utility functions
@@ -55,10 +43,6 @@ utility functions
 
 \item \code{getTxDbLiteName}: get the name of the package/sqlite file for a FASTA-based annotation
 NOTE: as of 1.9.25, this is based on DbType.Org.Version
-
-\item \code{getAnnotationType}: figure out what type of annotation package to create
-
-\item \code{createAnnotationPackage}: create an annotation package for a FASTA file (try to figure out what kind)
 }}
 \keyword{datasets}
 
