@@ -24,8 +24,6 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   grab <- function(x, y=" ", i=1) splt(x, y)[i]
   shift <- function(x, y=" ") grab(x, y, i=1)
 
-     
-
   txDbLiteName <- getTxDbLiteName(fastaFile)
   genomeVersion <- strsplit(fastaFile, "\\.")[[1]][1]
   tokens <- strsplit(txDbLiteName, "\\.")[[1]]
@@ -38,12 +36,12 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
   if (verbose) cat("Extracting transcript lengths...") # {{{
   txLen <- fasta.seqlengths(fastaFile)
-  names(txLen) <- sapply(sapply(names(txLen), shift), pop, y="\\.")
+  names(txLen) <- sapply(names(txLen), idStub)
   if (verbose) cat("done.\n") # }}}
   
   if (verbose) cat("Extracting transcript descriptions...") # {{{
   txDesc <- names(fasta.seqlengths(fastaFile))
-  names(txDesc) <- sapply(txDesc, shift)
+  names(txDesc) <- sapply(txDesc, idStub)
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Extracting genomic coordinates...") # {{{
@@ -59,9 +57,12 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   matrixStrand <- ifelse(txCoords["strand",] == "1", "+", "-") # 1xN matrix 
   #converting to named character class for proper strand conversion. 
   characterStrand <- as.character(matrixStrand)
-  names(characterStrand) <- colnames(matrixStrand)
+  names(characterStrand) <- sapply(colnames(matrixStrand), idStub)
   stopifnot(identical(length(matrixStrand),length(characterStrand)))
-  stopifnot(identical(Rle(strand(characterStrand)),strand(Rle(characterStrand)))) #this is a sanity check enforcing strand conservation.
+
+  # a sanity check enforcing strand conservation:
+  stopifnot(identical(Rle(strand(characterStrand)),
+                      strand(Rle(characterStrand)))) 
 
   txs <- GRanges(seqnames=as.character(txCoords["seqnames",]),
                  ranges=IRanges(start=as.integer(txCoords["start",]),
@@ -71,12 +72,15 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   genome(txs) <- genomeVersion
   if (verbose) cat("done.\n") # }}}
 
+  # from here on out, all of the ENSG/ENST fuckery is fixed by idStub()
+
   if (verbose) cat("Extracting gene and biotype associations...") # {{{
   mcols(txs) <- DataFrame(tx_id=names(txs),
                           tx_length=txLen[names(txs)],
                           gene_id=sapply(sapply(txDesc,grab,i=4), pop, ":"),
                           tx_biotype=sapply(sapply(txDesc,grab,i=6), pop,":"),
                           gene_biotype=sapply(sapply(txDesc,grab,i=5), pop,":"))
+  mcols(txs)$gene_id <- sapply(mcols(txs)$gene_id, idStub)
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Tabulating GC content...") # {{{
@@ -254,6 +258,10 @@ getEntrezIDs <- function(gxs, organism) { # {{{
 getSymbols <- function(gxs, organism) { # {{{
   org <- getOrgDetails(organism)
   library(org$package, character.only=TRUE) 
+
+  ## needed since Ens83...
+  if (any(grepl("\\.", gxs$gene_id))) 
+     
   res <- try(mapIds(get(org$package), keys=gxs$gene_id, 
                     column=org$symbol, keytype=org$keytype), silent=TRUE)
   if (inherits(res, "try-error")) {

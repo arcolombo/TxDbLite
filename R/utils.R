@@ -2,6 +2,23 @@
 #'
 utils <- NULL
 
+
+#' @describeIn utils
+#' 
+#' needed from Ens83 onwards :-/ and maybe will need to generalize as well
+#' 
+#' @param x   a string to try and pop the ENSEMBL identifier off of
+#'
+#' @return    if everything works out properly, the ENS* identifier (without .N)
+#'
+#' @export
+idStub <- function(x) {
+  if (grepl("^ENS.*\\.", x)) x <- strsplit(x, "\\.")[[1]][1]
+  if (grepl(" ", x)) x <- strsplit(x, " ")[[1]][1]
+  return(x)
+}
+
+
 #' @describeIn utils
 #' 
 #' get the "stub" of a FASTA filename (no .fa, no .fasta, no .gz)
@@ -83,28 +100,27 @@ getTxDbLiteName <- function(fastaFile) { # {{{
   } else if(!is.null(type)) {
     tokens <- strsplit(fastaStub, "\\.")[[1]]
     organism <- tokens[1] 
-    organism <- sub("\\.", "_", ## try & be robust
+    organism <- sub("\\.", "_", # try to be robust
                     sub("Mmusculus", "Mus_musculus", 
                         sub("Hsapiens", "Homo_sapiens",
-                          sub("Dmelanogaster","Drosophila_melanogaster", organism))))
-
+                          sub("Dmelanogaster","Drosophila_melanogaster", 
+                              organism))))
 
     organism <- getOrganismAbbreviation(organism)
     genomeVersion <- tokens[2]
     if (length(tokens) > 3) {
       version <- tokens[3]
       what <- tokens[4]
-     if(grepl("_",what)=="TRUE"){
-     what<-gsub("_",".",what)
-  }
+      if(grepl("_", what)) {
+         what <- gsub("_",".",what)
+      }
     
     } else { 
       version <- tokens[2]
       what <- tokens[3] 
-      if(grepl("_",what)=="TRUE"){
-      what<-gsub("_",".",what)
-    }
-    
+      if(grepl("_",what)) { 
+        what <- gsub("_", ".", what)
+      }
     }
     return(gsub("_", "", paste(type, organism, version, sep=".")))
   } else {

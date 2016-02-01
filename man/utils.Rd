@@ -8,11 +8,14 @@
 \alias{getOrganismAbbreviation}
 \alias{getSupportedAbbreviations}
 \alias{getTxDbLiteName}
+\alias{idStub}
 \alias{utils}
 \title{utility functions}
 \format{An object of class \code{NULL} of length 0.}
 \usage{
 utils
+
+idStub(x)
 
 getFastaStub(fastaFile)
 
@@ -26,11 +29,19 @@ getOrgDetails(organism)
 
 getTxDbLiteName(fastaFile)
 }
+\arguments{
+\item{x}{a string to try and pop the ENSEMBL identifier off of}
+}
+\value{
+if everything works out properly, the ENS* identifier (without .N)
+}
 \description{
 utility functions
 }
 \section{Functions}{
 \itemize{
+\item \code{idStub}: needed from Ens83 onwards :-/ and maybe will need to generalize as well
+
 \item \code{getFastaStub}: get the "stub" of a FASTA filename (no .fa, no .fasta, no .gz)
 
 \item \code{colAsVector}: get a column of a data.frame _complete_with_rownames_ as a vector
