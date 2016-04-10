@@ -1,5 +1,5 @@
 ---
-title: "Artemis: Raw Reads To Pathway Analsyes In Much Less Time"
+title: "Arkas: Raw Reads To Pathway Analsyes In Much Less Time"
 author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
 output:
     pdf_document:
@@ -12,13 +12,13 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 this is a simple test for displaying the table repeat data used in the upcoming paper, and added as a test for TxDbLite.
 
 ```{r}
-suppressWarnings(suppressPackageStartupMessages(library(artemis)))
-suppressPackageStartupMessages(library(artemisData))
-jsonFile <- system.file("extdata", "NS.JSON", package="artemis")
+suppressWarnings(suppressPackageStartupMessages(library(arkas)))
+suppressPackageStartupMessages(library(arkasData))
+jsonFile <- system.file("extdata", "NS.JSON", package="arkas")
 appSession <- fetchAppSession(jsonFile) ## a
 names(appSession$samples) <- appSession$samples ## so column names get set
-appSession$outputPath <- system.file("extdata", "", package="artemisData")
-pathBase<-system.file("extdata",package="artemisData")
+appSession$outputPath <- system.file("extdata", "", package="arkasData")
+pathBase<-system.file("extdata",package="arkasData")
 fastaPath <- paste0(pathBase, "/fasta")
 appSession$fastaPath<-fastaPath
 erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
