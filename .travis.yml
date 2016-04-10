@@ -1,8 +1,9 @@
-# Sample .travis.yml for R projects.
+# this uses the r-travis native syntax for 1/16/16 travis implementation
 #
 # See README.md for instructions, or for more configuration options,
 # see the wiki:
 #   https://github.com/craigcitro/r-travis/wiki
+#  checking now from ramsinghLab ~ master
 
 language: 
     - r
@@ -32,7 +33,7 @@ apt_packages:
    - zlib1g-dev 
    - libc6-dev 
    - libcurl4-openssl-dev 
-   - libxml2-dev
+   - r-cran-xml
    - curl 
    - cmake 
    - zlibc 
@@ -46,59 +47,70 @@ apt_packages:
    - texlive-latex-extra
    - libcurl4-openssl-dev
    - libxml2-dev
-
+   - samtools
 before_install:
     - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
     - chmod 755 ./travis-tool.sh
     - sudo apt-get --yes install curl cmake zlibc zlib1g-dev
     - sudo apt-get install -y libhdf5-dev
     - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
-  
+    - sudo R -e 'source("http://bioconductor.org/biocLite.R"); biocLite("BiocInstaller")'
+    - sudo R -e 'library(BiocInstaller);biocLite(c("rtracklayer","XML","biomaRt","RCurl"),ask=FALSE)'
+    - sudo R -e 'library(BiocInstaller);biocLite(c("parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","SPIA","EnrichmentBrowser","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
+     - sudo R -e 'library(BiocInstaller);biocLite(c("Homo.sapiens","Mus.musculus","RUVSeq","erccdashboard"),ask=FALSE)'
+     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","rtracklayer","stringdist","Biostrings","OrganismDbi","Rsamtools", "qusage"),ask=FALSE)'
+ 
 bioc_packages: 
-    - BiocInstaller
     - xml2
     - rversions
-    - ensembldb
     - rtracklayer
-    - Biobase
-    - Biostrings
-    - GenomicRanges
-    - OrganismDbi
-    - Rsamtools
-    - rhdf5
-    - matrixStats
-    - GenomicFeatures 
-    - Matrix 
-    - KEGGREST
-    - rmarkdown
-    - roxygen2
-    - knitr
-    - RUVSeq
-    - erccdashboard 
-    - pathview
-    - qusage
+    - XML
+    - RCurl
+    - annotate
+    - genefilter
+    - RColorBrewer
+    - geneplotter
+    - bitops
+    - BiocParallel
+    - httr
+    - png 
+    - parallel 
     - jsonlite
     - GenomeInfoDb
-    - limma
-    - parallel
-    - tools
-    - biomaRt
+    - Matrix
+    - Biostrings
+    - BiocParallel
+    - bitops
+    - httr
+    - png
+    - locfit
+    - org.Hs.eg.db
+    - latticeExtra
+    - hwriter
+    - GenomicAlignments
+    - ShortRead
+    - RSQLite
+    - EDASeq
+    - OrganismDbi
+    - geneplotter
+    - rmarkdown
+    - pathview
+    - jsonlite
     - edgeR
     - ggplot2
     - DBI
-    - RSQLite
     - ensembldb
-    - rtracklayer
     - stringdist
-    - SummarizedExperiment
-    - beeswarm 
+
 r_github_packages:
     - arcolombo/TxDbLite
     - arcolombo/arkas
     - arcolombo/arkasData
     
 script:
-    - sudo R -e 'library(rmarkdown);library(arkas);library(arkasData);library(TxDbLite); render("./vignettes/geneWiseAnalysis.Rmd")'    
+    - sudo R -e 'library(rmarkdown);library(arkas);library(arkasData);render("./vignettes/arkas.Rmd")' 
+    - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
+    - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
 after_failure:
     - sudo ./travis-tool.sh dump_logs
 
