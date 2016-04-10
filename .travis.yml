@@ -61,29 +61,15 @@ before_install:
      - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","rtracklayer","stringdist","Biostrings","OrganismDbi","Rsamtools", "qusage"),ask=FALSE)'
  
 bioc_packages: 
-    - xml2
     - rversions
-    - rtracklayer
-    - XML
-    - RCurl
     - annotate
     - genefilter
     - RColorBrewer
     - geneplotter
     - bitops
     - BiocParallel
-    - httr
-    - png 
     - parallel 
-    - jsonlite
-    - GenomeInfoDb
-    - Matrix
-    - Biostrings
     - BiocParallel
-    - bitops
-    - httr
-    - png
-    - locfit
     - org.Hs.eg.db
     - latticeExtra
     - hwriter
@@ -91,15 +77,10 @@ bioc_packages:
     - ShortRead
     - RSQLite
     - EDASeq
-    - OrganismDbi
-    - geneplotter
     - rmarkdown
     - pathview
-    - jsonlite
     - edgeR
     - ggplot2
-    - DBI
-    - ensembldb
     - stringdist
 
 r_github_packages:
