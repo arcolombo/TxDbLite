@@ -108,9 +108,7 @@ r_github_packages:
     - arcolombo/arkasData
     
 script:
-    - sudo R -e 'library(rmarkdown);library(arkas);library(arkasData);render("./vignettes/arkas.Rmd")' 
-    - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
-    - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
+      - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
 after_failure:
     - sudo ./travis-tool.sh dump_logs
 
