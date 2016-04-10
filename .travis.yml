@@ -103,9 +103,9 @@ bioc_packages:
     - stringdist
 
 r_github_packages:
-    - arcolombo/TxDbLite
-    - arcolombo/arkas
-    - arcolombo/arkasData
+    - RamsinghLab/TxDbLite_arkas
+    - RamsinghLabl/arkas_staging
+    - RamsinghLab/arkasData
     
 script:
       - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
