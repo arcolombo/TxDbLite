@@ -3,18 +3,19 @@
 \docType{data}
 \name{utils}
 \alias{colAsVector}
-\alias{createAnnotationPackage}
-\alias{getAnnotationType}
 \alias{getFastaStub}
 \alias{getOrgDetails}
 \alias{getOrganismAbbreviation}
 \alias{getSupportedAbbreviations}
 \alias{getTxDbLiteName}
+\alias{idStub}
 \alias{utils}
 \title{utility functions}
 \format{An object of class \code{NULL} of length 0.}
 \usage{
 utils
+
+idStub(x)
 
 getFastaStub(fastaFile)
 
@@ -27,22 +28,20 @@ getOrganismAbbreviation(organism)
 getOrgDetails(organism)
 
 getTxDbLiteName(fastaFile)
-
-getAnnotationType(fastaFile)
-
-createAnnotationPackage(fastaFile, ...)
 }
 \arguments{
-\item{fastaFile}{the filename}
+\item{x}{a string to try and pop the ENSEMBL identifier off of}
 }
 \value{
-the name of the annotation package, or NULL if uncertain how to do it
+if everything works out properly, the ENS* identifier (without .N)
 }
 \description{
 utility functions
 }
 \section{Functions}{
 \itemize{
+\item \code{idStub}: needed from Ens83 onwards :-/ and maybe will need to generalize as well
+
 \item \code{getFastaStub}: get the "stub" of a FASTA filename (no .fa, no .fasta, no .gz)
 
 \item \code{colAsVector}: get a column of a data.frame _complete_with_rownames_ as a vector
@@ -55,10 +54,6 @@ utility functions
 
 \item \code{getTxDbLiteName}: get the name of the package/sqlite file for a FASTA-based annotation
 NOTE: as of 1.9.25, this is based on DbType.Org.Version
-
-\item \code{getAnnotationType}: figure out what type of annotation package to create
-
-\item \code{createAnnotationPackage}: create an annotation package for a FASTA file (try to figure out what kind)
 }}
 \keyword{datasets}
 
