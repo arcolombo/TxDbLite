@@ -8,7 +8,10 @@
 #' @import Rsamtools
 #'
 #' @export
-repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
+repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
+
+#FIX ME support mouse uncataloged
+# FIX ME add three columns for reactome Ensembl support
  
   verbose <- TRUE 
   options(useFancyQuotes=FALSE)
@@ -43,128 +46,128 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   if (verbose) cat("done.\n") # }}}
  
   if (verbose) cat("Extracting repeat descriptions...") # {{{
-  data(repeat_biotypes, package="TxDbLite")
-  uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+  data(mouse_repeat_biotypes, package="TxDbLite")
+  uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
   if (length(uncataloged) > 1) { 
 
       message(length(uncataloged), " uncataloged repeat biotypes, fix case...")
       hit <- !is.na(match(tolower(uncataloged), 
-                          tolower(rownames(repeat_biotypes))))
-      rows <- rownames(repeat_biotypes)
+                          tolower(rownames(mouse_repeat_biotypes))))
+      rows <- rownames(mouse_repeat_biotypes)
       hits <- uncataloged[hit] 
-      cased <- repeat_biotypes[match(tolower(hits), tolower(rows)),]
+      cased <- mouse_repeat_biotypes[match(tolower(hits), tolower(rows)),]
       rownames(cased) <- hits
       cased$name <- hits
-      repeat_biotypes <- rbind(repeat_biotypes, cased)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+      mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, cased)
+      mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
+      uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
 
       message(length(uncataloged), 
               " uncataloged repeat biotypes, fix Tiggers...")
-      Tigger <- repeat_biotypes["Tigger1", , drop=FALSE]
+      Tigger <- mouse_repeat_biotypes["Tigger1", , drop=FALSE]
       Tiggers <- uncataloged[which(toupper(substr(uncataloged, 1, 6)) == 
                                    "TIGGER")]
       makeTigger <- function(name) return(data.frame(name=name, Tigger[,-1]))
       TiggerRows <- do.call(rbind, lapply(Tiggers, makeTigger))
       rownames(TiggerRows) <- Tiggers
-      repeat_biotypes <- rbind(repeat_biotypes, TiggerRows)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+      mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, TiggerRows)
+      mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
+      uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
 
       message(length(uncataloged), " uncataloged repeat biotypes, fix Alus...")
-      Alu <- repeat_biotypes["Alu", , drop=FALSE]
+      Alu <- mouse_repeat_biotypes["Alu", , drop=FALSE]
       Alus <- uncataloged[which(substr(uncataloged, 1, 3) == "Alu")]
       makeAlu <- function(name) return(data.frame(name=name, Alu[,-1]))
       AluRows <- do.call(rbind, lapply(Alus, makeAlu))
       rownames(AluRows) <- Alus
-      repeat_biotypes <- rbind(repeat_biotypes, AluRows)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+      mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, AluRows)
+      mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
+      uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
 
-      message(length(uncataloged), " uncataloged repeat biotypes, fix HERVs...")
-      HERVs <- uncataloged[which(substr(uncataloged, 1, 4) == "HERV")]
-      HERVi <- paste0(HERVs[paste0(HERVs, "-int") %in% 
-                      rownames(repeat_biotypes)], "-int")
-      HERVis <- repeat_biotypes[HERVi, ]
-      rownames(HERVis) <- sub("-int", "", rownames(HERVis))
-      HERVis$name <- sub("-int", "", HERVis$name)
-      repeat_biotypes <- rbind(repeat_biotypes, HERVis)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
-
-      message(length(uncataloged)," uncataloged repeat biotypes, more HERVs...")
-      HERVs <- HERVs[!paste0(HERVs, "-int") %in% rownames(repeat_biotypes)]
-      HERV <- repeat_biotypes["HERV1_I-int", , drop=FALSE]
-      makeHERV <- function(name) return(data.frame(name=name, HERV[,-1]))
-      HERVRows <- do.call(rbind, lapply(HERVs, makeHERV))
-      rownames(HERVRows) <- HERVs
-      repeat_biotypes <- rbind(repeat_biotypes, HERVRows)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
-
+  #    message(length(uncataloged), " uncataloged repeat biotypes, fix HERVs...")
+   #   HERVs <- uncataloged[which(substr(uncataloged, 1, 4) == "HERV")]
+   #   HERVi <- paste0(HERVs[paste0(HERVs, "-int") %in% 
+  #                    rownames(repeat_biotypes)], "-int")
+   #   HERVis <- repeat_biotypes[HERVi, ]
+    #  rownames(HERVis) <- sub("-int", "", rownames(HERVis))
+  #    HERVis$name <- sub("-int", "", HERVis$name)
+  #    repeat_biotypes <- rbind(repeat_biotypes, HERVis)
+  #    repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
+  #    uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+#
+  #    message(length(uncataloged)," uncataloged repeat biotypes, more HERVs...")
+  #    HERVs <- HERVs[!paste0(HERVs, "-int") %in% rownames(repeat_biotypes)]
+  #    HERV <- repeat_biotypes["HERV1_I-int", , drop=FALSE]
+  #    makeHERV <- function(name) return(data.frame(name=name, HERV[,-1]))
+  #    HERVRows <- do.call(rbind, lapply(HERVs, makeHERV))
+  #    rownames(HERVRows) <- HERVs
+  #    repeat_biotypes <- rbind(repeat_biotypes, HERVRows)
+  #    repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
+  #    uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+  # there ain't no HERVs for mouse
       message(length(uncataloged), " uncataloged repeat biotypes, fix LINE1...")
       L1s <- uncataloged[which(substr(uncataloged, 1, 2) == "L1")]
-      LINE1 <- repeat_biotypes["L1M",]
+      LINE1 <- mouse_repeat_biotypes["L1M",]
       makeLINE1 <- function(name) return(data.frame(name=name, LINE1[,-1]))
       LINE1Rows <- do.call(rbind, lapply(L1s, makeLINE1))
       rownames(LINE1Rows) <- L1s
-      repeat_biotypes <- rbind(repeat_biotypes, LINE1Rows)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+      mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, LINE1Rows)
+      mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
+      uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
 
-      message(length(uncataloged), " uncataloged repeat biotypes, fix MERs...")
+      message(length(uncataloged), " uncataloged mouse repeat biotypes, fix MERs...")
       MERs <- uncataloged[which(substr(uncataloged, 1, 3) == "MER")]
-      MER <- repeat_biotypes["MER101",]
+      MER <- mouse_repeat_biotypes["MER101",]
       makeMER <- function(name) return(data.frame(name=name, MER[,-1]))
       MERRows <- do.call(rbind, lapply(MERs, makeMER))
       rownames(MERRows) <- MERs
-      repeat_biotypes <- rbind(repeat_biotypes, MERRows)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+      mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, MERRows)
+      mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
+      uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
 
-      message(length(uncataloged), " uncataloged repeat biotypes, fix LTRs...")
+      message(length(uncataloged), " uncataloged mouse repeat biotypes, fix LTRs...")
       LTRs <- uncataloged[which(substr(uncataloged, 1, 3) == "LTR")]
-      LTR <- repeat_biotypes["LTR1",]
+      LTR <- mouse_repeat_biotypes["LTR1",]
       makeLTR <- function(name) return(data.frame(name=name, LTR[,-1]))
       LTRRows <- do.call(rbind, lapply(LTRs, makeLTR))
       rownames(LTRRows) <- LTRs
-      repeat_biotypes <- rbind(repeat_biotypes, LTRRows)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+      mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, LTRRows)
+      mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
+      uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
 
-      message(length(uncataloged), " uncataloged repeat biotypes, fix SVAs...")
+      message(length(uncataloged), " uncataloged mouse repeat biotypes, fix SVAs...")
       SVAs <- uncataloged[which(substr(uncataloged, 1, 3) == "SVA")]
       SVA <- repeat_biotypes["SVA_A",]
       makeSVA <- function(name) return(data.frame(name=name, SVA[,-1]))
       SVARows <- do.call(rbind, lapply(SVAs, makeSVA))
       rownames(SVARows) <- SVAs
-      repeat_biotypes <- rbind(repeat_biotypes, SVARows)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+      mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, SVARows)
+      mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
+      uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
 
       message(length(uncataloged), " uncataloged repeat biotypes, fix SINEs...")
       SINEs <- uncataloged[grep("(FLA|FAM|FLAM|FRAM)", uncataloged)]
-      SINE <- repeat_biotypes["FRAM",]
+      SINE <- mouse_repeat_biotypes["FRAM",]
       makeSINE <- function(name) return(data.frame(name=name, SINE[,-1]))
       SINERows <- do.call(rbind, lapply(SINEs, makeSINE))
       rownames(SINERows) <- SINEs
-      repeat_biotypes <- rbind(repeat_biotypes, SINERows)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+      mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, SINERows)
+      mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
+      uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
       
       message(length(uncataloged),
-              " uncataloged repeat biotypes, fix Mariners...")
+              " uncataloged mouse repeat biotypes, fix Mariners...")
       MARs <- uncataloged[which(substr(uncataloged, 1, 3) == "MAR")]
-      MAR <- repeat_biotypes["MARNA",] 
+      MAR <- mouse_repeat_biotypes["MARNA",] 
       makeMAR <- function(name) return(data.frame(name=name, MAR[,-1]))
       MARRows <- do.call(rbind, lapply(MARs, makeMAR))
       rownames(MARRows) <- MARs
-      repeat_biotypes <- rbind(repeat_biotypes, MARRows)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+      mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, MARRows)
+      mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
+      uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
 
       ## fall back on hinting...?
-      message(length(uncataloged), " uncataloged repeat biotypes... hinting...")
+      message(length(uncataloged), " uncataloged mouse repeat biotypes... hinting...")
       txDesc <- names(fasta.seqlengths(fastaFile))
       names(txDesc) <- shiftall(names(txLen), y="\\t")
       txUncat <- txDesc[uncataloged] 
@@ -198,19 +201,19 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
       hinted$gene_biotype[grep("ERV", hinted$tx_biotype)] <- "LTR_element"
       hinted$gene_biotype[grep("LTR", hinted$tx_biotype)] <- "LTR_element"
       hinted$gene_biotype[is.na(hinted$gene_biotype)] <- "other_repeat"
-      repeat_biotypes <- rbind(repeat_biotypes, hinted)
-      repeat_biotypes <- repeat_biotypes[order(repeat_biotypes$name),] 
-      uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
+      mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, hinted)
+      mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
+      uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
       message(length(uncataloged), 
               " uncataloged repeat biotypes after hinting.")
 
       ## collapse tx_biotypes with "?" into their parent & tidy up the rest 
-      repeat_biotypes$tx_biotype <- shiftall(repeat_biotypes$tx_biotype, y="-")
-      repeat_biotypes$tx_biotype <- sub("\\?$", "", repeat_biotypes$tx_biotype)
-      repeat_biotypes$tx_biotype <- sub("acro$", "acromeric", 
-                                        repeat_biotypes$tx_biotype)
-      repeat_biotypes$tx_biotype <- sub("centr$", "centromeric", 
-                                        repeat_biotypes$tx_biotype)
+      mouse_repeat_biotypes$tx_biotype <- shiftall(mouse_repeat_biotypes$tx_biotype, y="-")
+      mouse_repeat_biotypes$tx_biotype <- sub("\\?$", "", mouse_repeat_biotypes$tx_biotype)
+      mouse_repeat_biotypes$tx_biotype <- sub("acro$", "acromeric", 
+                                        mouse_repeat_biotypes$tx_biotype)
+      mouse_repeat_biotypes$tx_biotype <- sub("centr$", "centromeric", 
+                                        mouse_repeat_biotypes$tx_biotype)
   }
   if (verbose) cat("done.\n") # }}}
 
@@ -228,8 +231,8 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   rpt$gene_id <- NA 
   rpt$gene_name <- NA 
   rpt$entrezid <- NA 
-  rpt$tx_biotype <- repeat_biotypes[rownames(rpt), "tx_biotype"]
-  rpt$gene_biotype <- repeat_biotypes[rownames(rpt), "gene_biotype"]
+  rpt$tx_biotype <- mouse_repeat_biotypes[rownames(rpt), "tx_biotype"]
+  rpt$gene_biotype <- mouse_repeat_biotypes[rownames(rpt), "gene_biotype"]
   rpt$biotype_class <- "repeat"
   txcols <- c("seqnames", "start", "end", "strand",
               "tx_length", "gc_content", 

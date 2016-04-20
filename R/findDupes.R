@@ -44,8 +44,15 @@ findDupes <- function(fastaFiles=NULL) {
      #FIX ME: a dupe must match the dupe sequence with dupe names. 
      #find the duplicated names in the list of duplicated sequnces
      #find set of intersection between dupeNames (dupe names) and filteredSeqs(dupe sequences) 
-     duplicates<- unlist(ensemblNames.duplicatedSequences) %in% unlist(dupeNames) 
+     duplicates<- unlist(ensemblNames.duplicatedSequences) %in% unlist(dupeNames)
      duplicates<-unlist(ensemblNames.duplicatedSequences)[duplicates]
+     if(length(duplicates)==0) {
+     message("there exist duplicated names, but the sequences may not be actual duplicates; please pluck out or rename ...")
+     duplicates<-as.data.frame(unlist(dupeNames))
+     return(duplicates)
+     } 
+     
+     else {
      duplicates<-Filter(length,duplicates)
      duplicateDF<-data.frame(duplicates)
      duplicateDF<-suppressWarnings(as.data.frame(duplicateDF,stringsAsFactors=FALSE))#factors errors indexKallisto
@@ -54,6 +61,7 @@ findDupes <- function(fastaFiles=NULL) {
      #print(duplicateDF)
      return(suppressWarnings(duplicateDF))
      } #dupeLengths contains a dupe
+   }
 
     if(length(dupeLengths)==0) {#empty list
     message("found no duplicated sequence names .... no dupes found")
