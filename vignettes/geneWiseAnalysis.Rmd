@@ -110,6 +110,7 @@ lapply(files,function(x) system(paste0("rm -r ",x)))
 
 # Annotating Merged KallistoExperiment Containers
    Arkas has a function "annotateFeatures.R" which annotates ERCC, Ensembl, and RepBase databases for species Homo-Sapiens, Mus-musculus, and Rattus norvegicus.  The method "annotateFeatures.R" annotates the merged KallistoExperiment against every TxDbLite library simulatenously. These annotation databases are defined as 'lite' because they do not store exonic or intronic coordinates.
+
 ```{r}
 suppressPackageStartupMessages(library(arkas))
 library(arkasData)
@@ -119,8 +120,9 @@ pathBase<-system.file("extdata",package="arkasData")
 merged <- mergeKallisto(samples, outputPath=pathBase)
 libraryPath<-system.file("extdata","Libraries",package="arkasData")
 command<-paste0("sudo R CMD INSTALL ",libraryPath,"/",dir(libraryPath))
+setwd(libraryPath)
 lapply(command,function(x) system(x))
-merged<-annotateFeatures(merged, level="transcript") #annotate features using transcriptomes
+merged<-annotateFeatures(merged, level="transcript") #annotate features
 NS<-suppressWarnings(annotateFeatures(NS,level="transcript"))
 NS$subject <- factor(substr(colnames(NS), 2, 2))
 NS$treatment <- substr(colnames(NS), 1, 1) == "s"
