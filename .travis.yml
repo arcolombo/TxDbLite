@@ -10,7 +10,7 @@ language:
     - c
 bioc_required: true
 
-#pandoc: true
+pandoc: true
 
 
 sudo: required
