@@ -1,6 +1,5 @@
 #' functions to create a RepDbLite object (a stripped-down SQLite db) from
-#' a specified RepBase FASTA file for a given version, species, and type(s)
-#' 
+#' a specified RepBase FASTA file for a given version, species, and type(s). this is the mouse rep biotype to be used.
 #' @param fastaFile     the FASTA file to collate into a RepDbLite instance
 #' @param verbose       make a lot of noise? (TRUE) 
 #'
@@ -147,16 +146,14 @@ repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
       makeLTR <- function(name) return(data.frame(name=name, LTR[,-1]))
      if(length(LTRs)==0) {
       message("No LTRs were found in the uncataloged repeats...skipping")
-   
-  }
+       }
       if(length(LTRs)>0) {
       LTRRows <- do.call(rbind, lapply(LTRs, makeLTR))
       rownames(LTRRows) <- LTRs
       mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, LTRRows)
       mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
       uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
-
-}
+      }
 
       message(length(uncataloged), " uncataloged mouse repeat biotypes, fix SVAs...")
       SVAs <- uncataloged[which(substr(uncataloged, 1, 3) == "SVA")]
@@ -171,7 +168,7 @@ repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
       mouse_repeat_biotypes <- rbind(mouse_repeat_biotypes, SVARows)
       mouse_repeat_biotypes <- mouse_repeat_biotypes[order(mouse_repeat_biotypes$name),] 
       uncataloged <- setdiff(names(txs), rownames(mouse_repeat_biotypes))
-}
+     }
 
       message(length(uncataloged), " uncataloged mouse repeat biotypes, fix SINEs...")
       SINEs <- uncataloged[grep("(FLA|FAM|FLAM|FRAM)", uncataloged)]
