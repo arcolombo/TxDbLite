@@ -17,4 +17,8 @@ a data.frame mapping IDs to Reactome IDs and pathways
 \description{
 map genes or transcripts to Reactome pathways
 }
+\examples{
+mapToReactome("ENST00000519619", type="transcript")
+
+}
 
