@@ -1,24 +1,15 @@
 #' map genes or transcripts to updated HUGO symbols 
 #'
-#' @param   IDs     the identifiers to map
-#' @param   type    what type of identifier are these? (gene)
+#' @param   IDs       the identifiers to map
+#' @param   type      what type of identifier are these? (transcript)
+#' @param   useCache  boolean: use the cache? (TRUE, and should stay that way)
 #' 
-#' @return  a data.frame mapping IDs to HUGO symbols or transcript names 
+#' @return  a list mapping IDs to HUGO symbols or HUGO transcript names 
 #' 
-#' @import  biomaRt 
+#' @examples mapHugo("ENST00000003084")
 #' 
 #' @export
-mapHugo <- function(IDs, type=c("gene","transcript")) { 
-
-  type <- match.arg(type) 
-  idtype <- paste("ensembl", type, "id", sep="_") 
-  columns <- list(gene=c(ENSG="ensembl_gene_id", 
-                         HUGO="hgnc_symbol"),
-                  transcript=c(ENST="ensembl_transcript_id",
-                               HUGO="hgnc_transcript_name"))
-
-  ensembl <- useEnsembl(biomart="ensembl", 
-                        dataset="hsapiens_gene_ensembl") 
-  getBM(attributes=columns[[type]], filters=idtype, values=IDs, mart=ensembl)
-
+mapHugo <- function(IDs, useCache=TRUE) { 
+  cache <- getHugoCache(useCache=useCache)
+  cache[intersect(IDs, names(cache))]
 }

@@ -21,9 +21,9 @@ getFastaStub(fastaFile)
 
 colAsVector(x, y)
 
-getSupportedAbbreviations()
+getSupportedAbbreviations(how = c("abbreviation", "reactome"))
 
-getOrganismAbbreviation(organism)
+getOrganismAbbreviation(organism, how = c("abbreviation", "reactome"))
 
 getOrgDetails(organism)
 

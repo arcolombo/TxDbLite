@@ -2,23 +2,35 @@
 % Please edit documentation in R/mapToReactome.R
 \name{mapToReactome}
 \alias{mapToReactome}
-\title{map genes or transcripts to Reactome pathways}
+\title{map transcripts or genes to Reactome pathways, using a cache if possible}
 \usage{
-mapToReactome(IDs, type = c("transcript", "gene"))
+mapToReactome(IDs, type = c("transcript", "gene"), species = "Homo sapiens",
+  build = 84, asNames = FALSE, asUrls = FALSE, useCache = TRUE)
 }
 \arguments{
 \item{IDs}{the identifiers to map}
 
-\item{type}{what type of identifier are these? (transcript)}
+\item{type}{what type of identifier are these? (default:transcript)}
+
+\item{species}{what species are the IDs from? (default:Homo sapiens)}
+
+\item{build}{what build the IDs are from? (default:84)}
+
+\item{asNames}{boolean, convert the terms to full pathway names? (FALSE)}
+
+\item{asUrls}{boolean, convert terms to Reactome website URLs? (FALSE)}
+
+\item{useCache}{use the cache? (TRUE; do not change unless maintaining)}
 }
 \value{
-a data.frame mapping IDs to Reactome IDs and pathways
+a list of mappings for the supplied IDs
 }
 \description{
-map genes or transcripts to Reactome pathways
+map transcripts or genes to Reactome pathways, using a cache if possible
 }
 \examples{
-mapToReactome("ENST00000519619", type="transcript")
+ mapToReactome("ENSG00000234258")
+           mapToReactome("ENST00000387459", asNames=TRUE)
 
 }
 
