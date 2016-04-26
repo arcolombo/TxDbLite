@@ -5,6 +5,8 @@
 #   https://github.com/craigcitro/r-travis/wiki
 #  checking now from ramsinghLab ~ master
 
+#this tests TxDbLite build of geneWiseAnalysis which runs annotateFeatures and build TxDbLite libraries from scratch before running gwa. this is for human only testing.  
+
 language: 
     - r
     - c
@@ -56,7 +58,7 @@ before_install:
     - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
     - sudo R -e 'source("http://bioconductor.org/biocLite.R"); biocLite("BiocInstaller")'
     - sudo R -e 'library(BiocInstaller);biocLite(c("rtracklayer","XML","biomaRt","RCurl"),ask=FALSE)'
-    - sudo R -e 'library(BiocInstaller);biocLite(c("parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","SPIA","EnrichmentBrowser","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
+    - sudo R -e 'library(BiocInstaller);biocLite(c("org.Hs.eg.db","parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","SPIA","EnrichmentBrowser","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
      - sudo R -e 'library(BiocInstaller);biocLite(c("Homo.sapiens","Mus.musculus","RUVSeq","erccdashboard"),ask=FALSE)'
      - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","rtracklayer","stringdist","Biostrings","OrganismDbi","Rsamtools", "qusage"),ask=FALSE)'
  
@@ -68,20 +70,15 @@ bioc_packages:
     - geneplotter
     - bitops
     - BiocParallel
-   # - parallel 
-    - BiocParallel
-    - org.Hs.eg.db
     - latticeExtra
     - hwriter
     - GenomicAlignments
     - ShortRead
-   # - RSQLite
     - EDASeq
     - rmarkdown
     - pathview
     - edgeR
     - ggplot2
-   # - stringdist
 
 r_github_packages:
     - arcolombo/TxDbLite
