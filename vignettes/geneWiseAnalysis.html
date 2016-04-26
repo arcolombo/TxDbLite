@@ -110,7 +110,7 @@ $(document).ready(function () {
 
 <h1 class="title">Arkas: Raw Reads To Pathway Analsyes In Much Less Time</h1>
 <h4 class="author"><em>Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel</em></h4>
-<h4 class="date"><em>09 April, 2016</em></h4>
+<h4 class="date"><em>25 April, 2016</em></h4>
 
 </div>
 
@@ -286,8 +286,8 @@ lapply(fastaTx,function(x) findDupes(x))</code></pre>
 ## |package_name: ErccDbLite.ERCC.97
 ## |db_type: ErccDbLite
 ## |type_of_gene_id: N/A
-## |created_by: TxDbLite 1.9.100
-## |creation_time: Sat Apr  9 20:18:21 2016
+## |created_by: TxDbLite 1.9.13
+## |creation_time: Mon Apr 25 18:18:31 2016
 ## |organism: N/A
 ## |genome_build: N/A
 ## |source_file: /usr/local/lib/R/site-library/arkasData/extdata/fasta/tmp/ERCC.fa.gz
@@ -297,8 +297,8 @@ lapply(fastaTx,function(x) findDupes(x))</code></pre>
 ## |package_name: EnsDbLite.Hsapiens.81
 ## |db_type: EnsDbLite
 ## |type_of_gene_id: Ensembl Gene ID
-## |created_by: TxDbLite 1.9.100
-## |creation_time: Sat Apr  9 20:21:01 2016
+## |created_by: TxDbLite 1.9.13
+## |creation_time: Mon Apr 25 18:21:23 2016
 ## |organism: Homo sapiens
 ## |genome_build: GRCh38
 ## |source_file: Homo_sapiens.GRCh38.81.cdna.all.fa.gz
@@ -308,8 +308,8 @@ lapply(fastaTx,function(x) findDupes(x))</code></pre>
 ## |package_name: RepDbLite.Hsapiens.2005
 ## |db_type: RepDbLite
 ## |type_of_gene_id: RepBase identifiers
-## |created_by: TxDbLite 1.9.100
-## |creation_time: Sat Apr  9 20:21:01 2016
+## |created_by: TxDbLite 1.9.13
+## |creation_time: Mon Apr 25 18:21:23 2016
 ## |organism: Homo sapiens
 ## |genome_build: RepBase20_05
 ## |source_file: Homo_sapiens.RepBase.20_05.merged.fa
@@ -329,19 +329,19 @@ lapply(fastaTx,function(x) findDupes(x))</code></pre>
 ##    ERCC-00170  ERCC-00170 [1, 1023]      *   |      1023  0.3372434
 ##    ERCC-00171  ERCC-00171 [1,  505]      *   |       505  0.4772277
 ##   ERCC_vector ERCC_vector [1, 2732]      *   |      2732  0.4989019
-##                     tx_id   gene_id gene_name  entrezid
-##               &lt;character&gt; &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
-##    ERCC-00002  ERCC-00002      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00003  ERCC-00003      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00004  ERCC-00004      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00007  ERCC-00007      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00009  ERCC-00009      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
-##           ...         ...       ...       ...       ...
-##    ERCC-00165  ERCC-00165      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00168  ERCC-00168      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00170  ERCC-00170      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00171  ERCC-00171      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
-##   ERCC_vector ERCC_vector      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+##                     tx_id     gene_id gene_name  entrezid
+##               &lt;character&gt; &lt;character&gt; &lt;integer&gt; &lt;integer&gt;
+##    ERCC-00002  ERCC-00002  ERCC-00002      &lt;NA&gt;      &lt;NA&gt;
+##    ERCC-00003  ERCC-00003  ERCC-00003      &lt;NA&gt;      &lt;NA&gt;
+##    ERCC-00004  ERCC-00004  ERCC-00004      &lt;NA&gt;      &lt;NA&gt;
+##    ERCC-00007  ERCC-00007  ERCC-00007      &lt;NA&gt;      &lt;NA&gt;
+##    ERCC-00009  ERCC-00009  ERCC-00009      &lt;NA&gt;      &lt;NA&gt;
+##           ...         ...         ...       ...       ...
+##    ERCC-00165  ERCC-00165  ERCC-00165      &lt;NA&gt;      &lt;NA&gt;
+##    ERCC-00168  ERCC-00168  ERCC-00168      &lt;NA&gt;      &lt;NA&gt;
+##    ERCC-00170  ERCC-00170  ERCC-00170      &lt;NA&gt;      &lt;NA&gt;
+##    ERCC-00171  ERCC-00171  ERCC-00171      &lt;NA&gt;      &lt;NA&gt;
+##   ERCC_vector ERCC_vector ERCC_vector      &lt;NA&gt;      &lt;NA&gt;
 ##                        tx_biotype gene_biotype biotype_class
 ##                       &lt;character&gt;  &lt;character&gt;   &lt;character&gt;
 ##    ERCC-00002           SpikeIn_D      SpikeIn       SpikeIn
@@ -496,6 +496,7 @@ merged &lt;- mergeKallisto(samples, outputPath=pathBase)</code></pre>
 <pre><code>## Setting transcriptome automatically from Kallisto call string.</code></pre>
 <pre class="r"><code>libraryPath&lt;-system.file(&quot;extdata&quot;,&quot;Libraries&quot;,package=&quot;arkasData&quot;)
 command&lt;-paste0(&quot;sudo R CMD INSTALL &quot;,libraryPath,&quot;/&quot;,dir(libraryPath))
+setwd(libraryPath)
 lapply(command,function(x) system(x))</code></pre>
 <pre><code>## [[1]]
 ## [1] 0
@@ -505,7 +506,7 @@ lapply(command,function(x) system(x))</code></pre>
 ## 
 ## [[3]]
 ## [1] 0</code></pre>
-<pre class="r"><code>merged&lt;-annotateFeatures(merged, level=&quot;transcript&quot;) #annotate features using transcriptomes</code></pre>
+<pre class="r"><code>merged&lt;-annotateFeatures(merged, level=&quot;transcript&quot;) #annotate features</code></pre>
 <pre><code>## Loading required package: ErccDbLite.ERCC.97</code></pre>
 <pre><code>## Loading required package: EnsDbLite.Hsapiens.81</code></pre>
 <pre><code>## Warning in .Seqinfo.mergexy(x, y): The 2 combined objects have no sequence levels in common. (Use
@@ -533,47 +534,47 @@ GWA&lt;-geneWiseAnalysis(NS,design=design,
 <pre><code>## finding entrez IDs of top ensembl genes...</code></pre>
 <pre class="r"><code>head(GWA$limmaWithMeta,n=20)</code></pre>
 <pre><code>##                     logFC    AveExpr         t      P.Value    adj.P.Val
-## ENSG00000000938  2.503936  3.4115048  3.452477 1.909930e-03 3.964324e-02
-## ENSG00000000971 -3.222736  1.4423090 -3.786282 8.123283e-04 2.105124e-02
-## ENSG00000001630 -1.822014  6.4316184 -5.308421 1.483109e-05 9.036595e-04
-## ENSG00000002822  3.750556  1.1385317  4.073160 3.850783e-04 1.189385e-02
-## ENSG00000003137 -6.183849 -1.8495805 -6.703350 4.074361e-07 5.101421e-05
-## ENSG00000003402  1.631505  8.2001798  7.894025 2.238905e-08 5.078680e-06
-## ENSG00000004478 -2.185685  3.8978332 -3.916894 5.789056e-04 1.637483e-02
-## ENSG00000005187 -1.943089  4.9011626 -4.206421 2.715437e-04 9.147383e-03
-## ENSG00000005381  2.471777  6.5678349  7.247126 1.059470e-07 1.745777e-05
-## ENSG00000005810 -1.625765  7.8181754 -6.920968 2.366541e-07 3.280570e-05
-## ENSG00000005844  2.713230  4.3581900  4.968384 3.634861e-05 1.889533e-03
-## ENSG00000006062  2.943912  4.2249563  5.153493 2.230152e-05 1.254523e-03
-## ENSG00000006118  3.585798 -0.3106464  3.415789 2.095688e-03 4.219900e-02
-## ENSG00000006125 -1.112240  6.9416204 -3.925823 5.656129e-04 1.609003e-02
-## ENSG00000006831 -2.612343  5.8762788 -6.680104 4.319203e-07 5.350451e-05
-## ENSG00000007202  1.075648  6.5488238  3.382974 2.276585e-03 4.495644e-02
-## ENSG00000007237  3.324875  3.7464312  5.593566 7.022544e-06 5.153751e-04
-## ENSG00000007384 -4.976736 -1.0944191 -4.491820 1.280544e-04 5.177461e-03
-## ENSG00000008130  2.300708  4.0822873  4.425604 1.525006e-04 5.880027e-03
-## ENSG00000008283 -2.560269  3.9195730 -4.418107 1.555460e-04 5.944953e-03
+## ENSG00000000938  2.506741  3.4080943  3.455407 1.893514e-03 3.930713e-02
+## ENSG00000000971 -3.220352  1.4388985 -3.781833 8.204444e-04 2.128168e-02
+## ENSG00000001630 -1.820239  6.4282079 -5.288816 1.555754e-05 9.434826e-04
+## ENSG00000002822  3.752857  1.1351212  4.073408 3.840923e-04 1.185372e-02
+## ENSG00000003137 -6.181444 -1.8529909 -6.699594 4.086839e-07 5.125688e-05
+## ENSG00000003402  1.633832  8.1967693  7.859496 2.408146e-08 5.436506e-06
+## ENSG00000004478 -2.183421  3.8944227 -3.909632 5.889338e-04 1.659257e-02
+## ENSG00000005187 -1.941093  4.8977521 -4.196045 2.784651e-04 9.378297e-03
+## ENSG00000005381  2.474701  6.5644244  7.238251 1.074672e-07 1.773816e-05
+## ENSG00000005810 -1.623114  7.8147649 -6.875203 2.634004e-07 3.572445e-05
+## ENSG00000005844  2.715459  4.3547795  4.968874 3.618514e-05 1.884212e-03
+## ENSG00000006062  2.946248  4.2215458  5.154144 2.218513e-05 1.254123e-03
+## ENSG00000006118  3.587921 -0.3140569  3.416301 2.090528e-03 4.221106e-02
+## ENSG00000006125 -1.110178  6.9382099 -3.904161 5.973749e-04 1.674947e-02
+## ENSG00000006831 -2.610126  5.8728684 -6.661324 4.499511e-07 5.543905e-05
+## ENSG00000007202  1.077860  6.5454133  3.380017 2.291012e-03 4.524103e-02
+## ENSG00000007237  3.326906  3.7430207  5.593047 7.002093e-06 5.147421e-04
+## ENSG00000007384 -4.974067 -1.0978296 -4.489305 1.285879e-04 5.207808e-03
+## ENSG00000008130  2.302894  4.0788768  4.424983 1.523862e-04 5.898560e-03
+## ENSG00000008283 -2.557983  3.9161625 -4.410817 1.581896e-04 6.042979e-03
 ##                          B entrez_id gene_name      ensembl_id
-## ENSG00000000938 -1.4095287      2268       FGR ENSG00000000938
-## ENSG00000000971 -0.5100927      3075       CFH ENSG00000000971
-## ENSG00000001630  2.8192731      1595   CYP51A1 ENSG00000001630
-## ENSG00000002822  0.1513972      8379    MAD1L1 ENSG00000002822
-## ENSG00000003137  6.1313765     56603   CYP26B1 ENSG00000003137
-## ENSG00000003402  9.0162886      8837     CFLAR ENSG00000003402
-## ENSG00000004478 -0.3685884      2288     FKBP4 ENSG00000004478
-## ENSG00000005187  0.2188737      6296     ACSM3 ENSG00000005187
-## ENSG00000005381  7.7419880      4353       MPO ENSG00000005381
-## ENSG00000005810  6.6960183     23077    MYCBP2 ENSG00000005810
-## ENSG00000005844  2.2455964      3683     ITGAL ENSG00000005844
-## ENSG00000006062  2.7250540      9020   MAP3K14 ENSG00000006062
-## ENSG00000006118 -1.3272816     54972  TMEM132A ENSG00000006118
-## ENSG00000006125 -0.8679923       163     AP2B1 ENSG00000006125
-## ENSG00000006831  6.4144336     79602   ADIPOR2 ENSG00000006831
-## ENSG00000007202 -2.1223845      9703  KIAA0100 ENSG00000007202
-## ENSG00000007237  3.8426315      8522      GAS7 ENSG00000007237
-## ENSG00000007384  1.0616307     64285    RHBDF1 ENSG00000007384
-## ENSG00000008130  0.8776605     65220      NADK ENSG00000008130
-## ENSG00000008283  0.8797450      1534    CYB561 ENSG00000008283
+## ENSG00000000938 -1.4036444      2268       FGR ENSG00000000938
+## ENSG00000000971 -0.5196109      3075       CFH ENSG00000000971
+## ENSG00000001630  2.7709645      1595   CYP51A1 ENSG00000001630
+## ENSG00000002822  0.1538268      8379    MAD1L1 ENSG00000002822
+## ENSG00000003137  6.1349586     56603   CYP26B1 ENSG00000003137
+## ENSG00000003402  8.9432028      8837     CFLAR ENSG00000003402
+## ENSG00000004478 -0.3869001      2288     FKBP4 ENSG00000004478
+## ENSG00000005187  0.1926951      6296     ACSM3 ENSG00000005187
+## ENSG00000005381  7.7265706      4353       MPO ENSG00000005381
+## ENSG00000005810  6.5886497     23077    MYCBP2 ENSG00000005810
+## ENSG00000005844  2.2483078      3683     ITGAL ENSG00000005844
+## ENSG00000006062  2.7286643      9020   MAP3K14 ENSG00000006062
+## ENSG00000006118 -1.3253822     54972  TMEM132A ENSG00000006118
+## ENSG00000006125 -0.9213536       163     AP2B1 ENSG00000006125
+## ENSG00000006831  6.3727115     79602   ADIPOR2 ENSG00000006831
+## ENSG00000007202 -2.1291190      9703  KIAA0100 ENSG00000007202
+## ENSG00000007237  3.8447311      8522      GAS7 ENSG00000007237
+## ENSG00000007384  1.0602700     64285    RHBDF1 ENSG00000007384
+## ENSG00000008130  0.8765624     65220      NADK ENSG00000008130
+## ENSG00000008283  0.8619163      1534    CYB561 ENSG00000008283
 ##                   gene_biotype  biotype_class
 ## ENSG00000000938 protein_coding protein_coding
 ## ENSG00000000971 protein_coding protein_coding

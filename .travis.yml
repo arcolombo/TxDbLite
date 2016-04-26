@@ -10,7 +10,7 @@ language:
     - c
 bioc_required: true
 
-pandoc: true
+#pandoc: true
 
 
 sudo: required
@@ -68,20 +68,20 @@ bioc_packages:
     - geneplotter
     - bitops
     - BiocParallel
-    - parallel 
+   # - parallel 
     - BiocParallel
     - org.Hs.eg.db
     - latticeExtra
     - hwriter
     - GenomicAlignments
     - ShortRead
-    - RSQLite
+   # - RSQLite
     - EDASeq
     - rmarkdown
     - pathview
     - edgeR
     - ggplot2
-    - stringdist
+   # - stringdist
 
 r_github_packages:
     - arcolombo/TxDbLite
