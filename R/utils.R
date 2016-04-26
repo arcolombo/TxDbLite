@@ -44,9 +44,11 @@ colAsVector <- function(x, y) t(x[, y, drop=FALSE])[1,]
 #' supported organism abbreviations
 #'
 #' @export
-getSupportedAbbreviations <- function() { # {{{
-  data(supportedOrganismsForTxDbLite, package="TxDbLite")
-  colAsVector(supportedOrganismsForTxDbLite, "abbreviation")
+getSupportedAbbreviations <- function(how=c("abbreviation","reactome")) { # {{{
+  how <- match.arg(how) 
+  if (!exists("supportedOrganismsForTxDbLite")) 
+    data(supportedOrganismsForTxDbLite, package="TxDbLite")
+  colAsVector(supportedOrganismsForTxDbLite, how)
 } # }}}
 
 #' @describeIn utils
@@ -54,9 +56,11 @@ getSupportedAbbreviations <- function() { # {{{
 #' Get the abbreviation for an organism (among those with which we're familiar)
 #' 
 #' @export
-getOrganismAbbreviation <- function(organism) { # {{{
+getOrganismAbbreviation <- function(organism, how=c("abbreviation","reactome")){# {{{
+
+  how <- match.arg(how)
   org <- sub(" ", "_", sub("\\.", "_", organism))
-  abbr <- getSupportedAbbreviations()
+  abbr <- getSupportedAbbreviations(how=how)
   if (org %in% abbr) {
     return(abbr)
   } else if (org %in% names(abbr)) {
