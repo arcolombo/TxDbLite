@@ -15,7 +15,7 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   mcols(txs) <- DataFrame(tx_length=width(txs),
                           gc_content=GCcontent(scanFa(fastaFile)),
                           tx_id=names(txs),
-                          gene_id=rep(NA, length(txs)),
+                          gene_id=rep("ERCC", length(txs)),
                           gene_name=rep(NA, length(txs)),
                           entrezid=rep(NA, length(txs)))
   txs <- .addSpikeInSubgroup(txs)
