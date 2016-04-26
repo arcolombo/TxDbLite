@@ -37,33 +37,10 @@ Arkas supports various levels of analysis, namely transcript-level or gene-level
 ## The Measure Depends On The Level
    Not all transcripts have the same function homology.  Most folks agree that genes are made up by transcripts defined by the transcripts' coordinate location on the genome.  However there are transcipt isoforms in DNMT3A and WT1 that have radically different biological function depending on the transcript isoform that is present.  The problem with conducting *only* a gene level analysis is that many genes can have the same total gene level total quantified counts; however the biological mechanisms for the same "gene" can vary greatly by a single transcript isoform.
  
-```{r message=FALSE}
-suppressWarnings(suppressPackageStartupMessages(library(arkas)))    
-suppressPackageStartupMessages(library(arkasData))       
-jsonFile <- system.file("extdata", "NS.JSON", package="arkas")
-appSession <- fetchAppSession(jsonFile) ## a
-names(appSession$samples) <- appSession$samples ## so column names get set 
-appSession$outputPath <- system.file("extdata", "", package="arkasData")
-pathBase<-system.file("extdata",package="arkasData")
-fastaPath <- paste0(pathBase, "/fasta")
-appSession$fastaPath<-fastaPath
-NS <- mergeKallisto(appSession$samples, 
-                      outputPath=appSession$outputPath)
-```
 
 ##Creating The Design Matrix
 In order to analyze bundle-aggregated transcripts defined as "genes", we create a design matrix which controls for individual effects and contrasts treatment effects across individual subjects.  
 
-```{r}
-NS$subject <- factor(substr(colnames(NS), 2, 2))
-NS$treatment <- substr(colnames(NS), 1, 1) == "s"
-NS$ID <- NULL
-design <- with(as(colData(NS), "data.frame"),
-                  model.matrix( ~ treatment + subject ))
-rownames(design) <- colnames(NS)
-metadata(NS)$design <- design
-design
-```
 #Annotate!
 In order to run gene-wise analysis, Arkas requires that the merged KallistoExperiment must be annotated; this is because we must collapse transcripts into groups linked to unique Ensembl Gene Ids.    
 
@@ -85,6 +62,17 @@ cd<-appSession$fastaPath
 setwd(paste0(appSession$fastaPath,"/","tmp"))
 NS <- mergeKallisto(appSession$samples,
                       outputPath=appSession$outputPath)
+
+#create design matrix
+NS$subject <- factor(substr(colnames(NS), 2, 2))
+NS$treatment <- substr(colnames(NS), 1, 1) == "s"
+NS$ID <- NULL
+design <- with(as(colData(NS), "data.frame"),
+                  model.matrix( ~ treatment + subject ))
+rownames(design) <- colnames(NS)
+metadata(NS)$design <- design
+design
+
 
 fastaTx<-c("ERCC.fa.gz","Homo_sapiens.GRCh38.81.cdna.all.fa.gz","Homo_sapiens.RepBase.20_05.merged.fa")
 erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/tmp/","ERCC.fa.gz"))
