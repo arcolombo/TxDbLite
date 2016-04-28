@@ -110,7 +110,7 @@ $(document).ready(function () {
 
 <h1 class="title">Arkas: Raw Reads To Pathway Analsyes In Much Less Time</h1>
 <h4 class="author"><em>Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel</em></h4>
-<h4 class="date"><em>25 April, 2016</em></h4>
+<h4 class="date"><em>28 April, 2016</em></h4>
 
 </div>
 
@@ -160,47 +160,14 @@ make install   </code></pre>
 <h1><span class="header-section-number">3</span> Gene Wise Analysis</h1>
 <p>Arkas supports various levels of analysis, namely transcript-level or gene-level analysis which involves the Limma package for differential expression analysis.<br />
 Gene Wise Analysis is founded on the idea that groups of transcripts by a fixed Ensembl Gene ID is termed a “gene”; where “gene” counts are defined as the sum of all transcripts identified by the same unique Ensembl Gene Id. Gene Wise analysis generates bundled and aggregated transcripts associated with a specific Ensembl Gene ID. Arkas wraps limma around another method titled “collapseBundles”, which collapses transcripts into appropriate groups and sums the quantified transcript counts of the group; these transcript aggregated counts are defined as “gene” counts.</p>
+<p>Note- in order to run gene level analysis, the TxDbLite libraries need to be created using any arbitrary fasta file. once these libraries are created the Kallisto Experiment must be annotated using the method annotateFeatures.R, then geneWiseAnalysis.R can be called.</p>
 <div id="the-measure-depends-on-the-level" class="section level2">
 <h2><span class="header-section-number">3.1</span> The Measure Depends On The Level</h2>
 <p>Not all transcripts have the same function homology. Most folks agree that genes are made up by transcripts defined by the transcripts’ coordinate location on the genome. However there are transcipt isoforms in DNMT3A and WT1 that have radically different biological function depending on the transcript isoform that is present. The problem with conducting <em>only</em> a gene level analysis is that many genes can have the same total gene level total quantified counts; however the biological mechanisms for the same “gene” can vary greatly by a single transcript isoform.</p>
-<pre class="r"><code>suppressWarnings(suppressPackageStartupMessages(library(arkas)))    
-suppressPackageStartupMessages(library(arkasData))       
-jsonFile &lt;- system.file(&quot;extdata&quot;, &quot;NS.JSON&quot;, package=&quot;arkas&quot;)
-appSession &lt;- fetchAppSession(jsonFile) ## a
-names(appSession$samples) &lt;- appSession$samples ## so column names get set 
-appSession$outputPath &lt;- system.file(&quot;extdata&quot;, &quot;&quot;, package=&quot;arkasData&quot;)
-pathBase&lt;-system.file(&quot;extdata&quot;,package=&quot;arkasData&quot;)
-fastaPath &lt;- paste0(pathBase, &quot;/fasta&quot;)
-appSession$fastaPath&lt;-fastaPath
-NS &lt;- mergeKallisto(appSession$samples, 
-                      outputPath=appSession$outputPath)</code></pre>
 </div>
 <div id="creating-the-design-matrix" class="section level2">
 <h2><span class="header-section-number">3.2</span> Creating The Design Matrix</h2>
 <p>In order to analyze bundle-aggregated transcripts defined as “genes”, we create a design matrix which controls for individual effects and contrasts treatment effects across individual subjects.</p>
-<pre class="r"><code>NS$subject &lt;- factor(substr(colnames(NS), 2, 2))
-NS$treatment &lt;- substr(colnames(NS), 1, 1) == &quot;s&quot;
-NS$ID &lt;- NULL
-design &lt;- with(as(colData(NS), &quot;data.frame&quot;),
-                  model.matrix( ~ treatment + subject ))
-rownames(design) &lt;- colnames(NS)
-metadata(NS)$design &lt;- design
-design</code></pre>
-<pre><code>##    (Intercept) treatmentTRUE subject2 subject4
-## n1           1             0        0        0
-## n2           1             0        1        0
-## n4           1             0        0        1
-## s1           1             1        0        0
-## s2           1             1        1        0
-## s4           1             1        0        1
-## attr(,&quot;assign&quot;)
-## [1] 0 1 2 2
-## attr(,&quot;contrasts&quot;)
-## attr(,&quot;contrasts&quot;)$treatment
-## [1] &quot;contr.treatment&quot;
-## 
-## attr(,&quot;contrasts&quot;)$subject
-## [1] &quot;contr.treatment&quot;</code></pre>
 </div>
 </div>
 <div id="annotate" class="section level1">
@@ -209,8 +176,12 @@ design</code></pre>
 <div id="buiding-annotation-libraries" class="section level2">
 <h2><span class="header-section-number">4.1</span> Buiding Annotation libraries</h2>
 <p>Library Annotations are built using TxDbLite; these annotation databases allow for lite annotations parsing gene names, bio-types and family type from reference fastas from ERCC, Ensembl, or RepBase. Currently exonic, intronic, or other coordinate dependent information is not included in TxDbLite. The supplemental package arkasData stores the ready-to-load annotation libraries under /extdata/Libraries directory. For demonstration, we build the libraries under the arkasData/extdata/fasta/tmp directory.</p>
-<pre class="r"><code>suppressPackageStartupMessages(library(TxDbLite))
-suppressWarnings(suppressPackageStartupMessages(library(arkas)))
+<pre class="r"><code>suppressPackageStartupMessages(library(TxDbLite))</code></pre>
+<pre><code>## Warning: replacing previous import 'Biostrings::tail' by 'utils::tail' when
+## loading 'TxDbLite'</code></pre>
+<pre><code>## Warning: replacing previous import 'Biostrings::head' by 'utils::head' when
+## loading 'TxDbLite'</code></pre>
+<pre class="r"><code>suppressWarnings(suppressPackageStartupMessages(library(arkas)))
 suppressPackageStartupMessages(library(arkasData))
 jsonFile &lt;- system.file(&quot;extdata&quot;, &quot;NS.JSON&quot;, package=&quot;arkas&quot;)
 appSession &lt;- fetchAppSession(jsonFile)
@@ -220,10 +191,7 @@ fastaPath&lt;-system.file(&quot;extdata&quot;,&quot;fasta&quot;,package=&quot;ar
 appSession$fastaPath&lt;-fastaPath
 cd&lt;-appSession$fastaPath
 setwd(paste0(appSession$fastaPath,&quot;/&quot;,&quot;tmp&quot;))
-NS &lt;- mergeKallisto(appSession$samples,
-                      outputPath=appSession$outputPath)</code></pre>
-<pre><code>## Setting transcriptome automatically from Kallisto call string.</code></pre>
-<pre class="r"><code>fastaTx&lt;-c(&quot;ERCC.fa.gz&quot;,&quot;Homo_sapiens.GRCh38.81.cdna.all.fa.gz&quot;,&quot;Homo_sapiens.RepBase.20_05.merged.fa&quot;)
+fastaTx&lt;-c(&quot;ERCC.fa.gz&quot;,&quot;Homo_sapiens.GRCh38.81.cdna.all.fa.gz&quot;,&quot;Homo_sapiens.RepBase.20_05.merged.fa&quot;)
 erccDb&lt;-erccDbLiteFromFasta(paste0(appSession$fastaPath,&quot;/tmp/&quot;,&quot;ERCC.fa.gz&quot;))</code></pre>
 <pre><code>## Extracting spike-in associations...done.
 ## Creating the database...done.
@@ -232,8 +200,8 @@ erccDb&lt;-erccDbLiteFromFasta(paste0(appSession$fastaPath,&quot;/tmp/&quot;,&qu
 <pre><code>## Creating package in /usr/local/lib/R/site-library/arkasData/extdata/fasta/tmp/ErccDbLite.ERCC.97</code></pre>
 <pre class="r"><code>#Create a Ensembl Annotation Db with cdna and ncrna
 lapply(fastaTx,function(x) findDupes(x))</code></pre>
-<pre><code>## found no duplicated sequence names .... no dupes found</code></pre>
-<pre><code>## found no duplicated sequence names .... no dupes found</code></pre>
+<pre><code>## found no duplicated sequence names .... no dupes found
+## found no duplicated sequence names .... no dupes found</code></pre>
 <pre><code>## Warning in .Call2(&quot;fasta_index&quot;, filexp_list, nrec, skip, seek.first.rec, :
 ## reading FASTA file Homo_sapiens.RepBase.20_05.merged.fa: ignored 147
 ## invalid one-letter sequence codes</code></pre>
@@ -286,8 +254,8 @@ lapply(fastaTx,function(x) findDupes(x))</code></pre>
 ## |package_name: ErccDbLite.ERCC.97
 ## |db_type: ErccDbLite
 ## |type_of_gene_id: N/A
-## |created_by: TxDbLite 1.9.13
-## |creation_time: Mon Apr 25 18:18:31 2016
+## |created_by: TxDbLite 1.9.105
+## |creation_time: Thu Apr 28 16:18:30 2016
 ## |organism: N/A
 ## |genome_build: N/A
 ## |source_file: /usr/local/lib/R/site-library/arkasData/extdata/fasta/tmp/ERCC.fa.gz
@@ -297,8 +265,8 @@ lapply(fastaTx,function(x) findDupes(x))</code></pre>
 ## |package_name: EnsDbLite.Hsapiens.81
 ## |db_type: EnsDbLite
 ## |type_of_gene_id: Ensembl Gene ID
-## |created_by: TxDbLite 1.9.13
-## |creation_time: Mon Apr 25 18:21:23 2016
+## |created_by: TxDbLite 1.9.105
+## |creation_time: Thu Apr 28 16:21:50 2016
 ## |organism: Homo sapiens
 ## |genome_build: GRCh38
 ## |source_file: Homo_sapiens.GRCh38.81.cdna.all.fa.gz
@@ -308,8 +276,8 @@ lapply(fastaTx,function(x) findDupes(x))</code></pre>
 ## |package_name: RepDbLite.Hsapiens.2005
 ## |db_type: RepDbLite
 ## |type_of_gene_id: RepBase identifiers
-## |created_by: TxDbLite 1.9.13
-## |creation_time: Mon Apr 25 18:21:23 2016
+## |created_by: TxDbLite 1.9.105
+## |creation_time: Thu Apr 28 16:21:50 2016
 ## |organism: Homo sapiens
 ## |genome_build: RepBase20_05
 ## |source_file: Homo_sapiens.RepBase.20_05.merged.fa
@@ -486,116 +454,7 @@ lapply(files,function(x) system(paste0(&quot;rm -r &quot;,x)))</code></pre>
 </div>
 <div id="annotating-merged-kallistoexperiment-containers" class="section level1">
 <h1><span class="header-section-number">5</span> Annotating Merged KallistoExperiment Containers</h1>
-<p>Arkas has a function “annotateFeatures.R” which annotates ERCC, Ensembl, and RepBase databases for species Homo-Sapiens, Mus-musculus, and Rattus norvegicus. The method “annotateFeatures.R” annotates the merged KallistoExperiment against every TxDbLite library simulatenously. These annotation databases are defined as ‘lite’ because they do not store exonic or intronic coordinates.</p>
-<pre class="r"><code>suppressPackageStartupMessages(library(arkas))
-library(arkasData)
-suppressPackageStartupMessages(library(TxDbLite))
-samples&lt;-c(&quot;n1&quot;,&quot;n2&quot;,&quot;n4&quot;,&quot;s1&quot;,&quot;s2&quot;,&quot;s4&quot;)
-pathBase&lt;-system.file(&quot;extdata&quot;,package=&quot;arkasData&quot;)
-merged &lt;- mergeKallisto(samples, outputPath=pathBase)</code></pre>
-<pre><code>## Setting transcriptome automatically from Kallisto call string.</code></pre>
-<pre class="r"><code>libraryPath&lt;-system.file(&quot;extdata&quot;,&quot;Libraries&quot;,package=&quot;arkasData&quot;)
-command&lt;-paste0(&quot;sudo R CMD INSTALL &quot;,libraryPath,&quot;/&quot;,dir(libraryPath))
-setwd(libraryPath)
-lapply(command,function(x) system(x))</code></pre>
-<pre><code>## [[1]]
-## [1] 0
-## 
-## [[2]]
-## [1] 0
-## 
-## [[3]]
-## [1] 0</code></pre>
-<pre class="r"><code>merged&lt;-annotateFeatures(merged, level=&quot;transcript&quot;) #annotate features</code></pre>
-<pre><code>## Loading required package: ErccDbLite.ERCC.97</code></pre>
-<pre><code>## Loading required package: EnsDbLite.Hsapiens.81</code></pre>
-<pre><code>## Warning in .Seqinfo.mergexy(x, y): The 2 combined objects have no sequence levels in common. (Use
-##   suppressWarnings() to suppress this warning.)</code></pre>
-<pre><code>## Loading required package: RepDbLite.Hsapiens.2007</code></pre>
-<pre><code>## Warning in .Seqinfo.mergexy(x, y): The 2 combined objects have no sequence levels in common. (Use
-##   suppressWarnings() to suppress this warning.)</code></pre>
-<pre class="r"><code>NS&lt;-suppressWarnings(annotateFeatures(NS,level=&quot;transcript&quot;))
-NS$subject &lt;- factor(substr(colnames(NS), 2, 2))
-NS$treatment &lt;- substr(colnames(NS), 1, 1) == &quot;s&quot;
-NS$ID &lt;- NULL
-design &lt;- with(as(colData(NS), &quot;data.frame&quot;),
-                  model.matrix( ~ treatment + subject ))
-rownames(design) &lt;- colnames(NS)
-metadata(NS)$design &lt;- design
-#returns a KallistoExperiment at the gene level
-GWA&lt;-geneWiseAnalysis(NS,design=design,
-                       how=&quot;cpm&quot;,
-                       p.cutoff=0.05,
-                       fold.cutoff=1,
-                       read.cutoff=1,
-                       species=&quot;Homo.sapiens&quot;)</code></pre>
-<pre><code>## Fitting bundles...</code></pre>
-<pre><code>## For the time being, only summing of bundles is supported</code></pre>
-<pre><code>## finding entrez IDs of top ensembl genes...</code></pre>
-<pre class="r"><code>head(GWA$limmaWithMeta,n=20)</code></pre>
-<pre><code>##                     logFC    AveExpr         t      P.Value    adj.P.Val
-## ENSG00000000938  2.506741  3.4080943  3.455407 1.893514e-03 3.930713e-02
-## ENSG00000000971 -3.220352  1.4388985 -3.781833 8.204444e-04 2.128168e-02
-## ENSG00000001630 -1.820239  6.4282079 -5.288816 1.555754e-05 9.434826e-04
-## ENSG00000002822  3.752857  1.1351212  4.073408 3.840923e-04 1.185372e-02
-## ENSG00000003137 -6.181444 -1.8529909 -6.699594 4.086839e-07 5.125688e-05
-## ENSG00000003402  1.633832  8.1967693  7.859496 2.408146e-08 5.436506e-06
-## ENSG00000004478 -2.183421  3.8944227 -3.909632 5.889338e-04 1.659257e-02
-## ENSG00000005187 -1.941093  4.8977521 -4.196045 2.784651e-04 9.378297e-03
-## ENSG00000005381  2.474701  6.5644244  7.238251 1.074672e-07 1.773816e-05
-## ENSG00000005810 -1.623114  7.8147649 -6.875203 2.634004e-07 3.572445e-05
-## ENSG00000005844  2.715459  4.3547795  4.968874 3.618514e-05 1.884212e-03
-## ENSG00000006062  2.946248  4.2215458  5.154144 2.218513e-05 1.254123e-03
-## ENSG00000006118  3.587921 -0.3140569  3.416301 2.090528e-03 4.221106e-02
-## ENSG00000006125 -1.110178  6.9382099 -3.904161 5.973749e-04 1.674947e-02
-## ENSG00000006831 -2.610126  5.8728684 -6.661324 4.499511e-07 5.543905e-05
-## ENSG00000007202  1.077860  6.5454133  3.380017 2.291012e-03 4.524103e-02
-## ENSG00000007237  3.326906  3.7430207  5.593047 7.002093e-06 5.147421e-04
-## ENSG00000007384 -4.974067 -1.0978296 -4.489305 1.285879e-04 5.207808e-03
-## ENSG00000008130  2.302894  4.0788768  4.424983 1.523862e-04 5.898560e-03
-## ENSG00000008283 -2.557983  3.9161625 -4.410817 1.581896e-04 6.042979e-03
-##                          B entrez_id gene_name      ensembl_id
-## ENSG00000000938 -1.4036444      2268       FGR ENSG00000000938
-## ENSG00000000971 -0.5196109      3075       CFH ENSG00000000971
-## ENSG00000001630  2.7709645      1595   CYP51A1 ENSG00000001630
-## ENSG00000002822  0.1538268      8379    MAD1L1 ENSG00000002822
-## ENSG00000003137  6.1349586     56603   CYP26B1 ENSG00000003137
-## ENSG00000003402  8.9432028      8837     CFLAR ENSG00000003402
-## ENSG00000004478 -0.3869001      2288     FKBP4 ENSG00000004478
-## ENSG00000005187  0.1926951      6296     ACSM3 ENSG00000005187
-## ENSG00000005381  7.7265706      4353       MPO ENSG00000005381
-## ENSG00000005810  6.5886497     23077    MYCBP2 ENSG00000005810
-## ENSG00000005844  2.2483078      3683     ITGAL ENSG00000005844
-## ENSG00000006062  2.7286643      9020   MAP3K14 ENSG00000006062
-## ENSG00000006118 -1.3253822     54972  TMEM132A ENSG00000006118
-## ENSG00000006125 -0.9213536       163     AP2B1 ENSG00000006125
-## ENSG00000006831  6.3727115     79602   ADIPOR2 ENSG00000006831
-## ENSG00000007202 -2.1291190      9703  KIAA0100 ENSG00000007202
-## ENSG00000007237  3.8447311      8522      GAS7 ENSG00000007237
-## ENSG00000007384  1.0602700     64285    RHBDF1 ENSG00000007384
-## ENSG00000008130  0.8765624     65220      NADK ENSG00000008130
-## ENSG00000008283  0.8619163      1534    CYB561 ENSG00000008283
-##                   gene_biotype  biotype_class
-## ENSG00000000938 protein_coding protein_coding
-## ENSG00000000971 protein_coding protein_coding
-## ENSG00000001630 protein_coding protein_coding
-## ENSG00000002822 protein_coding protein_coding
-## ENSG00000003137 protein_coding protein_coding
-## ENSG00000003402 protein_coding protein_coding
-## ENSG00000004478 protein_coding protein_coding
-## ENSG00000005187 protein_coding protein_coding
-## ENSG00000005381 protein_coding protein_coding
-## ENSG00000005810 protein_coding protein_coding
-## ENSG00000005844 protein_coding protein_coding
-## ENSG00000006062 protein_coding protein_coding
-## ENSG00000006118 protein_coding protein_coding
-## ENSG00000006125 protein_coding protein_coding
-## ENSG00000006831 protein_coding protein_coding
-## ENSG00000007202 protein_coding protein_coding
-## ENSG00000007237 protein_coding protein_coding
-## ENSG00000007384 protein_coding protein_coding
-## ENSG00000008130 protein_coding protein_coding
-## ENSG00000008283 protein_coding protein_coding</code></pre>
+<p>Arkas has a function “annotateFeatures.R” which annotates ERCC, Ensembl, and RepBase databases for species Homo-Sapiens, Mus-musculus, and Rattus norvegicus. The method “annotateFeatures.R” annotates the merged KallistoExperiment against every TxDbLite library simulatenously. These annotation databases are defined as ‘lite’ because they do not store exonic or intronic coordinates. GeneWise analysis is dependent on the annotateFeatures feature data, so this serves as unit test for genelevel analysis.</p>
 </div>
 <div id="gene-wise-analysis-1" class="section level1">
 <h1><span class="header-section-number">6</span> Gene Wise Analysis</h1>
