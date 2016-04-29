@@ -42,11 +42,11 @@ apt_packages:
    - zlib1g-dev
    - libhdf5-dev
    - git
-   - pandoc
-   - texlive-latex-base
-   - texlive-fonts-recommended
-   - texlive-fonts-extra
-   - texlive-latex-extra
+#   - pandoc
+ #  - texlive-latex-base
+ #  - texlive-fonts-recommended
+ #  - texlive-fonts-extra
+ #  - texlive-latex-extra
    - libcurl4-openssl-dev
    - libxml2-dev
    - samtools
