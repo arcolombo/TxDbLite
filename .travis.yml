@@ -40,11 +40,11 @@ apt_packages:
    - zlib1g-dev
    - libhdf5-dev
    - git
-   - pandoc
-   - texlive-latex-base
-   - texlive-fonts-recommended
-   - texlive-fonts-extra
-   - texlive-latex-extra
+  # - pandoc
+  # - texlive-latex-base
+  # - texlive-fonts-recommended
+  # - texlive-fonts-extra
+  # - texlive-latex-extra
    - libcurl4-openssl-dev
    - libxml2-dev
    - samtools
@@ -56,37 +56,37 @@ before_install:
     - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
     - sudo R -e 'source("http://bioconductor.org/biocLite.R"); biocLite("BiocInstaller")'
     - sudo R -e 'library(BiocInstaller);biocLite(c("rtracklayer","XML","biomaRt","RCurl"),ask=FALSE)'
-    - sudo R -e 'library(BiocInstaller);biocLite(c("parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","SPIA","EnrichmentBrowser","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
+    - sudo R -e 'library(BiocInstaller);biocLite(c("org.Hs.eg.db","parallel","jsonlite","GenomeInfoDb","limma","Biobase","SummarizedExperiment","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
      - sudo R -e 'library(BiocInstaller);biocLite(c("Homo.sapiens","Mus.musculus","RUVSeq","erccdashboard"),ask=FALSE)'
-     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","rtracklayer","stringdist","Biostrings","OrganismDbi","Rsamtools", "qusage"),ask=FALSE)'
+     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","stringdist","Biostrings","OrganismDbi","Rsamtools", "qusage","rmarkdown","na.utils"),ask=FALSE)'
  
 bioc_packages: 
-    - rversions
-    - annotate
-    - genefilter
-    - RColorBrewer
-    - geneplotter
-    - bitops
-    - BiocParallel
-    - parallel 
-    - BiocParallel
-    - org.Hs.eg.db
-    - latticeExtra
-    - hwriter
-    - GenomicAlignments
-    - ShortRead
-    - RSQLite
-    - EDASeq
-    - rmarkdown
-    - pathview
-    - edgeR
-    - ggplot2
-    - stringdist
+#    - rversions
+ #   - annotate
+  #  - genefilter
+   # - RColorBrewer
+#    - geneplotter
+ #   - bitops
+  #  - BiocParallel
+   # - parallel 
+#    - BiocParallel
+ #   - org.Hs.eg.db
+  #  - latticeExtra
+   # - hwriter
+    #- GenomicAlignments
+#    - ShortRead
+ #   - RSQLite
+  #  - EDASeq
+   # - rmarkdown
+#    - pathview
+ #   - edgeR
+  #  - ggplot2
+   # - stringdist
 
 r_github_packages:
-    - arcolombo/TxDbLite
-    - arcolombo/arkas
-    - arcolombo/arkasData
+    - RamsinghLab/TxDbLite
+    - RamsinghLab/arkas
+    - RamsinghLab/arkasData
     
 script:
       - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
