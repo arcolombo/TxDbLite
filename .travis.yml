@@ -60,25 +60,25 @@ before_install:
     - sudo R -e 'library(BiocInstaller);biocLite(c("rtracklayer","XML","biomaRt","RCurl"),ask=FALSE)'
     - sudo R -e 'library(BiocInstaller);biocLite(c("org.Hs.eg.db","parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","SPIA","EnrichmentBrowser","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
      - sudo R -e 'library(BiocInstaller);biocLite(c("Homo.sapiens","Mus.musculus","RUVSeq","erccdashboard"),ask=FALSE)'
-     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","rtracklayer","stringdist","Biostrings","OrganismDbi","Rsamtools", "qusage"),ask=FALSE)'
+     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","rtracklayer","stringdist","Biostrings","OrganismDbi","Rsamtools", "qusage", "rmarkdown","na.utils"),ask=FALSE)'
  
 bioc_packages: 
-    - rversions
-    - annotate
-    - genefilter
-    - RColorBrewer
-    - geneplotter
-    - bitops
-    - BiocParallel
-    - latticeExtra
-    - hwriter
-    - GenomicAlignments
-    - ShortRead
-    - EDASeq
-    - rmarkdown
-    - pathview
-    - edgeR
-    - ggplot2
+#    - rversions
+ #   - annotate
+  #  - genefilter
+ #   - RColorBrewer
+ #   - geneplotter
+ #   - bitops
+ #   - BiocParallel
+ #   - latticeExtra
+ #   - hwriter
+ #   - GenomicAlignments
+ #   - ShortRead
+ #   - EDASeq
+ #   - rmarkdown
+ #   - pathview
+ #   - edgeR
+ #   - ggplot2
 
 r_github_packages:
     - arcolombo/TxDbLite
