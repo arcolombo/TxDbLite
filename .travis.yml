@@ -82,9 +82,9 @@ bioc_packages:
  #   - ggplot2
 
 r_github_packages:
-    - RamsinghLab/TxDbLite
-    - RamsinghLab/arkas
-    - RamsinghLab/arkasData
+    - arcolombo/TxDbLite
+    - arcolombo/arkas
+    - arcolombo/arkasData
     
 script:
       - sudo R -e 'library(rmarkdown); render("./vignettes/makeTxDbLiteAnnotationLibrary.Rmd")'    
