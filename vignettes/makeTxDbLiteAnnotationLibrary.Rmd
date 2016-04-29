@@ -1,5 +1,5 @@
 ---
-title: "Arkas: Raw Reads To Pathway Analsyes In Much Less Time"
+title: "Arkas: TxDbLite Arbitrary Annotation Library Creation"
 author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
 output: 
     html_document:
