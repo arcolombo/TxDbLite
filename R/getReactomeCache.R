@@ -61,7 +61,7 @@ getReactomeCache <- function(species=c("Homo sapiens","Mus musculus"), build=84,
          }
      } #mouse
 
-
+#FIX ME: the rda must be creating into a SQLite library
 
  # return(reactomeCache[[whichCache]])
   return(specReactome)
