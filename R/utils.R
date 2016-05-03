@@ -80,9 +80,10 @@ getOrganismAbbreviation <- function(organism, how=c("abbreviation","reactome")){
 #' @export
 getOrgDetails <- function(organism) { # {{{
   abbr <- getSupportedAbbreviations()
-  if (organism %in% abbr) organism <- names(abbr)[which(abbr == organism)] 
+  joined <- gsub(" ", "_", gsub("\\.", " ", organism))
+  if (joined %in% abbr) joined <- names(abbr)[which(abbr == joined)] 
   data(supportedOrganismsForTxDbLite, package="TxDbLite")
-  return(supportedOrganismsForTxDbLite[organism,])
+  return(supportedOrganismsForTxDbLite[joined,])
 } # }}}
 
 #' @describeIn utils

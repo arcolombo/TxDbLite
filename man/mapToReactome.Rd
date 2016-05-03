@@ -10,7 +10,7 @@ mapToReactome(IDs, type = c("transcript", "gene"), species = "Homo sapiens",
 \arguments{
 \item{IDs}{the identifiers to map}
 
-\item{type}{what type of identifier are these? (default:transcript)}
+\item{type}{transcript- or gene-level mappings? (default: transcript)}
 
 \item{species}{what species are the IDs from? (default:Homo sapiens)}
 
@@ -29,7 +29,7 @@ a list of mappings for the supplied IDs
 map transcripts or genes to Reactome pathways, using a cache if possible
 }
 \examples{
- mapToReactome("ENSG00000234258")
+ mapToReactome("ENSG00000234258", type="gene")
            mapToReactome("ENST00000387459", asNames=TRUE)
 
 }
