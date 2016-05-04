@@ -4,12 +4,14 @@
 \alias{mapHugo}
 \title{map genes or transcripts to updated HUGO symbols}
 \usage{
-mapHugo(IDs, useCache = TRUE)
+mapHugo(IDs, useCache = TRUE, byType = c("transcript", "gene"))
 }
 \arguments{
 \item{IDs}{the identifiers to map}
 
 \item{useCache}{boolean: use the cache? (TRUE, and should stay that way)}
+
+\item{byType}{gene, or transcript}
 
 \item{type}{what type of identifier are these? (transcript)}
 }

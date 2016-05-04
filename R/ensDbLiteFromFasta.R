@@ -260,7 +260,9 @@ getSymbols <- function(gxs, organism) { # {{{
   library(org$package, character.only=TRUE) 
 
   ## needed since Ens83...
-  if (any(grepl("\\.", gxs$gene_id))) 
+  if (any(grepl("\\.", gxs$gene_id))){
+   gxs$gene_id<-gsub("\\.","",gxs$gene_id)
+  }#no period in gene names.... 
      
   res <- try(mapIds(get(org$package), keys=gxs$gene_id, 
                     column=org$symbol, keytype=org$keytype), silent=TRUE)
