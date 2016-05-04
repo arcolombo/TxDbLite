@@ -4,12 +4,15 @@
 \alias{reactomeSets}
 \title{using the cached Reactome databases, generate gene sets for qusage etc.}
 \usage{
-reactomeSets(species = "Homo sapiens", type = c("transcript", "gene"))
+reactomeSets(species = "Homo sapiens", type = c("transcript", "gene"),
+  mappedReactome = NULL)
 }
 \arguments{
 \item{species}{what species are the IDs from? (default:Homo sapiens)}
 
 \item{type}{transcript- or gene-level mappings? (default: transcript)}
+
+\item{mappedReactome}{list of the results output from mapToReactome, downstream to assemble the list into pathways.}
 }
 \value{
 gene sets per Reactome term for this species
