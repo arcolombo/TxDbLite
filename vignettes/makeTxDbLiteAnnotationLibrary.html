@@ -200,13 +200,9 @@ appSession$fastaPath&lt;-fastaPath
 cd&lt;-appSession$fastaPath
 setwd(paste0(appSession$fastaPath,&quot;/&quot;,&quot;tmp&quot;))
 fastaTx&lt;-c(&quot;ERCC.fa.gz&quot;,&quot;Homo_sapiens.GRCh38.81.cdna.all.fa.gz&quot;,&quot;Homo_sapiens.RepBase.20_05.merged.fa&quot;)
-erccDb&lt;-erccDbLiteFromFasta(paste0(appSession$fastaPath,&quot;/tmp/&quot;,&quot;ERCC.fa.gz&quot;))</code></pre>
-<pre><code>## Extracting spike-in associations...done.
-## Creating the database...done.
-## Writing the spike-in tables...done.</code></pre>
-<pre class="r"><code>erccPkg&lt;-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,&quot;/&quot;,&quot;tmp&quot;))</code></pre>
-<pre><code>## Creating package in /usr/local/lib/R/site-library/arkasData/extdata/fasta/tmp/ErccDbLite.ERCC.97</code></pre>
-<pre class="r"><code>#Create a Ensembl Annotation Db with cdna and ncrna
+#erccDb&lt;-erccDbLiteFromFasta(paste0(appSession$fastaPath,&quot;/tmp/&quot;,&quot;ERCC.fa.gz&quot;))
+#erccPkg&lt;-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,&quot;/&quot;,&quot;tmp&quot;))
+#Create a Ensembl Annotation Db with cdna and ncrna
 lapply(fastaTx,function(x) findDupes(x))</code></pre>
 <pre><code>## found no duplicated sequence names .... no dupes found
 ## found no duplicated sequence names .... no dupes found</code></pre>
@@ -257,24 +253,14 @@ lapply(fastaTx,function(x) findDupes(x))</code></pre>
 <pre><code>## done.</code></pre>
 <pre class="r"><code>repPkg&lt;-makeRepDbLitePkg(repDb,destDir=paste0(appSession$fastaPath,&quot;/&quot;,&quot;tmp&quot;))</code></pre>
 <pre><code>## Creating package in /usr/local/lib/R/site-library/arkasData/extdata/fasta/tmp/RepDbLite.Hsapiens.2005</code></pre>
-<pre class="r"><code>ErccDbLite(erccDb)</code></pre>
-<pre><code>## ErccDbLite :
-## |package_name: ErccDbLite.ERCC.97
-## |db_type: ErccDbLite
-## |type_of_gene_id: N/A
-## |created_by: TxDbLite 1.9.111
-## |creation_time: Tue May  3 17:32:04 2016
-## |organism: N/A
-## |genome_build: N/A
-## |source_file: /usr/local/lib/R/site-library/arkasData/extdata/fasta/tmp/ERCC.fa.gz
-## | 97 spike-in controls from 4 subgroups (no known genes).</code></pre>
-<pre class="r"><code>EnsDbLite(ensDb)</code></pre>
+<pre class="r"><code>#ErccDbLite(erccDb)
+EnsDbLite(ensDb)</code></pre>
 <pre><code>## EnsDbLite :
 ## |package_name: EnsDbLite.Hsapiens.81
 ## |db_type: EnsDbLite
 ## |type_of_gene_id: Ensembl Gene ID
 ## |created_by: TxDbLite 1.9.111
-## |creation_time: Tue May  3 17:35:02 2016
+## |creation_time: Tue May  3 21:19:09 2016
 ## |organism: Homo sapiens
 ## |genome_build: GRCh38
 ## |source_file: Homo_sapiens.GRCh38.81.cdna.all.fa.gz
@@ -285,55 +271,13 @@ lapply(fastaTx,function(x) findDupes(x))</code></pre>
 ## |db_type: RepDbLite
 ## |type_of_gene_id: RepBase identifiers
 ## |created_by: TxDbLite 1.9.111
-## |creation_time: Tue May  3 17:35:02 2016
+## |creation_time: Tue May  3 21:19:10 2016
 ## |organism: Homo sapiens
 ## |genome_build: RepBase20_05
 ## |source_file: Homo_sapiens.RepBase.20_05.merged.fa
 ## | 1116 repeat exemplars from 68 repeat families (no known genes).</code></pre>
-<pre class="r"><code>transcripts(ErccDbLite(erccDb))</code></pre>
-<pre><code>## GRanges object with 97 ranges and 9 metadata columns:
-##                  seqnames    ranges strand   | tx_length gc_content
-##                     &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;   | &lt;integer&gt;  &lt;numeric&gt;
-##    ERCC-00002  ERCC-00002 [1, 1061]      *   |      1061  0.5136664
-##    ERCC-00003  ERCC-00003 [1, 1023]      *   |      1023  0.3264907
-##    ERCC-00004  ERCC-00004 [1,  523]      *   |       523  0.3441683
-##    ERCC-00007  ERCC-00007 [1, 1135]      *   |      1135  0.4537445
-##    ERCC-00009  ERCC-00009 [1,  984]      *   |       984  0.4725610
-##           ...         ...       ...    ... ...       ...        ...
-##    ERCC-00165  ERCC-00165 [1,  872]      *   |       872  0.5000000
-##    ERCC-00168  ERCC-00168 [1, 1024]      *   |      1024  0.3417969
-##    ERCC-00170  ERCC-00170 [1, 1023]      *   |      1023  0.3372434
-##    ERCC-00171  ERCC-00171 [1,  505]      *   |       505  0.4772277
-##   ERCC_vector ERCC_vector [1, 2732]      *   |      2732  0.4989019
-##                     tx_id     gene_id gene_name  entrezid
-##               &lt;character&gt; &lt;character&gt; &lt;integer&gt; &lt;integer&gt;
-##    ERCC-00002  ERCC-00002  ERCC-00002      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00003  ERCC-00003  ERCC-00003      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00004  ERCC-00004  ERCC-00004      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00007  ERCC-00007  ERCC-00007      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00009  ERCC-00009  ERCC-00009      &lt;NA&gt;      &lt;NA&gt;
-##           ...         ...         ...       ...       ...
-##    ERCC-00165  ERCC-00165  ERCC-00165      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00168  ERCC-00168  ERCC-00168      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00170  ERCC-00170  ERCC-00170      &lt;NA&gt;      &lt;NA&gt;
-##    ERCC-00171  ERCC-00171  ERCC-00171      &lt;NA&gt;      &lt;NA&gt;
-##   ERCC_vector ERCC_vector ERCC_vector      &lt;NA&gt;      &lt;NA&gt;
-##                        tx_biotype gene_biotype biotype_class
-##                       &lt;character&gt;  &lt;character&gt;   &lt;character&gt;
-##    ERCC-00002           SpikeIn_D      SpikeIn       SpikeIn
-##    ERCC-00003           SpikeIn_D      SpikeIn       SpikeIn
-##    ERCC-00004           SpikeIn_A      SpikeIn       SpikeIn
-##    ERCC-00007 SpikeIn_unannotated      SpikeIn       SpikeIn
-##    ERCC-00009           SpikeIn_B      SpikeIn       SpikeIn
-##           ...                 ...          ...           ...
-##    ERCC-00165           SpikeIn_D      SpikeIn       SpikeIn
-##    ERCC-00168           SpikeIn_D      SpikeIn       SpikeIn
-##    ERCC-00170           SpikeIn_A      SpikeIn       SpikeIn
-##    ERCC-00171           SpikeIn_B      SpikeIn       SpikeIn
-##   ERCC_vector SpikeIn_unannotated      SpikeIn       SpikeIn
-##   -------
-##   seqinfo: 97 sequences from N/A genome; no seqlengths</code></pre>
-<pre class="r"><code>transcripts(EnsDbLite(ensDb))</code></pre>
+<pre class="r"><code>#transcripts(ErccDbLite(erccDb))
+transcripts(EnsDbLite(ensDb))</code></pre>
 <pre><code>## GRanges object with 175372 ranges and 9 metadata columns:
 ##                              seqnames                 ranges strand   |
 ##                                 &lt;Rle&gt;              &lt;IRanges&gt;  &lt;Rle&gt;   |
@@ -448,15 +392,6 @@ lapply(files,function(x) system(paste0(&quot;rm -r &quot;,x)))</code></pre>
 ## [1] 0
 ## 
 ## [[5]]
-## [1] 0
-## 
-## [[6]]
-## [1] 0
-## 
-## [[7]]
-## [1] 0
-## 
-## [[8]]
 ## [1] 0</code></pre>
 </div>
 </div>

@@ -32,7 +32,7 @@ reactomeSets <- function(species="Homo sapiens", type=c("transcript","gene"), ma
   if(is.null(mappedReactome)==TRUE) { 
   build<-getMostRecentCacheBuild()
   data(reactomeCache, package="TxDbLite")
-  allTerms=data.frame(unlist(reactomeCache[[toupper(abbreviation)]]))
+  allTerms=data.frame(term=unlist(reactomeCache[[toupper(abbreviation)]]))
   allTerms$ID<-rownames(allTerms)
   key <- with(orgDetails, switch(type, transcript=txpre, gene=gxpre))
   allTerms <- subset(allTerms, substr(allTerms$ID, 1, nchar(key)) == key)

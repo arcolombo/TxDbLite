@@ -63,18 +63,18 @@ appSession$fastaPath<-fastaPath
 cd<-appSession$fastaPath
 setwd(paste0(appSession$fastaPath,"/","tmp"))
 fastaTx<-c("ERCC.fa.gz","Homo_sapiens.GRCh38.81.cdna.all.fa.gz","Homo_sapiens.RepBase.20_05.merged.fa")
-erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/tmp/","ERCC.fa.gz"))
-erccPkg<-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
+#erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/tmp/","ERCC.fa.gz"))
+#erccPkg<-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
 #Create a Ensembl Annotation Db with cdna and ncrna
 lapply(fastaTx,function(x) findDupes(x))
 ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna.all.fa.gz")
 ensPkg<-makeEnsDbLitePkg(ensDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
 repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_05.merged.fa")
 repPkg<-makeRepDbLitePkg(repDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
-ErccDbLite(erccDb)
+#ErccDbLite(erccDb)
 EnsDbLite(ensDb)
 RepDbLite(repDb)
-transcripts(ErccDbLite(erccDb))
+#transcripts(ErccDbLite(erccDb))
 transcripts(EnsDbLite(ensDb))
 transcripts(RepDbLite(repDb))
 
