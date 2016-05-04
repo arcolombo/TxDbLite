@@ -3,23 +3,20 @@
 \name{getReactomeCache}
 \alias{getReactomeCache}
 \title{Pulling Reactome mappings through biomaRt takes time. So we try not to do it.
-More specifically, try to only pull updates, and then only for new builds. this will subset the reactomeCache.rda to the species of selection and gene-/transcrpit appropriate selection which can be easily made into an enrichment gene/transcript set calling makeReactomeEnrichmentSet.R}
+More specifically, try to only pull updates, and then only for new builds.}
 \usage{
-getReactomeCache(species = c("Homo sapiens", "Mus musculus"), build = 84,
-  byLevel = c("gene", "transcript"))
+getReactomeCache(species = "Homo sapiens", build = 84)
 }
 \arguments{
 \item{species}{species for which to get mappings (Homo sapiens)}
 
 \item{build}{numeric ENSEMBL build (84 by default)}
-
-\item{byLevel}{character specifying gene or transcript level to return}
 }
 \value{
 a list of REACTOME terms mapped to ENSEMBL IDs (both tx and gene)
 }
 \description{
 Pulling Reactome mappings through biomaRt takes time. So we try not to do it.
-More specifically, try to only pull updates, and then only for new builds. this will subset the reactomeCache.rda to the species of selection and gene-/transcrpit appropriate selection which can be easily made into an enrichment gene/transcript set calling makeReactomeEnrichmentSet.R
+More specifically, try to only pull updates, and then only for new builds.
 }
 
