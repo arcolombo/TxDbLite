@@ -55,7 +55,7 @@ before_install:
     - chmod 755 ./travis-tool.sh
     - sudo apt-get --yes install curl cmake zlibc zlib1g-dev
     - sudo apt-get install -y libhdf5-dev
-#    - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
+   # - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
     - sudo R -e 'source("http://bioconductor.org/biocLite.R"); biocLite("BiocInstaller")'
     - sudo R -e 'library(BiocInstaller);biocLite(c("rtracklayer","XML","biomaRt","RCurl"),ask=FALSE)'
     - sudo R -e 'library(BiocInstaller);biocLite(c("org.Hs.eg.db","parallel","jsonlite","GenomeInfoDb","limma","Biobase","SummarizedExperiment","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
