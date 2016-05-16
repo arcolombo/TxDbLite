@@ -16,12 +16,12 @@ mapHugo <- function(IDs, useCache=TRUE, byType=c("transcript","gene")) {
   cache <- getHugoCache(useCache=useCache)
  
    if(byType=="transcript") {
-   cache[intersect(IDs, names(cache$transcript))]
+    mappedHugo<-cache$transcript[intersect(IDs, names(cache$transcript))]
     }
 
     if(byType=="gene") {
-   cache[intersect(IDs, names(cache$gene))]
+   mappedHugo<-cache$gene[intersect(IDs, names(cache$gene))]
     }
 
-
+ return(mappedHugo)
 }
