@@ -7,6 +7,17 @@ mapReactomeSets<-function(reactomePathways, reactomeSets){
 
 indX<- names(reactomePathways) %in% tx.DF$pathway.name
 
+gn.Url<- getReactomeUrl(gs[,1])
+gn.DF<-data.frame(gs,gn.Url, stringsAsFactors=FALSE)
+
+
+data(reactomePathways,package="TxDbLite")
+
+gindX<-names(reactomePathways) %in% gn.DF$pathway.name
+for(i in 1:nrow(gn.DF)) {
+ginner<-which(gn.DF$pathway.name[i] == names(reactomePathways[gindX]))
+gn.DF$Pathway.Description[i]<-reactomePathways[gindX][[ginner]]
+}
 
 
 }#{{{main
