@@ -242,7 +242,7 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
   rpt$tx_length <- txLen
   rpt$gc_content <- GCcontent(scanFa(fastaFile))
   rpt$tx_id <- names(txLen)
-  rpt$gene_id <- NA 
+  rpt$gene_id <- names(txLen) 
   rpt$gene_name <- NA 
   rpt$entrezid <- NA 
   rpt$tx_biotype <- repeat_biotypes[rownames(rpt), "tx_biotype"]
