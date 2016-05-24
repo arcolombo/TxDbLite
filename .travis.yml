@@ -82,12 +82,12 @@ bioc_packages:
  #   - ggplot2
 
 r_github_packages:
-<<<<<<< HEAD
     - arcolombo/TxDbLite
     - arcolombo/RepDbLite.Hsapiens.2012
     - arcolombo/EnsDbLite.Hsapiens.83
     - arcolombo/arkas
     - arcolombo/arkasData    
+
 script:
       - sudo R -e 'library(rmarkdown); render("./vignettes/makeTxDbLiteAnnotationLibrary.Rmd")'    
 after_failure:
