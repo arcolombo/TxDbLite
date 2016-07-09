@@ -4,6 +4,10 @@
 #' 
 #' @return the name of the annotation package, or NULL if uncertain how to do it
 #' 
+#' @import Biobase
+#' @import DBI
+#' @import RSQLite
+#'
 #' @export
 createAnnotationPackage <- function(fastaFile, ...) { # {{{
 

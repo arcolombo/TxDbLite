@@ -40,7 +40,6 @@ makeEnsDbLitePkg <- function(ensdblitefile, author="Nobody", email="dev@null.com
     TXDBOBJNAME=pkg
   )
 
-  require(Biobase)
   createPackage(pkgname=pkg,
                 destinationDir=destDir,
                 originDir=template_path,

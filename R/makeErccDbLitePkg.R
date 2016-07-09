@@ -37,7 +37,6 @@ makeErccDbLitePkg <- function(erccdblitefile, author="Nobody", email="dev@null.c
     TXDBOBJNAME=pkg
   )
 
-  require(Biobase)
   createPackage(pkgname=pkg,
                 destinationDir=destDir,
                 originDir=template_path,
