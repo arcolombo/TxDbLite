@@ -3,9 +3,7 @@
 #' @param fastaFile     the FASTA file to collate into a RepDbLite instance
 #' @param verbose       make a lot of noise? (TRUE) 
 #'
-#' @importFrom Rsamtools indexFa
-#' @importFrom Rsamtools scanFaIndex
-#' @importFrom Rsamtools scanFa
+#' @importFrom Rsamtools indexFa scanFaIndex scanFa
 #' @export
 repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
  

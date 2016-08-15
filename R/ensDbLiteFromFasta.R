@@ -7,9 +7,7 @@
 #' 
 #' @import GenomicRanges
 #' @import OrganismDbi
-#' @importFrom Rsamtools indexFa
-#' @importFrom Rsamtools scanFaIndex
-#' @importFrom Rsamtools scanFa
+#' @importFrom Rsamtools indexFa scanFaIndex scanFa
 #' 
 #' @export
 ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{

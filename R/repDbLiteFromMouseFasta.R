@@ -4,9 +4,7 @@
 #' @param verbose       make a lot of noise? (TRUE) 
 #'
 #' 
-#' @importFrom Rsamtools indexFa
-#' @importFrom Rsamtools scanFaIndex
-#' @importFrom Rsamtools scanFa
+#' @importFrom Rsamtools indexFa scanFaIndex scanFa
 #'
 #' @export
 repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
