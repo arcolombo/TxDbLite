@@ -1,8 +1,8 @@
 Package: TxDbLite
 Type: Package
 Title: Lightweight SQLite-based annotation classes/packages for use with artemis
-Version: 1.9.111
-Date: 2016-05-03
+Version: 1.9.112
+Date: 2016-09-15
 Author: Tim Triche, Jr., Anthony Colombo
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: Package to make (very) lightweight annotation packages from FASTAs
@@ -13,12 +13,13 @@ Depends:
     rtracklayer,
     knitr,
     Biobase,
-    stringdist,
-    biomaRt
+    stringdist
 Imports:
     Biostrings,
     GenomicRanges,
     OrganismDbi,
+    Rsamtools,
+    biomaRt,
     Rsamtools
 Suggests:
     BiocStyle,

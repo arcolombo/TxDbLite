@@ -7,13 +7,11 @@
 #' 
 #' @import GenomicRanges
 #' @import OrganismDbi
-#' @import Biostrings
+#' @importFrom Rsamtools indexFa scanFaIndex scanFa
 #' 
 #' @export
 ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
-  require(Biostrings) 
-  require(GenomicRanges)
   options(useFancyQuotes=FALSE)
   options(stringsAsFactors=FALSE)
 

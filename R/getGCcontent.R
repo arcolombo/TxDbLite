@@ -4,7 +4,9 @@
 #'
 #' @return a GRanges with a gc_content column. 
 #' 
-#' @import Rsamtools
+#' @importFrom Rsamtools indexFa
+#' @importFrom Rsamtools scanFaIndex
+#' @importFrom Rsamtools scanFa
 #' 
 #' @export
 getGCcontent <- function(fastaFile) { 
@@ -23,7 +25,7 @@ getGCcontent <- function(fastaFile) {
 #'
 #' @return a vector of GC proportions
 #'
-#' @import Biostrings
+#' @importFrom Biostrings alphabetFrequency
 #' 
 #' @export
 GCcontent <- function(seqs) {

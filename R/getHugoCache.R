@@ -4,7 +4,8 @@
 #'
 #' @return  a list of HUGO names associated with ENSEMBL transcript and gene IDs
 #' 
-#' @import  biomaRt
+#' @importFrom  biomaRt useEnsembl
+#' @importFrom biomaRt getBM
 #'
 #' @export
 getHugoCache <- function(useCache=TRUE) {
