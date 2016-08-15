@@ -21,8 +21,8 @@ Imports:
     OrganismDbi,
     Rsamtools
 Suggests:
-    arkas,
     BiocStyle,
+    arkas,
     ComplexHeatmap
 VignetteBuilder: knitr
 License: LGPL
