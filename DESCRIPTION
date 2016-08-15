@@ -13,12 +13,13 @@ Depends:
     rtracklayer,
     knitr,
     Biobase,
-    stringdist,
-    biomaRt
+    stringdist
 Imports:
     Biostrings,
     GenomicRanges,
     OrganismDbi,
+    Rsamtools,
+    biomaRt,
     Rsamtools
 Suggests:
     arkas,

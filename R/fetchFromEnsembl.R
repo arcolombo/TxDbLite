@@ -7,7 +7,8 @@
 #'
 #' @return        a data.frame, if all goes well
 #' 
-#' @import biomaRt 
+#' @importFrom biomaRt useEnsembl
+#' @importFrom biomaRt getBM
 #'
 #' @export
 fetchFromEnsembl <- function(cols, idtype, IDs=NULL, dataset) {

@@ -1,7 +1,7 @@
 #' helper function for findDupes
 #' 
 #' @param fastaFile   the name of the FASTA file
-#' 
+#' @importFrom Rsamtools indexFa 
 #' return   the index, invisibly
 #' 
 #' @export

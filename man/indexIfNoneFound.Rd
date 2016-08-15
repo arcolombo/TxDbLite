@@ -7,9 +7,7 @@
 indexIfNoneFound(fastaFile)
 }
 \arguments{
-\item{fastaFile}{the name of the FASTA file
-
-return   the index, invisibly}
+\item{fastaFile}{the name of the FASTA file}
 }
 \description{
 helper function for findDupes
