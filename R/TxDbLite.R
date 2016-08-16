@@ -2,9 +2,8 @@
 #' 
 #' @param x     name of the sqlite file whence the TxDbLite should be created 
 #' @param path  where it lives (default: ".")
-#'
 #' @return   a TxDbLite object 
-#'
+#' @importFrom DBI dbDriver dbConnect dbListTables dbGetQuery
 #' @export
 TxDbLite <- function(x, path=".", ...) { 
   options(useFancyQuotes = FALSE)

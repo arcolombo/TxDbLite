@@ -1,9 +1,8 @@
-# TxDbLite methods (inherited by all subclasses)
-# FIXME: get rid of dependencies on ensembldb 
-
+#' @rdname TxDbLite-class
 #' @export
 setMethod("dbconn", "TxDbLite", function(x) return(x@con))
 
+#' @rdname TxDbLite-class
 setMethod("show", "TxDbLite", function(object) { # {{{
   if(is.null(object@con)) stop(paste("Invalid", class(object), "instance!"))
   info <- metadata(object)
@@ -12,6 +11,7 @@ setMethod("show", "TxDbLite", function(object) { # {{{
   for(i in 1:nrow(info)) catrow(info[i,])
 }) # }}}
 
+#' @rdname TxDbLite-class
 setMethod("metadata", "TxDbLite", function(x, ...) { # {{{
   md <- dbGetQuery(dbconn(x), "select * from metadata")
   rownames(md) <- md$name
@@ -32,7 +32,7 @@ setMethod("promoters", "TxDbLite", function(x,upstream=2000,downstream=200,...){
                                   downstream=downstream)))
 }) # }}}
 
-#' @describeIn TxDbLite
+#' 
 #' 
 #' get transcripts by gene, promoter, tx_biotype, gene_biotype, or biotype_class
 #'
@@ -40,7 +40,7 @@ setMethod("promoters", "TxDbLite", function(x,upstream=2000,downstream=200,...){
 #' @param by  how to split the transcripts 
 #'
 #' @return a GRangesList
-#' 
+#' @rdname TxDbLite-class
 #' @export
 setMethod("transcriptsBy", "TxDbLite", function(x, # {{{
                                                 by=c("gene",
@@ -75,20 +75,23 @@ setMethod("genes", "TxDbLite", function(x) { # {{{
   return(res)
 }) # }}}
 
-# new generic 
+#' Generic for querying genes
+#' @name genesBy
+#' @rdname TxDbLite-class
+#' @export
 setGeneric("genesBy", function(x,by=c("gene_biotype","biotype_class"), ...){#{{{
              standardGeneric("genesBy")
            }) # }}}
 
-#' @describeIn TxDbLite
+#' 
 #' 
 #' get genes by gene_biotype or biotype_class
 #'
 #' @param x   the TxDbLite instance
 #' @param by  how to split the genes 
-#'
+#' @aliases genesBy TxDbLite-method
 #' @return a GRangesList
-#' 
+#' @rdname TxDbLite-class
 #' @export
 setMethod("genesBy", "TxDbLite", function(x, by=c("gene_biotype","biotype_class")) { # {{{
   by <- match.arg(by)
