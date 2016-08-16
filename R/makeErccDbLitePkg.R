@@ -4,7 +4,7 @@
 #' @param email           email address 
 #' @param version         version of the package (default is "1.0")
 #' @param destDir         where to put the new package directory (".")
-#' 
+#' @importFrom Biobase createPackage
 #' @return the name of the package 
 #' 
 #' @export
@@ -37,7 +37,7 @@ makeErccDbLitePkg <- function(erccdblitefile, author="Nobody", email="dev@null.c
     TXDBOBJNAME=pkg
   )
 
-  require(Biobase)
+
   createPackage(pkgname=pkg,
                 destinationDir=destDir,
                 originDir=template_path,
