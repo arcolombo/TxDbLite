@@ -26,7 +26,7 @@ mapToReactome <- function(IDs,
 
   abbreviation <- "HSA" # default
   if (species != "Homo sapiens") {
-    abbreviations <- TxDbLite:::getSupportedAbbreviations("reactome")
+    abbreviations <- getSupportedAbbreviations("reactome")
     names(abbreviations) <- tolower(names(abbreviations))
     joined <- tolower(gsub(" ", "_", gsub("\\.", " ", species)))
     if (!joined %in% names(abbreviations)) stop("Unsupported species.")

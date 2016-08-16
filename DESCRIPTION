@@ -9,21 +9,21 @@ Description: Package to make (very) lightweight annotation packages from FASTAs.
 Depends:
     DBI,
     RSQLite,
-    ensembldb,
-    rtracklayer,
-    knitr,
-    Biobase,
-    stringdist
+    ensembldb
 Imports:
     Biostrings,
     GenomicRanges,
     OrganismDbi,
     Rsamtools,
-    biomaRt
+    biomaRt,
+    Biobase
 Suggests:
     BiocStyle,
     arkas,
-    ComplexHeatmap
+    ComplexHeatmap,
+    rtracklayer,
+    knitr,
+    stringdist
 VignetteBuilder: knitr
 License: LGPL
 RoxygenNote: 5.0.1
