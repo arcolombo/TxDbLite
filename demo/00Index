@@ -1,0 +1,8 @@
+annotateRepeats			Heatmap of repeat elements with annotations
+bestMatch			Query function of a database
+findRepBaseDupes		Repeat duplicate entry search
+repBaseClass			Repetitive element to R object 
+repBaseToRmsk			Repeat classes transformation to biotype annotation
+repeats				Repeat Genomic Ranges
+repPrep				Fasta file preparation for database
+vegaBioClass			Long non-coding biotype class formation

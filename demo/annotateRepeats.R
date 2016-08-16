@@ -1,5 +1,5 @@
-library(artemis) # EISAI release or later
-library(artemisData) # any release should do 
+library(arkas) # EISAI release or later
+library(arkasData) # any release should do 
 library(RepDbLite.Hsapiens.2005) # or generate
 library(ComplexHeatmap)
 

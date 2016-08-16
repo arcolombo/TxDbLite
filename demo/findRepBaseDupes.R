@@ -1,5 +1,5 @@
 library(TxDbLite)
-library(artemisData)
+library(arkasData)
 
 fasta_dir <- system.file("extdata", "fasta", package="artemisData")
 repbase_files <- list.files(fasta_dir, pattern="^Homo_sapiens.RepBase.*.fa$")
