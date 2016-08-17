@@ -5,6 +5,7 @@
 #' @param email           email address 
 #' @param version         version of the package (default is "1.0")
 #' @param destDir         where to put the new package directory (".")
+#' @param ...             additional parameters
 #' @importFrom Biobase createPackage
 #' @return the name of the package 
 #' 
@@ -40,7 +41,7 @@ makeRepDbLitePkg <- function(repdblitefile, author="Nobody", email="dev@null.com
     TXDBOBJNAME=pkg
   )
 
- 
+
   createPackage(pkgname=pkg,
                 destinationDir=destDir,
                 originDir=template_path,

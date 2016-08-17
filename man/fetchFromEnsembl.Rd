@@ -16,7 +16,7 @@ fetchFromEnsembl(cols, idtype, IDs = NULL, dataset)
 \item{dataset}{the dataset to use}
 }
 \value{
-a data.frame, if all goes well
+a data.frame
 }
 \description{
 a wrapper for biomaRt::getBM

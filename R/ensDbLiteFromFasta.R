@@ -248,7 +248,7 @@ getEntrezIDs <- function(gxs, organism) { # {{{
 #' 
 #' add symbols for Ensembl genes
 #'
-#' @param gxs       a GRanges of genes
+#' 
 #' 
 #' @return  symbols for the genes, where found 
 #'

@@ -854,7 +854,7 @@ ENSDARP00000035286	R-DRE-1430728	http://www.reactome.org/PathwayBrowser/#/R-DRE-
 ENSDARP00000035286	R-DRE-71291	http://www.reactome.org/PathwayBrowser/#/R-DRE-71291	Metabolism of amino acids and derivatives	IEA	Danio rerio
 ENSDARP00000035286	R-DRE-389661	http://www.reactome.org/PathwayBrowser/#/R-DRE-389661	Glyoxylate metabolism and glycine degradation	IEA	Danio rerio
 ENSDARP00000039257	R-DRE-380287	http://www.reactome.org/PathwayBrowser/#/R-DRE-380287	Centrosome maturation	IEA	Danio rerio
-ENSDARP00000039257	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Danio rerio
+ENSDARP00000039257	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Danio rerio
 ENSDARP00000039257	R-DRE-380259	http://www.reactome.org/PathwayBrowser/#/R-DRE-380259	Loss of Nlp from mitotic centrosomes	IEA	Danio rerio
 ENSDARP00000039257	R-DRE-68882	http://www.reactome.org/PathwayBrowser/#/R-DRE-68882	Mitotic Anaphase	IEA	Danio rerio
 ENSDARP00000039257	R-DRE-2467813	http://www.reactome.org/PathwayBrowser/#/R-DRE-2467813	Separation of Sister Chromatids	IEA	Danio rerio
@@ -1108,7 +1108,7 @@ ENSDARP00000130163	R-DRE-168179	http://www.reactome.org/PathwayBrowser/#/R-DRE-1
 ENSDARP00000130163	R-DRE-181438	http://www.reactome.org/PathwayBrowser/#/R-DRE-181438	Toll Like Receptor 2 (TLR2) Cascade	IEA	Danio rerio
 ENSDARP00000130163	R-DRE-168188	http://www.reactome.org/PathwayBrowser/#/R-DRE-168188	Toll Like Receptor TLR6:TLR2 Cascade	IEA	Danio rerio
 ENSDARP00000130189	R-DRE-380287	http://www.reactome.org/PathwayBrowser/#/R-DRE-380287	Centrosome maturation	IEA	Danio rerio
-ENSDARP00000130189	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Danio rerio
+ENSDARP00000130189	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Danio rerio
 ENSDARP00000130189	R-DRE-380259	http://www.reactome.org/PathwayBrowser/#/R-DRE-380259	Loss of Nlp from mitotic centrosomes	IEA	Danio rerio
 ENSDARP00000130189	R-DRE-1852241	http://www.reactome.org/PathwayBrowser/#/R-DRE-1852241	Organelle biogenesis and maintenance	IEA	Danio rerio
 ENSDARP00000130189	R-DRE-453274	http://www.reactome.org/PathwayBrowser/#/R-DRE-453274	Mitotic G2-G2/M phases	IEA	Danio rerio
@@ -1327,7 +1327,7 @@ ENSDARP00000130823	R-DRE-71387	http://www.reactome.org/PathwayBrowser/#/R-DRE-71
 ENSDARP00000130823	R-DRE-2022854	http://www.reactome.org/PathwayBrowser/#/R-DRE-2022854	Keratan sulfate biosynthesis	IEA	Danio rerio
 ENSDARP00000130823	R-DRE-1638074	http://www.reactome.org/PathwayBrowser/#/R-DRE-1638074	Keratan sulfate/keratin metabolism	IEA	Danio rerio
 ENSDARP00000130881	R-DRE-380287	http://www.reactome.org/PathwayBrowser/#/R-DRE-380287	Centrosome maturation	IEA	Danio rerio
-ENSDARP00000130881	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Danio rerio
+ENSDARP00000130881	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Danio rerio
 ENSDARP00000130881	R-DRE-380259	http://www.reactome.org/PathwayBrowser/#/R-DRE-380259	Loss of Nlp from mitotic centrosomes	IEA	Danio rerio
 ENSDARP00000130881	R-DRE-68882	http://www.reactome.org/PathwayBrowser/#/R-DRE-68882	Mitotic Anaphase	IEA	Danio rerio
 ENSDARP00000130881	R-DRE-2467813	http://www.reactome.org/PathwayBrowser/#/R-DRE-2467813	Separation of Sister Chromatids	IEA	Danio rerio
@@ -1350,7 +1350,7 @@ ENSDARP00000130881	R-DRE-162582	http://www.reactome.org/PathwayBrowser/#/R-DRE-1
 ENSDARP00000130881	R-DRE-5663220	http://www.reactome.org/PathwayBrowser/#/R-DRE-5663220	RHO GTPases Activate Formins	IEA	Danio rerio
 ENSDARP00000130881	R-DRE-68886	http://www.reactome.org/PathwayBrowser/#/R-DRE-68886	M Phase	IEA	Danio rerio
 ENSDARP00000130905	R-DRE-380287	http://www.reactome.org/PathwayBrowser/#/R-DRE-380287	Centrosome maturation	IEA	Danio rerio
-ENSDARP00000130905	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Danio rerio
+ENSDARP00000130905	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Danio rerio
 ENSDARP00000130905	R-DRE-380259	http://www.reactome.org/PathwayBrowser/#/R-DRE-380259	Loss of Nlp from mitotic centrosomes	IEA	Danio rerio
 ENSDARP00000130905	R-DRE-68882	http://www.reactome.org/PathwayBrowser/#/R-DRE-68882	Mitotic Anaphase	IEA	Danio rerio
 ENSDARP00000130905	R-DRE-2467813	http://www.reactome.org/PathwayBrowser/#/R-DRE-2467813	Separation of Sister Chromatids	IEA	Danio rerio
@@ -1708,7 +1708,7 @@ ENSDARP00000131701	R-DRE-166520	http://www.reactome.org/PathwayBrowser/#/R-DRE-1
 ENSDARP00000131701	R-DRE-449147	http://www.reactome.org/PathwayBrowser/#/R-DRE-449147	Signaling by Interleukins	IEA	Danio rerio
 ENSDARP00000131701	R-DRE-168256	http://www.reactome.org/PathwayBrowser/#/R-DRE-168256	Immune System	IEA	Danio rerio
 ENSDARP00000131747	R-DRE-380287	http://www.reactome.org/PathwayBrowser/#/R-DRE-380287	Centrosome maturation	IEA	Danio rerio
-ENSDARP00000131747	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Danio rerio
+ENSDARP00000131747	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Danio rerio
 ENSDARP00000131747	R-DRE-380259	http://www.reactome.org/PathwayBrowser/#/R-DRE-380259	Loss of Nlp from mitotic centrosomes	IEA	Danio rerio
 ENSDARP00000131747	R-DRE-1852241	http://www.reactome.org/PathwayBrowser/#/R-DRE-1852241	Organelle biogenesis and maintenance	IEA	Danio rerio
 ENSDARP00000131747	R-DRE-453274	http://www.reactome.org/PathwayBrowser/#/R-DRE-453274	Mitotic G2-G2/M phases	IEA	Danio rerio
@@ -2951,7 +2951,7 @@ ENSDARP00000137119	R-DRE-3108214	http://www.reactome.org/PathwayBrowser/#/R-DRE-
 ENSDARP00000137119	R-DRE-159236	http://www.reactome.org/PathwayBrowser/#/R-DRE-159236	Transport of Mature mRNA derived from an Intron-Containing Transcript	IEA	Danio rerio
 ENSDARP00000137119	R-DRE-3371556	http://www.reactome.org/PathwayBrowser/#/R-DRE-3371556	Cellular response to heat stress	IEA	Danio rerio
 ENSDARP00000137149	R-DRE-380287	http://www.reactome.org/PathwayBrowser/#/R-DRE-380287	Centrosome maturation	IEA	Danio rerio
-ENSDARP00000137149	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Danio rerio
+ENSDARP00000137149	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Danio rerio
 ENSDARP00000137149	R-DRE-380259	http://www.reactome.org/PathwayBrowser/#/R-DRE-380259	Loss of Nlp from mitotic centrosomes	IEA	Danio rerio
 ENSDARP00000137149	R-DRE-1852241	http://www.reactome.org/PathwayBrowser/#/R-DRE-1852241	Organelle biogenesis and maintenance	IEA	Danio rerio
 ENSDARP00000137149	R-DRE-453274	http://www.reactome.org/PathwayBrowser/#/R-DRE-453274	Mitotic G2-G2/M phases	IEA	Danio rerio
@@ -3521,7 +3521,7 @@ ENSDARP00000139062	R-DRE-196791	http://www.reactome.org/PathwayBrowser/#/R-DRE-1
 ENSDARP00000139062	R-DRE-196854	http://www.reactome.org/PathwayBrowser/#/R-DRE-196854	Metabolism of vitamins and cofactors	IEA	Danio rerio
 ENSDARP00000139062	R-DRE-6806667	http://www.reactome.org/PathwayBrowser/#/R-DRE-6806667	Metabolism of fat-soluble vitamins	IEA	Danio rerio
 ENSDARP00000139073	R-DRE-380287	http://www.reactome.org/PathwayBrowser/#/R-DRE-380287	Centrosome maturation	IEA	Danio rerio
-ENSDARP00000139073	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Danio rerio
+ENSDARP00000139073	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Danio rerio
 ENSDARP00000139073	R-DRE-380259	http://www.reactome.org/PathwayBrowser/#/R-DRE-380259	Loss of Nlp from mitotic centrosomes	IEA	Danio rerio
 ENSDARP00000139073	R-DRE-68882	http://www.reactome.org/PathwayBrowser/#/R-DRE-68882	Mitotic Anaphase	IEA	Danio rerio
 ENSDARP00000139073	R-DRE-2467813	http://www.reactome.org/PathwayBrowser/#/R-DRE-2467813	Separation of Sister Chromatids	IEA	Danio rerio
@@ -3615,7 +3615,7 @@ ENSDARP00000139144	R-DRE-162582	http://www.reactome.org/PathwayBrowser/#/R-DRE-1
 ENSDARP00000139144	R-DRE-4086400	http://www.reactome.org/PathwayBrowser/#/R-DRE-4086400	PCP/CE pathway	IEA	Danio rerio
 ENSDARP00000139144	R-DRE-4086398	http://www.reactome.org/PathwayBrowser/#/R-DRE-4086398	Ca2+ pathway	IEA	Danio rerio
 ENSDARP00000139209	R-DRE-380287	http://www.reactome.org/PathwayBrowser/#/R-DRE-380287	Centrosome maturation	IEA	Danio rerio
-ENSDARP00000139209	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Danio rerio
+ENSDARP00000139209	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Danio rerio
 ENSDARP00000139209	R-DRE-380259	http://www.reactome.org/PathwayBrowser/#/R-DRE-380259	Loss of Nlp from mitotic centrosomes	IEA	Danio rerio
 ENSDARP00000139209	R-DRE-68882	http://www.reactome.org/PathwayBrowser/#/R-DRE-68882	Mitotic Anaphase	IEA	Danio rerio
 ENSDARP00000139209	R-DRE-2467813	http://www.reactome.org/PathwayBrowser/#/R-DRE-2467813	Separation of Sister Chromatids	IEA	Danio rerio
@@ -3813,7 +3813,7 @@ ENSDARP00000139668	R-DRE-1430728	http://www.reactome.org/PathwayBrowser/#/R-DRE-
 ENSDARP00000139668	R-DRE-203615	http://www.reactome.org/PathwayBrowser/#/R-DRE-203615	eNOS activation	IEA	Danio rerio
 ENSDARP00000139668	R-DRE-203765	http://www.reactome.org/PathwayBrowser/#/R-DRE-203765	eNOS activation and regulation	IEA	Danio rerio
 ENSDARP00000139674	R-DRE-380287	http://www.reactome.org/PathwayBrowser/#/R-DRE-380287	Centrosome maturation	IEA	Danio rerio
-ENSDARP00000139674	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Danio rerio
+ENSDARP00000139674	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Danio rerio
 ENSDARP00000139674	R-DRE-380259	http://www.reactome.org/PathwayBrowser/#/R-DRE-380259	Loss of Nlp from mitotic centrosomes	IEA	Danio rerio
 ENSDARP00000139674	R-DRE-1852241	http://www.reactome.org/PathwayBrowser/#/R-DRE-1852241	Organelle biogenesis and maintenance	IEA	Danio rerio
 ENSDARP00000139674	R-DRE-453274	http://www.reactome.org/PathwayBrowser/#/R-DRE-453274	Mitotic G2-G2/M phases	IEA	Danio rerio
@@ -4084,7 +4084,7 @@ ENSDARP00000141154	R-DRE-983712	http://www.reactome.org/PathwayBrowser/#/R-DRE-9
 ENSDARP00000141154	R-DRE-382551	http://www.reactome.org/PathwayBrowser/#/R-DRE-382551	Transmembrane transport of small molecules	IEA	Danio rerio
 ENSDARP00000141154	R-DRE-936837	http://www.reactome.org/PathwayBrowser/#/R-DRE-936837	Ion transport by P-type ATPases	IEA	Danio rerio
 ENSDARP00000141192	R-DRE-380287	http://www.reactome.org/PathwayBrowser/#/R-DRE-380287	Centrosome maturation	IEA	Danio rerio
-ENSDARP00000141192	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Danio rerio
+ENSDARP00000141192	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Danio rerio
 ENSDARP00000141192	R-DRE-380259	http://www.reactome.org/PathwayBrowser/#/R-DRE-380259	Loss of Nlp from mitotic centrosomes	IEA	Danio rerio
 ENSDARP00000141192	R-DRE-1280218	http://www.reactome.org/PathwayBrowser/#/R-DRE-1280218	Adaptive Immune System	IEA	Danio rerio
 ENSDARP00000141192	R-DRE-380270	http://www.reactome.org/PathwayBrowser/#/R-DRE-380270	Recruitment of mitotic centrosome proteins and complexes	IEA	Danio rerio
@@ -4111,7 +4111,7 @@ ENSDARP00000141192	R-DRE-168256	http://www.reactome.org/PathwayBrowser/#/R-DRE-1
 ENSDARP00000141192	R-DRE-6807878	http://www.reactome.org/PathwayBrowser/#/R-DRE-6807878	COPI-mediated anterograde transport	IEA	Danio rerio
 ENSDARP00000141192	R-DRE-5653656	http://www.reactome.org/PathwayBrowser/#/R-DRE-5653656	Vesicle-mediated transport	IEA	Danio rerio
 ENSDARP00000141196	R-DRE-380287	http://www.reactome.org/PathwayBrowser/#/R-DRE-380287	Centrosome maturation	IEA	Danio rerio
-ENSDARP00000141196	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Danio rerio
+ENSDARP00000141196	R-DRE-380284	http://www.reactome.org/PathwayBrowser/#/R-DRE-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Danio rerio
 ENSDARP00000141196	R-DRE-380259	http://www.reactome.org/PathwayBrowser/#/R-DRE-380259	Loss of Nlp from mitotic centrosomes	IEA	Danio rerio
 ENSDARP00000141196	R-DRE-1852241	http://www.reactome.org/PathwayBrowser/#/R-DRE-1852241	Organelle biogenesis and maintenance	IEA	Danio rerio
 ENSDARP00000141196	R-DRE-453274	http://www.reactome.org/PathwayBrowser/#/R-DRE-453274	Mitotic G2-G2/M phases	IEA	Danio rerio
@@ -6155,7 +6155,7 @@ ENSGALP00000004979	R-GGA-5617833	http://www.reactome.org/PathwayBrowser/#/R-GGA-
 ENSGALP00000004979	R-GGA-5620912	http://www.reactome.org/PathwayBrowser/#/R-GGA-5620912	Anchoring of the basal body to the plasma membrane	IEA	Gallus gallus
 ENSGALP00000004979	R-GGA-380287	http://www.reactome.org/PathwayBrowser/#/R-GGA-380287	Centrosome maturation	IEA	Gallus gallus
 ENSGALP00000004979	R-GGA-380259	http://www.reactome.org/PathwayBrowser/#/R-GGA-380259	Loss of Nlp from mitotic centrosomes	IEA	Gallus gallus
-ENSGALP00000004979	R-GGA-380284	http://www.reactome.org/PathwayBrowser/#/R-GGA-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Gallus gallus
+ENSGALP00000004979	R-GGA-380284	http://www.reactome.org/PathwayBrowser/#/R-GGA-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Gallus gallus
 ENSGALP00000004979	R-GGA-69278	http://www.reactome.org/PathwayBrowser/#/R-GGA-69278	Cell Cycle, Mitotic	IEA	Gallus gallus
 ENSGALP00000004979	R-GGA-2565942	http://www.reactome.org/PathwayBrowser/#/R-GGA-2565942	Regulation of PLK1 Activity at G2/M Transition	IEA	Gallus gallus
 ENSGALP00000004979	R-GGA-1640170	http://www.reactome.org/PathwayBrowser/#/R-GGA-1640170	Cell Cycle	IEA	Gallus gallus
@@ -8610,7 +8610,7 @@ ENSRNOP00000025629	R-RNO-174143	http://www.reactome.org/PathwayBrowser/#/R-RNO-1
 ENSRNOP00000025629	R-RNO-380287	http://www.reactome.org/PathwayBrowser/#/R-RNO-380287	Centrosome maturation	IEA	Rattus norvegicus
 ENSRNOP00000025629	R-RNO-176412	http://www.reactome.org/PathwayBrowser/#/R-RNO-176412	Phosphorylation of the APC/C	IEA	Rattus norvegicus
 ENSRNOP00000025629	R-RNO-195258	http://www.reactome.org/PathwayBrowser/#/R-RNO-195258	RHO GTPase Effectors	IEA	Rattus norvegicus
-ENSRNOP00000025629	R-RNO-380284	http://www.reactome.org/PathwayBrowser/#/R-RNO-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Rattus norvegicus
+ENSRNOP00000025629	R-RNO-380284	http://www.reactome.org/PathwayBrowser/#/R-RNO-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Rattus norvegicus
 ENSRNOP00000025629	R-RNO-5617833	http://www.reactome.org/PathwayBrowser/#/R-RNO-5617833	Assembly of the primary cilium	IEA	Rattus norvegicus
 ENSRNOP00000025629	R-RNO-380259	http://www.reactome.org/PathwayBrowser/#/R-RNO-380259	Loss of Nlp from mitotic centrosomes	IEA	Rattus norvegicus
 ENSRNOP00000025629	R-RNO-176417	http://www.reactome.org/PathwayBrowser/#/R-RNO-176417	Phosphorylation of Emi1	IEA	Rattus norvegicus
@@ -9250,7 +9250,7 @@ ENSXETP00000060193	R-XTR-4641263	http://www.reactome.org/PathwayBrowser/#/R-XTR-
 ENSXETP00000060193	R-XTR-195721	http://www.reactome.org/PathwayBrowser/#/R-XTR-195721	Signaling by Wnt	IEA	Xenopus tropicalis
 ENSXETP00000060193	R-XTR-201681	http://www.reactome.org/PathwayBrowser/#/R-XTR-201681	TCF dependent signaling in response to WNT	IEA	Xenopus tropicalis
 ENSXETP00000060664	R-XTR-380259	http://www.reactome.org/PathwayBrowser/#/R-XTR-380259	Loss of Nlp from mitotic centrosomes	IEA	Xenopus tropicalis
-ENSXETP00000060664	R-XTR-380284	http://www.reactome.org/PathwayBrowser/#/R-XTR-380284	Loss of proteins required for interphase microtubule organizationÂ from the centrosome	IEA	Xenopus tropicalis
+ENSXETP00000060664	R-XTR-380284	http://www.reactome.org/PathwayBrowser/#/R-XTR-380284	Loss of proteins required for interphase microtubule organization from the centrosome	IEA	Xenopus tropicalis
 ENSXETP00000060664	R-XTR-453274	http://www.reactome.org/PathwayBrowser/#/R-XTR-453274	Mitotic G2-G2/M phases	IEA	Xenopus tropicalis
 ENSXETP00000060664	R-XTR-2565942	http://www.reactome.org/PathwayBrowser/#/R-XTR-2565942	Regulation of PLK1 Activity at G2/M Transition	IEA	Xenopus tropicalis
 ENSXETP00000060664	R-XTR-380287	http://www.reactome.org/PathwayBrowser/#/R-XTR-380287	Centrosome maturation	IEA	Xenopus tropicalis

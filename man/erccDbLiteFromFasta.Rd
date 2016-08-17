@@ -8,6 +8,11 @@ If ERCC spike-ins change radically, we'll need to build an entirely new one.}
 \usage{
 erccDbLiteFromFasta(fastaFile, verbose = TRUE)
 }
+\arguments{
+\item{fastaFile}{a fasta file containing ERCC sequence information}
+
+\item{verbose}{boolean if true will print process messages}
+}
 \description{
 create an ERCC annotation DB from the FASTA file
 NOTE: we probably shouldn't even bother exporting this.

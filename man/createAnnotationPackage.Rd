@@ -8,6 +8,8 @@ createAnnotationPackage(fastaFile, ...)
 }
 \arguments{
 \item{fastaFile}{the filename}
+
+\item{...}{additional arguments related to package creation.}
 }
 \value{
 the name of the annotation package, or NULL if uncertain how to do it

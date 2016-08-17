@@ -31,29 +31,31 @@ getTxDbLiteName(fastaFile)
 }
 \arguments{
 \item{x}{a string to try and pop the ENSEMBL identifier off of}
+
+\item{fastaFile}{a FASTA file of interest 
+get the "stub" of a FASTA filename (no .fa, no .fasta, no .gz)}
+
+\item{y}{a column of a data frame
+get a column of a data.frame _complete_with_rownames_ as a vector}
+
+\item{how}{method for finding supported species abbreviations 
+supported organism abbreviations}
+
+\item{organism}{a familiar organism 
+Get the abbreviation for an organism (among those with which we're familiar)}
 }
 \value{
 if everything works out properly, the ENS* identifier (without .N)
 }
 \description{
 utility functions
-}
-\section{Functions}{
-\itemize{
-\item \code{idStub}: needed from Ens83 onwards :-/ and maybe will need to generalize as well
 
-\item \code{getFastaStub}: get the "stub" of a FASTA filename (no .fa, no .fasta, no .gz)
+Finds the prefix name
 
-\item \code{colAsVector}: get a column of a data.frame _complete_with_rownames_ as a vector
+helper fn that handles a number of annoying tasks using saved data
 
-\item \code{getSupportedAbbreviations}: supported organism abbreviations
-
-\item \code{getOrganismAbbreviation}: Get the abbreviation for an organism (among those with which we're familiar)
-
-\item \code{getOrgDetails}: helper fn that handles a number of annoying tasks using saved data
-
-\item \code{getTxDbLiteName}: get the name of the package/sqlite file for a FASTA-based annotation
+get the name of the package/sqlite file for a FASTA-based annotation
 NOTE: as of 1.9.25, this is based on DbType.Org.Version
-}}
+}
 \keyword{datasets}
 

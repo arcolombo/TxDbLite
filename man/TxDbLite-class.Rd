@@ -29,11 +29,11 @@ genesBy(x, by = c("gene_biotype", "biotype_class"), ...)
 \S4method{genesBy}{TxDbLite}(x, by = c("gene_biotype", "biotype_class"))
 }
 \arguments{
-\item{x}{the TxDbLite instance}
+\item{x}{TxDblite SQL-lite database instance}
 
-\item{by}{how to split the transcripts}
+\item{object}{TxDbLite SQL-lite annotation database}
 
-\item{x}{the TxDbLite instance}
+\item{...}{additional parameters releated to annotation database}
 
 \item{by}{how to split the genes}
 }

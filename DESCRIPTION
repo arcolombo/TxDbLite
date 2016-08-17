@@ -1,14 +1,14 @@
 Package: TxDbLite
 Type: Package
-Title: Lightweight SQLite-based annotation classes/packages for use with artemis
-Version: 1.9.112
 Date: 2016-09-15
+Title: Lightweight SQLite-based annotation classes/packages for use with arkas
+Version: 1.9.113
 Author: Tim Triche, Jr., Anthony Colombo
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: Package to make (very) lightweight annotation packages from FASTAs.  The annotations here give transcript biotype and gene biotype for genes, non coding regions and repetitive elements.  It is determined for light annotations without gene-transfer format coordinate information.
 Depends:
     DBI,
-    RSQLite,
+    RSQLite,  
     ensembldb
 Imports:
     Biostrings,

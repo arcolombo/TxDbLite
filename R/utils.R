@@ -2,10 +2,10 @@
 #'
 utils <- NULL
 
-
-#' @describeIn utils
-#' 
-#' needed from Ens83 onwards :-/ and maybe will need to generalize as well
+#' Finds the prefix name
+#' @name utils 
+#' @rdname utils
+#'  
 #' 
 #' @param x   a string to try and pop the ENSEMBL identifier off of
 #'
@@ -19,8 +19,9 @@ idStub <- function(x) {
 }
 
 
-#' @describeIn utils
-#' 
+#' @name utils 
+#' @rdname utils
+#' @param fastaFile  a FASTA file of interest 
 #' get the "stub" of a FASTA filename (no .fa, no .fasta, no .gz)
 #' 
 #' @export
@@ -32,15 +33,17 @@ getFastaStub <- function(fastaFile) { # {{{
   sub("\\.humrep", ".merged", xx)
 } # }}}
 
-#' @describeIn utils
-#' 
+#' @name utils 
+#' @rdname utils 
+#' @param y a column of a data frame  
 #' get a column of a data.frame _complete_with_rownames_ as a vector 
 #' 
 #' @export
 colAsVector <- function(x, y) t(x[, y, drop=FALSE])[1,]
 
-#' @describeIn utils 
-#' 
+#' @name utils 
+#' @rdname utils
+#' @param how method for finding supported species abbreviations 
 #' supported organism abbreviations
 #'
 #' @export
@@ -51,8 +54,9 @@ getSupportedAbbreviations <- function(how=c("abbreviation","reactome")) { # {{{
   colAsVector(supportedOrganismsForTxDbLite, how)
 } # }}}
 
-#' @describeIn utils
-#' 
+#' @name utils 
+#' @rdname utils
+#' @param organism a familiar organism 
 #' Get the abbreviation for an organism (among those with which we're familiar)
 #' 
 #' @export
@@ -73,10 +77,10 @@ getOrganismAbbreviation <- function(organism, how=c("abbreviation","reactome")){
   }
 } # }}}
 
-#' @describeIn utils
-#' 
+
 #' helper fn that handles a number of annoying tasks using saved data
-#' 
+#' @name utils 
+#' @rdname utils 
 #' @export
 getOrgDetails <- function(organism) { # {{{
   abbr <- getSupportedAbbreviations()
@@ -86,11 +90,12 @@ getOrgDetails <- function(organism) { # {{{
   return(supportedOrganismsForTxDbLite[joined,])
 } # }}}
 
-#' @describeIn utils
+#' 
 #' 
 #' get the name of the package/sqlite file for a FASTA-based annotation
 #' NOTE: as of 1.9.25, this is based on DbType.Org.Version
-#'
+#' @name utils 
+#' @rdname utils
 #' @export
 getTxDbLiteName <- function(fastaFile) { # {{{
 

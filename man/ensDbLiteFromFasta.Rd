@@ -31,8 +31,6 @@ ensDbLiteMetadata(packageName, genomeVersion, sourceFile)
 \item{genomeVersion}{name of genome assembly for coordinates, e.g. "GRCh38"}
 
 \item{sourceFile}{name of FASTA file(s) whence it was built, as a string}
-
-\item{gxs}{a GRanges of genes}
 }
 \value{
 entrez_id values for the genes, where found

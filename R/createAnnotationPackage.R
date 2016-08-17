@@ -1,9 +1,13 @@
 #' create an annotation package for a FASTA file (try to figure out what kind)
 #' 
 #' @param fastaFile the filename
-#' 
+#' @param ... additional arguments related to package creation. 
 #' @return the name of the annotation package, or NULL if uncertain how to do it
 #' 
+#' @import Biobase
+#' @import DBI
+#' @import RSQLite
+#'
 #' @export
 createAnnotationPackage <- function(fastaFile, ...) { # {{{
 

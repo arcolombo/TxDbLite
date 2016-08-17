@@ -3,6 +3,7 @@
 setMethod("dbconn", "TxDbLite", function(x) return(x@con))
 
 #' @rdname TxDbLite-class
+#' @param object TxDbLite SQL-lite annotation database
 setMethod("show", "TxDbLite", function(object) { # {{{
   if(is.null(object@con)) stop(paste("Invalid", class(object), "instance!"))
   info <- metadata(object)
@@ -12,6 +13,8 @@ setMethod("show", "TxDbLite", function(object) { # {{{
 }) # }}}
 
 #' @rdname TxDbLite-class
+#' @param x TxDblite SQL-lite database instance
+#' @param ... additional parameters releated to annotation database
 setMethod("metadata", "TxDbLite", function(x, ...) { # {{{
   md <- dbGetQuery(dbconn(x), "select * from metadata")
   rownames(md) <- md$name
@@ -36,8 +39,8 @@ setMethod("promoters", "TxDbLite", function(x,upstream=2000,downstream=200,...){
 #' 
 #' get transcripts by gene, promoter, tx_biotype, gene_biotype, or biotype_class
 #'
-#' @param x   the TxDbLite instance
-#' @param by  how to split the transcripts 
+#' 
+#' 
 #'
 #' @return a GRangesList
 #' @rdname TxDbLite-class
@@ -87,7 +90,7 @@ setGeneric("genesBy", function(x,by=c("gene_biotype","biotype_class"), ...){#{{{
 #' 
 #' get genes by gene_biotype or biotype_class
 #'
-#' @param x   the TxDbLite instance
+#' 
 #' @param by  how to split the genes 
 #' @aliases genesBy TxDbLite-method
 #' @return a GRangesList

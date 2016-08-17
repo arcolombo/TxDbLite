@@ -12,8 +12,6 @@ mapHugo(IDs, useCache = TRUE, byType = c("transcript", "gene"))
 \item{useCache}{boolean: use the cache? (TRUE, and should stay that way)}
 
 \item{byType}{gene, or transcript}
-
-\item{type}{what type of identifier are these? (transcript)}
 }
 \value{
 a list mapping IDs to HUGO symbols or HUGO transcript names

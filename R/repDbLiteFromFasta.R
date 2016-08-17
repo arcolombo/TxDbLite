@@ -269,7 +269,7 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
 }
 
 
-#' @describeIn repDbLiteFromFasta
+#' 
 #' 
 #' create metadata for a RepDbLite instance
 #'

@@ -17,6 +17,8 @@ makeErccDbLitePkg(erccdblitefile, author = "Nobody", email = "dev@null.com",
 \item{version}{version of the package (default is "1.0")}
 
 \item{destDir}{where to put the new package directory (".")}
+
+\item{...}{additional parameters}
 }
 \value{
 the name of the package

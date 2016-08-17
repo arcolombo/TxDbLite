@@ -274,7 +274,7 @@ repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
   if (verbose) cat("done.\n") # }}}
 
   ## write metadata table 
-  Metadata <- repDbLiteMetadata(outstub, sourceFile=fastaFile)
+  Metadata <- repDbLiteMetaMousedata(outstub, sourceFile=fastaFile)
   dbWriteTable(con, name="metadata", Metadata, overwrite=TRUE, row.names=FALSE)
 
   ## create indices 
@@ -289,7 +289,7 @@ repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
 }
 
 
-#' @describeIn repDbLiteFromFasta
+#' @describeIn repDbLiteFromMouseFasta
 #' 
 #' create metadata for a RepDbLite instance
 #'
@@ -298,7 +298,7 @@ repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
 #' 
 #' @return a data.frame of metadata suitable for cramming into the database
 #'
-repDbLiteMetadata <- function(packageName, sourceFile) { # {{{
+repDbLiteMetaMousedata <- function(packageName, sourceFile) { # {{{
 
   tokens <- strsplit(getFastaStub(sourceFile), "\\.")[[1]]
   names(tokens)[1:3] <- c("organism", "genome", "version")
