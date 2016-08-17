@@ -6,7 +6,7 @@
 \title{functions to create a RepDbLite object (a stripped-down SQLite db) from
 a specified RepBase FASTA file for a given version, species, and type(s). this is the mouse rep biotype to be used.}
 \usage{
-repDbLiteFromMouseFasta(fastaFile, verbose = TRUE)
+repDbLiteFromMouseFasta(fastaFile, verbose = TRUE, dryRun = FALSE)
 
 repDbLiteMetaMousedata(packageName, sourceFile)
 }
@@ -14,6 +14,8 @@ repDbLiteMetaMousedata(packageName, sourceFile)
 \item{fastaFile}{the FASTA file to collate into a RepDbLite instance}
 
 \item{verbose}{make a lot of noise? (TRUE)}
+
+\item{dryRun}{boolean if false, a sql database is created}
 
 \item{packageName}{the name of the annotation package to be built}
 

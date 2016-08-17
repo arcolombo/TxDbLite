@@ -2,13 +2,15 @@
 #' NOTE: we probably shouldn't even bother exporting this.
 #' If ERCC spike-ins change radically, we'll need to build an entirely new one.
 #'
-#' @importFrom Rsamtools indexFa
-#' @importFrom Rsamtools scanFaIndex
-#' @importFrom Rsamtools scanFa
+#' @importFrom Rsamtools indexFa index
+#' @importFrom Rsamtools scanFaIndex FaFile scanFa path
+#' @importFrom GenomeInfoDb seqnames
+#' @importFrom DBI dbConnect dbDriver dbWriteTable dbGetQuery dbDisconnect
 #' @param fastaFile a fasta file containing ERCC sequence information
 #' @param verbose boolean if true will print process messages 
+#' @param dryRun  boolean if false a sql-lite data base is saved, if true, no database is saved.
 #' @export
-erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE) { 
+erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE, dryRun=FALSE) { 
 
   if (verbose) cat("Extracting spike-in associations...")
   faFile <- FaFile(fastaFile)
@@ -31,9 +33,11 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
    
 
 
- outstub <- getTxDbLiteName(fastaFile)
+ outstub <- getTxDbLiteName(basename(fastaFile))
   dbname <- paste(outstub, "sqlite", sep=".") 
+  if(dryRun==FALSE){
   con <- dbConnect(dbDriver("SQLite"), dbname=dbname)
+  }
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Writing the spike-in tables...") # {{{
@@ -42,16 +46,20 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
               "tx_id", "gene_id", "gene_name", "entrezid", 
               "tx_biotype", "gene_biotype", "biotype_class")
   tx <- as(txs, "data.frame")[, txcols] 
+  if(dryRun==FALSE){
   dbWriteTable(con, name="tx", tx, overwrite=T, row.names=F)
+  }
   rm(tx)
   if (verbose) cat("done.\n") # }}}
 
   Metadata <- .erccDbLiteMetadata(packageName=outstub, sourceFile=fastaFile)
+  if(dryRun==FALSE){
   dbWriteTable(con, name="metadata", Metadata, overwrite=TRUE, row.names=FALSE)
   dbGetQuery(con, "create index tx_id_idx on tx (tx_id);")
-
+  
   ## finish 
   dbDisconnect(con)
+  }
   return(dbname)
 
 }

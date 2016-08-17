@@ -1,5 +1,5 @@
 ---
-title: "Arkas: TxDbLite Arbitrary Annotation Library Creation"
+title: "TxDbLite: Custom Annotation Library Creation In Much Less Time"
 author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
 output: 
     html_document:
@@ -48,40 +48,57 @@ In order to run gene-wise analysis, Arkas requires that the merged KallistoExper
 
 
 ## Buiding Annotation libraries
-  Library Annotations are built using TxDbLite; these annotation databases allow for lite annotations parsing gene names, bio-types and family type from reference fastas from ERCC, Ensembl, or RepBase.  Currently exonic, intronic, or other coordinate dependent information is not included in TxDbLite.   The supplemental package arkasData stores the ready-to-load annotation libraries under /extdata/Libraries directory.  For demonstration, we build the libraries under the arkasData/extdata/fasta/tmp directory.
-
-```{r}
+  Library Annotations are built using TxDbLite; these annotation databases allow for lite annotations parsing gene names, bio-types and family type from reference fastas from ERCC, Ensembl, or RepBase.  Currently exonic, intronic, or other coordinate dependent information is not included in TxDbLite.   The supplemental package arkasData stores the ready-to-load annotation libraries under /extdata/Libraries directory.  For demonstration, we dry build the SQL databases.
+```{r ercc_dryRun}
 suppressPackageStartupMessages(library(TxDbLite))
 suppressWarnings(suppressPackageStartupMessages(library(arkas)))
-suppressPackageStartupMessages(library(arkasData))
+
 jsonFile <- system.file("extdata", "NS.JSON", package="arkas")
 appSession <- fetchAppSession(jsonFile)
 names(appSession$samples) <- appSession$samples
-appSession$outputPath <- system.file("extdata", package="arkasData")
-fastaPath<-system.file("extdata","fasta",package="arkasData")
-appSession$fastaPath<-fastaPath
-cd<-appSession$fastaPath
-setwd(paste0(appSession$fastaPath,"/","tmp"))
-fastaTx<-c("ERCC.fa.gz","Homo_sapiens.GRCh38.81.cdna.all.fa.gz","Homo_sapiens.RepBase.20_05.merged.fa")
-#erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/tmp/","ERCC.fa.gz"))
-#erccPkg<-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
-#Create a Ensembl Annotation Db with cdna and ncrna
-lapply(fastaTx,function(x) findDupes(x))
-ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna.all.fa.gz")
+appSession$fastaPath<- system.file("extdata", package="TxDbLite")
+
+fastaTx<-c("ERCC.fa.gz","Homo_sapiens.GRCh38.81.ncrna.fa.gz","Homo_sapiens.RepBase.20_05.merged.fa.gz")
+erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"),dryRun=TRUE) #requires /site-library permissions
+print(erccDb)
+```
+
+# Creating a Lite ERCC Annotation Package
+For those interested in creating an ERCC annotation package, the below command can be issued with respect to the working director of the ERCC SQL database created previously.
+```
+erccPkg<-makeErccDbLitePkg(erccDb,destDir=paste0("SQL-Path"))
+```
+
+# Create a ENSEMBL Annotation Db with cdna and ncrna
+```{r ens_dryRun}
+lapply(paste0(appSession$fastaPath,"/",fastaTx),function(x) findDupes(x))
+ensDb<-ensDbLiteFromFasta(paste0(appSession$fastaPath,"/","Homo_sapiens.GRCh38.81.ncrna.fa.gz"),dryRun=TRUE)
+print(ensDb)
+```
+# Create ENSEMBL Package
+A re-usable ENSEMBL Annotation package compatible with R can be created with the below command.
+```
 ensPkg<-makeEnsDbLitePkg(ensDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
-repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_05.merged.fa")
+```
+#Repetitive Annotation SQL Database
+Users can create annotation databases for repetitive elements supported by the GIRI/RepBase
+```{r rep_dryRun}
+repDb<-repDbLiteFromFasta(paste0(appSession$fastaPath,"/","Homo_sapiens.RepBase.20_05.merged.fa.gz"), dryRun=TRUE)
+print(repDb)
+```
+#R Repeat Annotation Package
+Once a Repbase SQL annotation database is created, a creation of an R package follows.  The Annotation databases can be inspected using TxDbLite.
+```
 repPkg<-makeRepDbLitePkg(repDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
-#ErccDbLite(erccDb)
+ErccDbLite(erccDb)
 EnsDbLite(ensDb)
 RepDbLite(repDb)
-#transcripts(ErccDbLite(erccDb))
+transcripts(ErccDbLite(erccDb))
 transcripts(EnsDbLite(ensDb))
 transcripts(RepDbLite(repDb))
-
-files<-dir(paste0(appSession$fastaPath,"/tmp"))[!dir(paste0(appSession$fastaPath,"/tmp")) %in% fastaTx]
-
-lapply(files,function(x) system(paste0("rm -r ",x)))
 ```
+
+
 
 # Annotating Merged KallistoExperiment Containers
    Arkas has a function "annotateFeatures.R" which annotates ERCC, Ensembl, and RepBase databases for species Homo-Sapiens, Mus-musculus, and Rattus norvegicus.  The method "annotateFeatures.R" annotates the merged KallistoExperiment against every TxDbLite library simulatenously. These annotation databases are defined as 'lite' because they do not store exonic or intronic coordinates.  GeneWise analysis is dependent on the annotateFeatures feature data, so this serves as unit test for genelevel analysis.

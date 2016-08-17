@@ -9,7 +9,7 @@
 a specified Ensembl FASTA file for a given version, species, and type(s).
 Note that this is shockingly easier than the same process for the GTF...}
 \usage{
-ensDbLiteFromFasta(fastaFile, verbose = TRUE)
+ensDbLiteFromFasta(fastaFile, verbose = TRUE, dryRun = FALSE)
 
 getEntrezIDs(gxs, organism)
 
@@ -21,6 +21,8 @@ ensDbLiteMetadata(packageName, genomeVersion, sourceFile)
 \item{fastaFile}{the FASTA file to collate into a EnsDbLite instance}
 
 \item{verbose}{make a lot of noise? (TRUE)}
+
+\item{dryRun}{boolean if false a sql database is created}
 
 \item{gxs}{a GRanges of genes}
 

@@ -17,7 +17,8 @@ Imports:
     OrganismDbi,
     Rsamtools,
     biomaRt,
-    Biobase
+    Biobase,
+    GenomeInfoDb
 Suggests:
     BiocStyle,
     arkas,

@@ -2,10 +2,13 @@
 #' a specified RepBase FASTA file for a given version, species, and type(s). this will use biotype catalog designed for human species, but can possibly be used for mouse, though not recommended. 
 #' @param fastaFile     the FASTA file to collate into a RepDbLite instance
 #' @param verbose       make a lot of noise? (TRUE) 
-#'
-#' @importFrom Rsamtools indexFa scanFaIndex scanFa
+#' @param dryRun        boolean if false a sql database is created
+#' @importFrom GenomeInfoDb seqnames
+#' @importFrom Rsamtools indexFa scanFaIndex scanFa FaFile
+#' @importFrom Biostrings fasta.seqlengths
+#' @importFrom DBI dbConnect dbDriver dbWriteTable dbGetQuery dbDisconnect
 #' @export
-repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
+repDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE) {
  
   verbose <- TRUE 
   options(useFancyQuotes=FALSE)
@@ -231,10 +234,11 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
 
   ## create the SQLite database... 
   repVersion <- gsub("Repbase","", ignore.case=TRUE, version)
-  outstub <- getTxDbLiteName(fastaFile)
+  outstub <- getTxDbLiteName(basename(fastaFile))
   dbname <- paste(outstub, "sqlite", sep=".") 
+  if(dryRun==FALSE){
   con <- dbConnect(dbDriver("SQLite"), dbname=dbname)
-
+  }
   if (verbose) cat("Creating the database...") # {{{
   rpt <- as.data.frame(txs)
   rpt$tx_length <- txLen
@@ -250,13 +254,16 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
               "tx_length", "gc_content", 
               "tx_id", "gene_id", "gene_name", "entrezid", 
               "tx_biotype", "gene_biotype", "biotype_class")
+  if(dryRun==FALSE){
   dbWriteTable(con, name="tx", rpt[,txcols], overwrite=T, row.names=F)
+  }
   if (verbose) cat("done.\n") # }}}
 
   ## write metadata table 
   Metadata <- repDbLiteMetadata(outstub, sourceFile=fastaFile)
+  if(dryRun==FALSE){ 
   dbWriteTable(con, name="metadata", Metadata, overwrite=TRUE, row.names=FALSE)
-
+  
   ## create indices 
   dbGetQuery(con, "create index tx_id_idx on tx (tx_id);")
   dbGetQuery(con, "create index tx_biotype_idx on tx (tx_biotype);")
@@ -264,6 +271,7 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE) {
 
   ## finish 
   dbDisconnect(con)
+  }
   return(dbname)
 
 }
