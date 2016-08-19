@@ -33,7 +33,9 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE){#{{{
   tokens <- strsplit(txDbLiteName, "\\.")[[1]]
   organism <- tokens[2] 
   version <- tokens[3]
+  names(tokens)<-c("Name","organism","version") #name convention stems directly from the token assignment. FIX ME: pass a single token into ensDbMeta(,...token)
   org <- getOrgDetails(organism) 
+ 
   if (!require(org$package, character.only=TRUE)) {
     stop("Please install the", org$package, "package, then try again. Thanks!")
   } 
@@ -306,7 +308,7 @@ getSymbols <- function(gxs, organism) { # {{{
 #' @export
 ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
 
-  tokens <- strsplit(getFastaStub(sourceFile), "\\.")[[1]]
+  tokens <- strsplit(getFastaStub(basename(sourceFile)), "\\.")[[1]]
   names(tokens)[1:3] <- c("organism", "genome", "version")
   organism <- getOrgDetails(tokens["organism"])
   build <- tokens["genome"]
