@@ -21,9 +21,9 @@ createAnnotationPackage <- function(fastaFile, ...) { # {{{
   } else if (type == "RepDbLite") {
     db <- repDbLiteFromFasta(fastaFile)
     pkg <- makeRepDbLitePkg(db, ...)
-  } else if (type == "MitxDbLite") {
-    db <- mitxDbLiteFromFasta(fastaFile)
-    pkg <- makeMitxDbLitePkg(db, ...) 
+  #} else if (type == "MitxDbLite") {
+   # db <- mitxDbLiteFromFasta(fastaFile)
+   # pkg <- makeMitxDbLitePkg(db, ...) 
   } else if (grepl("ERCC", fastaFile)) { 
     db <- erccDbLiteFromFasta(fastaFile)
     pkg <- makeErccDbLitePkg(db, ...) 

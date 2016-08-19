@@ -4,6 +4,7 @@ setMethod("dbconn", "TxDbLite", function(x) return(x@con))
 
 #' @rdname TxDbLite-class
 #' @param object TxDbLite SQL-lite annotation database
+#' @import ensembldb
 setMethod("show", "TxDbLite", function(object) { # {{{
   if(is.null(object@con)) stop(paste("Invalid", class(object), "instance!"))
   info <- metadata(object)
@@ -21,6 +22,7 @@ setMethod("metadata", "TxDbLite", function(x, ...) { # {{{
   return(md)
 }) # }}}
 
+#' @importFrom GenomeInfoDb genome
 setMethod("transcripts", "TxDbLite", function(x) { # {{{
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), "select * from tx"),
                                   keep.extra.columns=TRUE)
@@ -44,6 +46,7 @@ setMethod("promoters", "TxDbLite", function(x,upstream=2000,downstream=200,...){
 #'
 #' @return a GRangesList
 #' @rdname TxDbLite-class
+#' @importFrom GenomeInfoDb seqlevelsStyle
 #' @export
 setMethod("transcriptsBy", "TxDbLite", function(x, # {{{
                                                 by=c("gene",
@@ -65,6 +68,7 @@ setMethod("transcriptsBy", "TxDbLite", function(x, # {{{
          biotype_class=split(txs, txs$biotype_class))
 }) # }}} 
 
+#' @importFrom GenomeInfoDb genome
 setMethod("genes", "TxDbLite", function(x) { # {{{
   sql <- paste("select seqnames, start, end, strand, ",
                "       tx_length, 'NA' as gc_content, 'NA' as tx_id,",
@@ -105,7 +109,8 @@ setMethod("genesBy", "TxDbLite", function(x, by=c("gene_biotype","biotype_class"
 }) # }}} 
 
 ## EnsDbLite methods
-
+#' @import ensembldb
+#' @importFrom GenomeInfoDb genome
 setMethod("genes", "EnsDbLite", function(x) { # {{{
   sql <- paste("select seqnames, start, end, strand, ",
                "       median_length as tx_length, 'NA' as gc_content,",
@@ -123,6 +128,7 @@ setMethod("genes", "EnsDbLite", function(x) { # {{{
   return(res)
 }) # }}}
 
+#' @importFrom GenomeInfoDb genome
 setMethod("transcripts", "EnsDbLite", function(x) { # {{{
   sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
                "       tx_length, gc_content, tx_id, gene_id, gene_name,",

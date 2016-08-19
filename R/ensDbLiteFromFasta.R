@@ -10,6 +10,11 @@
 #' @importFrom Rsamtools indexFa scanFaIndex scanFa FaFile index
 #' @importFrom Biostrings fasta.seqlengths 
 #' @importFrom DBI dbConnect dbDriver dbWriteTable dbGetQuery dbDisconnect
+#' @importFrom S4Vectors Rle
+#' @importFrom IRanges IRanges
+##' @importFrom GenomeInfoDb seqlevels seqnames genome
+#' @import GenomeInfoDb
+#' @importFrom stats median aggregate
 #' @export
 ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE){#{{{
 

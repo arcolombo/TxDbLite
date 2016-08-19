@@ -18,7 +18,11 @@ Imports:
     Rsamtools,
     biomaRt,
     Biobase,
-    GenomeInfoDb
+    GenomeInfoDb,
+    methods,
+    IRanges,
+    S4Vectors,
+    BiocGenerics
 Suggests:
     BiocStyle,
     arkas,

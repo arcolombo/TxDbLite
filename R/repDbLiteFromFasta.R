@@ -7,6 +7,7 @@
 #' @importFrom Rsamtools indexFa scanFaIndex scanFa FaFile
 #' @importFrom Biostrings fasta.seqlengths
 #' @importFrom DBI dbConnect dbDriver dbWriteTable dbGetQuery dbDisconnect
+#' 
 #' @export
 repDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE) {
  
@@ -197,9 +198,9 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE) {
       hinted$gene_biotype[grep("Mariner", hinted$tx_biotype)] <- "DNA_element"
       hinted$gene_biotype[grep("Transposable", 
                                hinted$tx_biotype)] <- "DNA_element"
-      hinted$gene_biotype[grep("EUT",ignore=T, 
+      hinted$gene_biotype[grep("EUT",ignore.case=T, 
                                hinted$tx_biotype)] <- "DNA_element"
-      hinted$gene_biotype[grep("SAT",ignore=T, 
+      hinted$gene_biotype[grep("SAT",ignore.case=T, 
                                hinted$tx_biotype)] <- "other_repeat"
       hinted$gene_biotype[grep("L1", hinted$name)] <- "LINE"
       hinted$gene_biotype[grep("L2", hinted$name)] <- "LINE"

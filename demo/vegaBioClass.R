@@ -1,5 +1,5 @@
 library(ensembldb)
-
+library(GenomeInfoDb)
 
 vegaBioClass <- function(txmap) {
   gene_biotypes <- names(sort(table(txmap$gene_biotype)))

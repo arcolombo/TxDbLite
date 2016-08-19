@@ -7,6 +7,7 @@
 #' @param destDir         where to put the new package directory (".")
 #' @param ...             additional parameters
 #' @importFrom Biobase createPackage
+#' @importFrom ensembldb metadata
 #' @return the name of the package 
 #' 
 #' @export

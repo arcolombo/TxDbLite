@@ -7,8 +7,9 @@
 #' @param z   after which element is x appended (default is 0, i.e. prepend x)
 #' 
 #' @return    the string produced by shoving x onto str2vec(w, y) after [z]
-#'
+#' @importFrom BiocGenerics paste
 #' @export
 strunshift <- function(w, x, y=" ", z=0) {
-  paste(append(str2vec(w, y), x, z, collapse=y))
+  ww<-append(str2vec(w, y), x, z) 
+  return(paste(ww,collapse=y))
 }

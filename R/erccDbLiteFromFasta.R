@@ -6,6 +6,7 @@
 #' @importFrom Rsamtools scanFaIndex FaFile scanFa path
 #' @importFrom GenomeInfoDb seqnames
 #' @importFrom DBI dbConnect dbDriver dbWriteTable dbGetQuery dbDisconnect
+#' @importFrom S4Vectors DataFrame
 #' @param fastaFile a fasta file containing ERCC sequence information
 #' @param verbose boolean if true will print process messages 
 #' @param dryRun  boolean if false a sql-lite data base is saved, if true, no database is saved.

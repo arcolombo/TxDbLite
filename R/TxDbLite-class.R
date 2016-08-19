@@ -1,5 +1,6 @@
 #' A parent class for lightweight Ensembl and RepBase/RepeatMasker annotations
 #' @rdname TxDbLite-class
+#' @import methods
 #' @slot con a DBI Connection
 #' @slot tables a list of annotation entries 
 #' @export
