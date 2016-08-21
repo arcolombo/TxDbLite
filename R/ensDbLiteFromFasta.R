@@ -4,16 +4,20 @@
 #' 
 #' @param fastaFile     the FASTA file to collate into a EnsDbLite instance
 #' @param verbose       make a lot of noise? (TRUE) 
-#' 
+#' @param dryRun       boolean if false a sql database is created
 #' @import GenomicRanges
 #' @import OrganismDbi
-#' @import Biostrings
-#' 
+#' @importFrom Rsamtools indexFa scanFaIndex scanFa FaFile index
+#' @importFrom Biostrings fasta.seqlengths 
+#' @importFrom DBI dbConnect dbDriver dbWriteTable dbGetQuery dbDisconnect
+#' @importFrom S4Vectors Rle
+#' @importFrom IRanges IRanges
+##' @importFrom GenomeInfoDb seqlevels seqnames genome
+#' @import GenomeInfoDb
+#' @importFrom stats median aggregate
 #' @export
-ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
+ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE){#{{{
 
-  require(Biostrings) 
-  require(GenomicRanges)
   options(useFancyQuotes=FALSE)
   options(stringsAsFactors=FALSE)
 
@@ -24,12 +28,14 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   grab <- function(x, y=" ", i=1) splt(x, y)[i]
   shift <- function(x, y=" ") grab(x, y, i=1)
 
-  txDbLiteName <- getTxDbLiteName(fastaFile)
+  txDbLiteName <- getTxDbLiteName(basename(fastaFile))
   genomeVersion <- strsplit(fastaFile, "\\.")[[1]][1]
   tokens <- strsplit(txDbLiteName, "\\.")[[1]]
   organism <- tokens[2] 
   version <- tokens[3]
+  names(tokens)<-c("Name","organism","version") #name convention stems directly from the token assignment. FIX ME: pass a single token into ensDbMeta(,...token)
   org <- getOrgDetails(organism) 
+ 
   if (!require(org$package, character.only=TRUE)) {
     stop("Please install the", org$package, "package, then try again. Thanks!")
   } 
@@ -147,9 +153,11 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
 
   if (verbose) cat("Creating the database...") # {{{
   txVersion <- gsub("^v", "", version)
-  outstub <- getTxDbLiteName(fastaFile)
+  outstub <- getTxDbLiteName(basename(fastaFile))
   dbname <- paste(outstub, "sqlite", sep=".") 
+  if(dryRun==FALSE){
   con <- dbConnect(dbDriver("SQLite"), dbname=dbname)
+  }
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Writing the gene table...") # {{{
@@ -157,7 +165,9 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
               "gene", "gene_id", "gene_biotype_id",
               "entrezid", "gene_name", "median_length")
   gx <- as(gxs, "data.frame")[, gxcols] 
+  if(dryRun==FALSE){
   dbWriteTable(con, name="gene", gx, overwrite=T, row.names=F)
+  }
   rm(gx)
   if (verbose) cat("done.\n") # }}}
 
@@ -168,8 +178,10 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Writing the gene_biotype table...") # {{{
+  if(dryRun==FALSE){
   dbWriteTable(con, name="gene_biotype", gene_biotypes, 
                overwrite=T, row.names=F)
+  }
   rm(gene_biotypes) 
   if (verbose) cat("done.\n") # }}}
 
@@ -177,7 +189,9 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   txcols <- c("start", "end", 
               "tx_id", "tx_length", "gc_content", "tx_biotype_id", "gene")
   tx <- as(txs, "data.frame")[, txcols]
+  if(dryRun==FALSE){
   dbWriteTable(con, name="tx", tx, overwrite=TRUE, row.names=FALSE)
+  }
   rm(tx)
   if (verbose) cat("done.\n") # }}}
 
@@ -188,24 +202,29 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Writing the tx_biotype table...") # {{{
+  if(dryRun==FALSE){
   dbWriteTable(con, name="tx_biotype", tx_biotypes, overwrite=T, row.names=F)
+  }
   rm(tx_biotypes)
   if (verbose) cat("done.\n") # }}}
 
   if (verbose) cat("Writing the biotype_class table...") # {{{
   data(ensembl_biotypes, package="TxDbLite")
   if (class(ensembl_biotypes) != "data.frame") browser()
+  if(dryRun==FALSE){
   dbWriteTable(con, name="biotype_class", ensembl_biotypes,
                overwrite=T, row.names=F)
+  }
   if (verbose) cat("done.\n") # }}}
 
   # write metadata table # {{{ 
   Metadata <- ensDbLiteMetadata(packageName=outstub, 
                                 genomeVersion=txVersion,
                                 sourceFile=fastaFile)
-  dbWriteTable(con, name="metadata", Metadata, overwrite=TRUE, row.names=FALSE)
+ if(dryRun==FALSE){ 
+ dbWriteTable(con, name="metadata", Metadata, overwrite=TRUE, row.names=FALSE)
   # }}}
-
+  
   # create indices  # {{{
   dbGetQuery(con, "create index tx_id_idx on tx (tx_id);")
   dbGetQuery(con, "create index gene_idx on gene (gene);")
@@ -214,9 +233,10 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE){#{{{
   dbGetQuery(con, "create index class_id_idx on biotype_class (class);")
   dbGetQuery(con, "create index biotype_id_idx on biotype_class (biotype);")
   # }}}
-
+  
   ## finish 
   dbDisconnect(con)
+  }
   return(dbname)
 
 } # }}}
@@ -250,7 +270,7 @@ getEntrezIDs <- function(gxs, organism) { # {{{
 #' 
 #' add symbols for Ensembl genes
 #'
-#' @param gxs       a GRanges of genes
+#' 
 #' 
 #' @return  symbols for the genes, where found 
 #'
@@ -288,7 +308,7 @@ getSymbols <- function(gxs, organism) { # {{{
 #' @export
 ensDbLiteMetadata <- function(packageName, genomeVersion, sourceFile) { # {{{
 
-  tokens <- strsplit(getFastaStub(sourceFile), "\\.")[[1]]
+  tokens <- strsplit(getFastaStub(basename(sourceFile)), "\\.")[[1]]
   names(tokens)[1:3] <- c("organism", "genome", "version")
   organism <- getOrgDetails(tokens["organism"])
   build <- tokens["genome"]

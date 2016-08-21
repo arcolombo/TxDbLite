@@ -5,7 +5,8 @@
 #' @param email           adding maintainer's email
 #' @param version         version of the package (default is "1.0")
 #' @param destDir         where to put the new package directory (".")
-#' 
+#' @param ...             additional parameters
+#' @importFrom Biobase createPackage
 #' @return the name of the package 
 #' 
 #' @export
@@ -40,7 +41,7 @@ makeEnsDbLitePkg <- function(ensdblitefile, author="Nobody", email="dev@null.com
     TXDBOBJNAME=pkg
   )
 
-  require(Biobase)
+
   createPackage(pkgname=pkg,
                 destinationDir=destDir,
                 originDir=template_path,

@@ -6,7 +6,14 @@
 NOTE: we probably shouldn't even bother exporting this.
 If ERCC spike-ins change radically, we'll need to build an entirely new one.}
 \usage{
-erccDbLiteFromFasta(fastaFile, verbose = TRUE)
+erccDbLiteFromFasta(fastaFile, verbose = TRUE, dryRun = FALSE)
+}
+\arguments{
+\item{fastaFile}{a fasta file containing ERCC sequence information}
+
+\item{verbose}{boolean if true will print process messages}
+
+\item{dryRun}{boolean if false a sql-lite data base is saved, if true, no database is saved.}
 }
 \description{
 create an ERCC annotation DB from the FASTA file

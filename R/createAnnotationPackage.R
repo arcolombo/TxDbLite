@@ -1,9 +1,13 @@
 #' create an annotation package for a FASTA file (try to figure out what kind)
 #' 
 #' @param fastaFile the filename
-#' 
+#' @param ... additional arguments related to package creation. 
 #' @return the name of the annotation package, or NULL if uncertain how to do it
 #' 
+#' @import Biobase
+#' @import DBI
+#' @import RSQLite
+#'
 #' @export
 createAnnotationPackage <- function(fastaFile, ...) { # {{{
 
@@ -17,9 +21,9 @@ createAnnotationPackage <- function(fastaFile, ...) { # {{{
   } else if (type == "RepDbLite") {
     db <- repDbLiteFromFasta(fastaFile)
     pkg <- makeRepDbLitePkg(db, ...)
-  } else if (type == "MitxDbLite") {
-    db <- mitxDbLiteFromFasta(fastaFile)
-    pkg <- makeMitxDbLitePkg(db, ...) 
+  #} else if (type == "MitxDbLite") {
+   # db <- mitxDbLiteFromFasta(fastaFile)
+   # pkg <- makeMitxDbLitePkg(db, ...) 
   } else if (grepl("ERCC", fastaFile)) { 
     db <- erccDbLiteFromFasta(fastaFile)
     pkg <- makeErccDbLitePkg(db, ...) 

@@ -2,12 +2,13 @@
 #' a specified RepBase FASTA file for a given version, species, and type(s). this is the mouse rep biotype to be used.
 #' @param fastaFile     the FASTA file to collate into a RepDbLite instance
 #' @param verbose       make a lot of noise? (TRUE) 
-#'
-#' @import Biostrings
-#' @import Rsamtools
-#'
+#' @param dryRun        boolean if false, a sql database is created
+#' @importFrom GenomeInfoDb seqnames
+#' @importFrom Rsamtools indexFa scanFaIndex scanFa FaFile
+#' @importFrom Biostrings fasta.seqlengths
+#' @importFrom DBI dbConnect dbDriver dbWriteTable dbGetQuery dbDisconnect
 #' @export
-repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
+repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE, dryRun=FALSE) {
 
 #FIX ME support mouse uncataloged
 # FIX ME add three columns for reactome Ensembl support
@@ -214,9 +215,9 @@ repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
       hinted$gene_biotype[grep("Mariner", hinted$tx_biotype)] <- "DNA_element"
       hinted$gene_biotype[grep("Transposable", 
                                hinted$tx_biotype)] <- "DNA_element"
-      hinted$gene_biotype[grep("EUT",ignore=T, 
+      hinted$gene_biotype[grep("EUT",ignore.case=T, 
                                hinted$tx_biotype)] <- "DNA_element"
-      hinted$gene_biotype[grep("SAT",ignore=T, 
+      hinted$gene_biotype[grep("SAT",ignore.case=T, 
                                hinted$tx_biotype)] <- "other_repeat"
       hinted$gene_biotype[grep("L1", hinted$name)] <- "LINE"
       hinted$gene_biotype[grep("L2", hinted$name)] <- "LINE"
@@ -251,10 +252,11 @@ repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
 
   ## create the SQLite database... 
   repVersion <- gsub("Repbase","", ignore.case=TRUE, version)
-  outstub <- getTxDbLiteName(fastaFile)
+  outstub <- getTxDbLiteName(basename(fastaFile))
   dbname <- paste(outstub, "sqlite", sep=".") 
+  if(dryRun==FALSE){
   con <- dbConnect(dbDriver("SQLite"), dbname=dbname)
-
+  }
   if (verbose) cat("Creating the database...") # {{{
   rpt <- as.data.frame(txs)
   rpt$tx_length <- txLen
@@ -270,11 +272,14 @@ repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
               "tx_length", "gc_content", 
               "tx_id", "gene_id", "gene_name", "entrezid", 
               "tx_biotype", "gene_biotype", "biotype_class")
+  if(dryRun==FALSE){
   dbWriteTable(con, name="tx", rpt[,txcols], overwrite=T, row.names=F)
+  } 
   if (verbose) cat("done.\n") # }}}
 
   ## write metadata table 
-  Metadata <- repDbLiteMetadata(outstub, sourceFile=fastaFile)
+  Metadata <- repDbLiteMetaMousedata(outstub, sourceFile=fastaFile)
+  if(dryRun==FALSE){
   dbWriteTable(con, name="metadata", Metadata, overwrite=TRUE, row.names=FALSE)
 
   ## create indices 
@@ -284,12 +289,13 @@ repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
 
   ## finish 
   dbDisconnect(con)
+  }
   return(dbname)
 
 }
 
 
-#' @describeIn repDbLiteFromFasta
+#' @describeIn repDbLiteFromMouseFasta
 #' 
 #' create metadata for a RepDbLite instance
 #'
@@ -298,7 +304,7 @@ repDbLiteFromMouseFasta <- function(fastaFile, verbose=TRUE) {
 #' 
 #' @return a data.frame of metadata suitable for cramming into the database
 #'
-repDbLiteMetadata <- function(packageName, sourceFile) { # {{{
+repDbLiteMetaMousedata <- function(packageName, sourceFile) { # {{{
 
   tokens <- strsplit(getFastaStub(sourceFile), "\\.")[[1]]
   names(tokens)[1:3] <- c("organism", "genome", "version")

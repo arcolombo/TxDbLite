@@ -9,7 +9,7 @@
 a specified Ensembl FASTA file for a given version, species, and type(s).
 Note that this is shockingly easier than the same process for the GTF...}
 \usage{
-ensDbLiteFromFasta(fastaFile, verbose = TRUE)
+ensDbLiteFromFasta(fastaFile, verbose = TRUE, dryRun = FALSE)
 
 getEntrezIDs(gxs, organism)
 
@@ -22,6 +22,8 @@ ensDbLiteMetadata(packageName, genomeVersion, sourceFile)
 
 \item{verbose}{make a lot of noise? (TRUE)}
 
+\item{dryRun}{boolean if false a sql database is created}
+
 \item{gxs}{a GRanges of genes}
 
 \item{organism}{what kind of organism these genes are from}
@@ -31,8 +33,6 @@ ensDbLiteMetadata(packageName, genomeVersion, sourceFile)
 \item{genomeVersion}{name of genome assembly for coordinates, e.g. "GRCh38"}
 
 \item{sourceFile}{name of FASTA file(s) whence it was built, as a string}
-
-\item{gxs}{a GRanges of genes}
 }
 \value{
 entrez_id values for the genes, where found

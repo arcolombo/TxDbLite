@@ -8,6 +8,8 @@ RepDbLite(x, ...)
 }
 \arguments{
 \item{x}{the name of the sqlite file}
+
+\item{...}{additional arguments related to Repetitive annotation database.}
 }
 \value{
 a RepDbLite object.

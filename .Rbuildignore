@@ -1,0 +1,7 @@
+.gitignore
+^\.Rproj\.user$
+^.*\.Rproj$
+^\.travis\.yml$
+^installDependencies\.sh$
+^travis-tool\.sh$
+

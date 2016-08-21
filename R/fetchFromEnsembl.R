@@ -5,9 +5,10 @@
 #' @param IDs     the IDs to try and fetch (NULL if filters is a list)
 #' @param dataset the dataset to use 
 #'
-#' @return        a data.frame, if all goes well
+#' @return        a data.frame
 #' 
-#' @import biomaRt 
+#' @importFrom biomaRt useEnsembl
+#' @importFrom biomaRt getBM
 #'
 #' @export
 fetchFromEnsembl <- function(cols, idtype, IDs=NULL, dataset) {

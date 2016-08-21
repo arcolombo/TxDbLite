@@ -8,6 +8,8 @@ EnsDbLite(x, ...)
 }
 \arguments{
 \item{x}{the name of the sqlite file}
+
+\item{...}{any additional arguments relating to ENSEMBL annotation database.}
 }
 \value{
 an EnsDbLite object.

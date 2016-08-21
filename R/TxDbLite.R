@@ -1,10 +1,10 @@
 #' Create a TxDbLite object (usually called by subclass constructors)
 #' 
-#' @param x     name of the sqlite file whence the TxDbLite should be created 
+#' @param x an annotation instance of TxDbLite 
 #' @param path  where it lives (default: ".")
-#'
+#' @param ...   additional parameters 
 #' @return   a TxDbLite object 
-#'
+#' @importFrom DBI dbDriver dbConnect dbListTables dbGetQuery
 #' @export
 TxDbLite <- function(x, path=".", ...) { 
   options(useFancyQuotes = FALSE)

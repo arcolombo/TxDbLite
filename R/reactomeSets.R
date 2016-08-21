@@ -14,7 +14,7 @@ reactomeSets <- function(species="Homo sapiens", type=c("transcript","gene"), ma
    type <- match.arg(type)
    abbreviation <- "HSA" # default
   if (species != "Homo sapiens") {
-    abbreviations <- TxDbLite:::getSupportedAbbreviations("reactome")
+    abbreviations <- getSupportedAbbreviations("reactome")
     names(abbreviations) <- tolower(names(abbreviations))
     joined <- tolower(gsub(" ", "_", gsub("\\.", " ", species)))
     if (!joined %in% names(abbreviations)) stop("Unsupported species.")

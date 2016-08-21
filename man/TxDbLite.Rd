@@ -7,9 +7,11 @@
 TxDbLite(x, path = ".", ...)
 }
 \arguments{
-\item{x}{name of the sqlite file whence the TxDbLite should be created}
+\item{x}{an annotation instance of TxDbLite}
 
 \item{path}{where it lives (default: ".")}
+
+\item{...}{additional parameters}
 }
 \value{
 a TxDbLite object

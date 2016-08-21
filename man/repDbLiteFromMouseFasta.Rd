@@ -2,18 +2,34 @@
 % Please edit documentation in R/repDbLiteFromMouseFasta.R
 \name{repDbLiteFromMouseFasta}
 \alias{repDbLiteFromMouseFasta}
+\alias{repDbLiteMetaMousedata}
 \title{functions to create a RepDbLite object (a stripped-down SQLite db) from
 a specified RepBase FASTA file for a given version, species, and type(s). this is the mouse rep biotype to be used.}
 \usage{
-repDbLiteFromMouseFasta(fastaFile, verbose = TRUE)
+repDbLiteFromMouseFasta(fastaFile, verbose = TRUE, dryRun = FALSE)
+
+repDbLiteMetaMousedata(packageName, sourceFile)
 }
 \arguments{
 \item{fastaFile}{the FASTA file to collate into a RepDbLite instance}
 
 \item{verbose}{make a lot of noise? (TRUE)}
+
+\item{dryRun}{boolean if false, a sql database is created}
+
+\item{packageName}{the name of the annotation package to be built}
+
+\item{sourceFile}{name of FASTA file(s) whence it was built, as a string}
+}
+\value{
+a data.frame of metadata suitable for cramming into the database
 }
 \description{
 functions to create a RepDbLite object (a stripped-down SQLite db) from
 a specified RepBase FASTA file for a given version, species, and type(s). this is the mouse rep biotype to be used.
 }
+\section{Functions}{
+\itemize{
+\item \code{repDbLiteMetaMousedata}: create metadata for a RepDbLite instance
+}}
 

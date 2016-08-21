@@ -8,6 +8,8 @@ ErccDbLite(x, ...)
 }
 \arguments{
 \item{x}{the name of the sqlite file}
+
+\item{...}{additional arguments related to ERCC annotation database.}
 }
 \value{
 an ErccDbLite object.

@@ -1,8 +1,8 @@
 #' helper function for findDupes
 #' 
 #' @param fastaFile   the name of the FASTA file
-#' 
-#' return   the index, invisibly
+#' @importFrom Rsamtools indexFa
+#' @return   the index invisibly
 #' 
 #' @export
 indexIfNoneFound <- function(fastaFile) {
