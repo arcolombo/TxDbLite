@@ -2,7 +2,7 @@
 % Please edit documentation in R/mapReactomeSets.R
 \name{mapReactomeSets}
 \alias{mapReactomeSets}
-\title{this creates a reactomePathway set in terms of gene names from a reactomeSet which is a list in terms of reactomeId per ENSEMBL entry.}
+\title{this creates a reactomePathway set in terms of gene names from a reactomeSet which is a list in terms of reactomeId per ENSEMBL entry.  *This Function is deprecated*}
 \usage{
 mapReactomeSets(reactomePathways, reactomeSets)
 }
@@ -15,6 +15,6 @@ mapReactomeSets(reactomePathways, reactomeSets)
 a list of reactomePathways per associated gene name
 }
 \description{
-this creates a reactomePathway set in terms of gene names from a reactomeSet which is a list in terms of reactomeId per ENSEMBL entry.
+this creates a reactomePathway set in terms of gene names from a reactomeSet which is a list in terms of reactomeId per ENSEMBL entry.  *This Function is deprecated*
 }
 
