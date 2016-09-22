@@ -43,16 +43,6 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE) {
   txs$tx_length <- txLen
   if (verbose) cat("done.\n") # }}}
 
-  if(verbose) cat("Extracting copy number ...") #{{{
-    if(grepl("musculus",organism)==TRUE){
-       data("mouseCopyNumber.mm10",package="TxDbLite")
-
-     } else if(grepl("sapiens",organism)==TRUE){
-       data("repeatCopyNumber.hg19",package="TxDbLite")
-        
-    }
-  #}}}
- 
   if (verbose) cat("Extracting repeat descriptions...") # {{{
   data(repeat_biotypes, package="TxDbLite")
   uncataloged <- setdiff(names(txs), rownames(repeat_biotypes))
@@ -243,6 +233,32 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE) {
   }
   if (verbose) cat("done.\n") # }}}
 
+  if(verbose) cat("Extracting copy number ...") #{{{
+    if(grepl("musculus",organism)==TRUE){
+       data("mouseCopyNumber.mm10",package="TxDbLite")
+      for(i in 1:nrow(repeat_biotypes)){
+        id<-which(rownames(repeat_biotypes)[i]==rownames(mouseCopyNumber.mm10))
+         if(length(id)>0){
+         repeat_biotypes$copyNumber[i]<-mouseCopyNumber.mm10$count[id]
+         } else if(length(id)<=0){
+           repeat_biotypes$copyNumber[i]<-1
+            }
+        } #for each biotype
+      } else if(grepl("sapiens",organism)==TRUE){
+       data("repeatCopyNumber.hg19",package="TxDbLite")
+       for(i in 1:nrow(repeat_biotypes)){
+        id<-which(rownames(repeat_biotypes)[i]==rownames(repeatCopyNumber.hg19))
+         if(length(id)>0){
+         repeat_biotypes$copyNumber[i]<-repeatCopyNumber.hg19$count[id]
+         } else if(length(id)<=0){
+           repeat_biotypes$copyNumber[i]<-1
+            }
+      } #for each in repeat_biotype
+    }## if human
+  #}}}
+
+
+
   ## create the SQLite database... 
   repVersion <- gsub("Repbase","", ignore.case=TRUE, version)
   outstub <- getTxDbLiteName(basename(fastaFile))
@@ -261,10 +277,11 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE) {
   rpt$tx_biotype <- repeat_biotypes[rownames(rpt), "tx_biotype"]
   rpt$gene_biotype <- repeat_biotypes[rownames(rpt), "gene_biotype"]
   rpt$biotype_class <- "repeat"
+  rpt$copyNumber<-repeat_biotypes[rownames(rpt),"copyNumber"]
   txcols <- c("seqnames", "start", "end", "strand",
               "tx_length", "gc_content", 
               "tx_id", "gene_id", "gene_name", "entrezid", 
-              "tx_biotype", "gene_biotype", "biotype_class")
+              "tx_biotype", "gene_biotype", "biotype_class","copyNumber")
   if(dryRun==FALSE){
   dbWriteTable(con, name="tx", rpt[,txcols], overwrite=T, row.names=F)
   }
@@ -279,7 +296,7 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE) {
   dbGetQuery(con, "create index tx_id_idx on tx (tx_id);")
   dbGetQuery(con, "create index tx_biotype_idx on tx (tx_biotype);")
   dbGetQuery(con, "create index gene_biotype_idx on tx (gene_biotype);")
-
+  dbGetQuery(con, "create index copyNumber_idx on tx (copyNumber);")
   ## finish 
   dbDisconnect(con)
   }
