@@ -42,6 +42,16 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE) {
   stopifnot(identical(names(txs), names(txLen)))
   txs$tx_length <- txLen
   if (verbose) cat("done.\n") # }}}
+
+  if(verbose) cat("Extracting copy number ...") #{{{
+    if(grepl("musculus",organism)==TRUE){
+       data("mouseCopyNumber.mm10",package="TxDbLite")
+
+     } else if(grepl("sapiens",organism)==TRUE){
+       data("repeatCopyNumber.hg19",package="TxDbLite")
+        
+    }
+  #}}}
  
   if (verbose) cat("Extracting repeat descriptions...") # {{{
   data(repeat_biotypes, package="TxDbLite")
