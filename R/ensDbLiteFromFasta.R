@@ -149,6 +149,8 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE){#{{{
   gxs$gene_name <- getSymbols(gxs, organism)[names(gxs)]
   txs$gene <- as.integer(sub(org$gxpre, "", txs$gene_id))
   gxs$gene <- as.integer(sub(org$gxpre,"",gxs$gene_id))
+  gxs$copyNumber<-rep(2,length(names(gxs)))
+  txs$copyNumber<-rep(2,length(names(txs)))
   if (verbose) cat("...done.\n") # }}}
 
   if (verbose) cat("Creating the database...") # {{{
@@ -163,7 +165,7 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE){#{{{
   if (verbose) cat("Writing the gene table...") # {{{
   gxcols <- c("seqnames", "start", "end", "strand",
               "gene", "gene_id", "gene_biotype_id",
-              "entrezid", "gene_name", "median_length")
+              "entrezid", "gene_name", "median_length","copyNumber")
   gx <- as(gxs, "data.frame")[, gxcols] 
   if(dryRun==FALSE){
   dbWriteTable(con, name="gene", gx, overwrite=T, row.names=F)
@@ -184,11 +186,11 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE){#{{{
   }
   rm(gene_biotypes) 
   if (verbose) cat("done.\n") # }}}
-
+ 
   if (verbose) cat("Writing the tx table...") # {{{
   txcols <- c("start", "end", 
-              "tx_id", "tx_length", "gc_content", "tx_biotype_id", "gene")
-  tx <- as(txs, "data.frame")[, txcols]
+              "tx_id", "tx_length", "gc_content", "tx_biotype_id", "gene","copyNumber")
+  tx <- as(txs, "data.frame")[,colnames(as(txs,"data.frame"))%in% txcols]
   if(dryRun==FALSE){
   dbWriteTable(con, name="tx", tx, overwrite=TRUE, row.names=FALSE)
   }
@@ -215,7 +217,11 @@ ensDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE){#{{{
   dbWriteTable(con, name="biotype_class", ensembl_biotypes,
                overwrite=T, row.names=F)
   }
-  if (verbose) cat("done.\n") # }}}
+  if (verbose) cat("amputation.liberation. \n") # }}}
+
+ 
+
+  
 
   # write metadata table # {{{ 
   Metadata <- ensDbLiteMetadata(packageName=outstub, 

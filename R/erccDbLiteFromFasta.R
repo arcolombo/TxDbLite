@@ -45,7 +45,7 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE, dryRun=FALSE) {
   txcols <- c("seqnames", "start", "end", "strand",
               "tx_length", "gc_content", 
               "tx_id", "gene_id", "gene_name", "entrezid", 
-              "tx_biotype", "gene_biotype", "biotype_class")
+              "tx_biotype", "gene_biotype", "biotype_class","copyNumber")
   tx <- as(txs, "data.frame")[, txcols] 
   if(dryRun==FALSE){
   dbWriteTable(con, name="tx", tx, overwrite=T, row.names=F)
@@ -75,7 +75,7 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE, dryRun=FALSE) {
   mcols(txs[named])$tx_biotype <- paste0("SpikeIn_", 
                                          ERCC_annotated[named, "subgroup"])
   mcols(txs)$biotype_class <- rep("SpikeIn", length(txs))
-  
+  mcols(txs)$copyNumber<-rep(1,length(txs))
   return(txs)
 
 } # }}}

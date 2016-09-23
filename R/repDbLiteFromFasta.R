@@ -275,27 +275,70 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE) {
   rpt$gene_name <- NA 
   rpt$entrezid <- NA 
   rpt$tx_biotype <- repeat_biotypes[rownames(rpt), "tx_biotype"]
+  rpt$tx_biotype_id<-as.numeric(as.factor(rpt$tx_biotype))
   rpt$gene_biotype <- repeat_biotypes[rownames(rpt), "gene_biotype"]
+  rpt$gene_biotype_id<-as.numeric(as.factor(rpt$gene_biotype))
   rpt$biotype_class <- "repeat"
   rpt$copyNumber<-repeat_biotypes[rownames(rpt),"copyNumber"]
-  txcols <- c("seqnames", "start", "end", "strand",
-              "tx_length", "gc_content", 
-              "tx_id", "gene_id", "gene_name", "entrezid", 
-              "tx_biotype", "gene_biotype", "biotype_class","copyNumber")
+  rpt$gene<-rpt$seqnames
+  rpt$median_length<-rpt$tx_length
+  
+  if(verbose) cat("Writing the gene table...") #{{{
+   gxcols <- c("seqnames", "start", "end", "strand",
+              "gene", "gene_id", "gene_biotype_id",
+              "entrezid", "gene_name", "median_length","copyNumber")
+   if(dryRun==FALSE){
+   dbWriteTable(con,name="gene",rpt[,gxcols],overwrite=T,row.names=F)
+  #}}}
+  }
+ 
+  
+  if(verbose) cat("Tabulating gene biotypes...")
+  gene_biotypes<-data.frame(id=seq_along(levels(as.factor(rpt$gene_biotype))),
+                            gene_biotype=levels(as.factor(rpt$gene_biotype)))
+  if(verbose) cat("Writing the gene_biotype table...")
+  if(dryRun==FALSE){
+  dbWriteTable(con,name="gene_biotype",gene_biotypes,overwrite=T,row.names=F)
+  }
+  if(verbose) cat("done.\n")
+
+
+  if(verbose) cat("Writing the tx table...") #{{{
+  txcols <- c("start", "end", "tx_id","tx_length","gc_content",
+              "tx_biotype_id", "gene","copyNumber")
   if(dryRun==FALSE){
   dbWriteTable(con, name="tx", rpt[,txcols], overwrite=T, row.names=F)
-  }
+   }
   if (verbose) cat("done.\n") # }}}
 
-  ## write metadata table 
+  if(verbose) cat("Tabulating transcript biotypes...")
+  if(dryRun==FALSE){
+    if(verbose) cat("Writing the transcript bio types...") #{{{
+   tx_biotypes<-data.frame(id=seq_along(levels(as.factor(rpt$tx_biotype))),
+                           tx_biotype=levels(as.factor(rpt$tx_biotype)))
+    dbWriteTable(con,name="tx_biotype",tx_biotypes,overwrite=T,row.names=F)
+   #}}}
+   }
+
+  if(verbose) cat("Writing the biotype_class table...")
+  if(dryRun==FALSE){
+   biotype_class=data.frame(biotype=levels(as.factor(rpt$tx_biotype)),
+                           class="repeat")
+   dbWriteTable(con,name="biotype_class",biotype_class,overwrite=T,row.names=F)
+ }
+
   Metadata <- repDbLiteMetadata(outstub, sourceFile=fastaFile)
   if(dryRun==FALSE){ 
   dbWriteTable(con, name="metadata", Metadata, overwrite=TRUE, row.names=FALSE)
-  
+  if(verbose) cat("no fate".\n)
   ## create indices 
   dbGetQuery(con, "create index tx_id_idx on tx (tx_id);")
+  dbGetQuery(con, "create index gene_idx on gene (gene);")
+  dbGetQuery(con, "create index txb_id_idx on tx_biotype (id);")
   dbGetQuery(con, "create index tx_biotype_idx on tx (tx_biotype);")
-  dbGetQuery(con, "create index gene_biotype_idx on tx (gene_biotype);")
+  dbGetQuery(con, "create index gxb_id_idx on gene_biotype (id);")
+  dbGetQuery(con, "create index class_id_idx on biotype_class (class);")
+  dbGetQuery(con, "create index biotype_id_idx on biotype_class (biotype);")
   dbGetQuery(con, "create index copyNumber_idx on tx (copyNumber);")
   ## finish 
   dbDisconnect(con)

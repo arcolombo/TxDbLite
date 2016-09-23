@@ -24,12 +24,22 @@ setMethod("metadata", "TxDbLite", function(x, ...) { # {{{
 
 #' @importFrom GenomeInfoDb genome
 setMethod("transcripts", "TxDbLite", function(x) { # {{{
-  res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), "select * from tx"),
+  sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
+               "       tx_length, gc_content, tx.copyNumber, tx_id, gene_id, gene_name,",
+               "       entrezid, tx_biotype, gene_biotype,",
+               "       class as biotype_class",
+               "  from gene, tx, gene_biotype, tx_biotype, biotype_class",
+               " where gene.gene = tx.gene",
+               "   and tx.tx_biotype_id = tx_biotype.id",
+               "   and gene.gene_biotype_id = gene_biotype.id",
+               "   and gene_biotype.gene_biotype = biotype_class.biotype",
+               " order by tx_id asc")
+  res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql),
                                   keep.extra.columns=TRUE)
   genome(res) <- metadata(x)["genome_build","value"]
   names(res) <- res$tx_id
   return(res)
-}) # }}}
+    }) # }}}
 
 setMethod("promoters", "TxDbLite", function(x,upstream=2000,downstream=200,...){ # {{{
   trim(suppressWarnings(promoters(transcripts(x, ...),
@@ -70,11 +80,15 @@ setMethod("transcriptsBy", "TxDbLite", function(x, # {{{
 
 #' @importFrom GenomeInfoDb genome
 setMethod("genes", "TxDbLite", function(x) { # {{{
-  sql <- paste("select seqnames, start, end, strand, ",
-               "       tx_length, 'NA' as gc_content, 'NA' as tx_id,",
-               "       tx_id as gene_id, 'NA' as gene_name, 'NA' as entrezid, ",
-               "       'NA' as tx_biotype, gene_biotype, biotype_class", 
-               "  from tx")
+ sql <- paste("select seqnames, start, end, strand, ",
+               "       median_length as tx_length, 'NA' as gc_content, copyNumber,",
+               "       'NA' as tx_id, gene_id, gene_name, entrezid,",
+               "       'NA' as tx_biotype, gene_biotype,",
+               "       class as biotype_class",
+               "  from gene, gene_biotype, biotype_class",
+               " where gene.gene_biotype_id = gene_biotype.id",
+               "   and gene_biotype.gene_biotype = biotype_class.biotype",
+               " order by gene_id asc")
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql), 
                                   keep.extra.columns=TRUE)
   genome(res) <- metadata(x)["genome_build","value"]
@@ -113,10 +127,10 @@ setMethod("genesBy", "TxDbLite", function(x, by=c("gene_biotype","biotype_class"
 #' @importFrom GenomeInfoDb genome
 setMethod("genes", "EnsDbLite", function(x) { # {{{
   sql <- paste("select seqnames, start, end, strand, ",
-               "       median_length as tx_length, 'NA' as gc_content,",
+               "       median_length as tx_length, 'NA' as gc_content, copyNumber,",
                "       'NA' as tx_id, gene_id, gene_name, entrezid,",
                "       'NA' as tx_biotype, gene_biotype,",
-               "       class as biotype_class", 
+               "       class as biotype_class",
                "  from gene, gene_biotype, biotype_class",
                " where gene.gene_biotype_id = gene_biotype.id",
                "   and gene_biotype.gene_biotype = biotype_class.biotype",
@@ -131,7 +145,7 @@ setMethod("genes", "EnsDbLite", function(x) { # {{{
 #' @importFrom GenomeInfoDb genome
 setMethod("transcripts", "EnsDbLite", function(x) { # {{{
   sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
-               "       tx_length, gc_content, tx_id, gene_id, gene_name,",
+               "       tx_length, gc_content, tx.copyNumber, tx_id, gene_id, gene_name,",
                "       entrezid, tx_biotype, gene_biotype,",
                "       class as biotype_class",
                "  from gene, tx, gene_biotype, tx_biotype, biotype_class",
@@ -177,6 +191,24 @@ setMethod("show", "RepDbLite", function(object) { # {{{
 }) # }}}
 
 ## RepDbLite objects have no genes in them
+setMethod("transcripts","RepDbLite",function(x) {
+ sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
+               "       tx_length, gc_content, tx.copyNumber, tx_id, gene_id, gene_name,",
+               "       entrezid,tx_biotype, gene_biotype,", 
+               "       class as biotype_class",
+               "  from gene, tx, gene_biotype, tx_biotype, biotype_class",
+               " where gene.gene = tx.gene",
+               "   and tx.tx_biotype_id = tx_biotype.id",
+               "   and gene.gene_biotype_id = gene_biotype.id",
+               "   and tx_biotype.tx_biotype = biotype_class.biotype",
+               " order by tx_id asc")
+  res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql),
+                                  keep.extra.columns=TRUE)
+  genome(res) <- metadata(x)["genome_build","value"]
+  names(res) <- res$tx_id
+  return(res)
+})
+
 setMethod("genes", "RepDbLite", function(x) callNextMethod()[0] ) ## no genes
 setMethod("promoters", "RepDbLite", function(x) callNextMethod()[0] ) ## none
 
