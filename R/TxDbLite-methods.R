@@ -194,13 +194,13 @@ setMethod("show", "RepDbLite", function(object) { # {{{
 setMethod("transcripts","RepDbLite",function(x) {
  sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
                "       tx_length, gc_content, tx.copyNumber, tx_id, gene_id, gene_name,",
-               "       entrezid,tx_biotype, gene_biotype,", 
+               "       entrezid, tx_biotype, gene_biotype,",
                "       class as biotype_class",
                "  from gene, tx, gene_biotype, tx_biotype, biotype_class",
                " where gene.gene = tx.gene",
                "   and tx.tx_biotype_id = tx_biotype.id",
                "   and gene.gene_biotype_id = gene_biotype.id",
-               "   and tx_biotype.tx_biotype = biotype_class.biotype",
+               "   and gene_biotype.gene_biotype = biotype_class.biotype",
                " order by tx_id asc")
   res <- makeGRangesFromDataFrame(dbGetQuery(dbconn(x), sql),
                                   keep.extra.columns=TRUE)

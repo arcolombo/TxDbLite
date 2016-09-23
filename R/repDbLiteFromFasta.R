@@ -322,7 +322,7 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE) {
 
   if(verbose) cat("Writing the biotype_class table...")
   if(dryRun==FALSE){
-   biotype_class=data.frame(biotype=levels(as.factor(rpt$tx_biotype)),
+   biotype_class=data.frame(biotype=levels(as.factor(rpt$gene_biotype)),
                            class="repeat")
    dbWriteTable(con,name="biotype_class",biotype_class,overwrite=T,row.names=F)
  }
@@ -330,12 +330,12 @@ repDbLiteFromFasta <- function(fastaFile, verbose=TRUE,dryRun=FALSE) {
   Metadata <- repDbLiteMetadata(outstub, sourceFile=fastaFile)
   if(dryRun==FALSE){ 
   dbWriteTable(con, name="metadata", Metadata, overwrite=TRUE, row.names=FALSE)
-  if(verbose) cat("no fate".\n)
+  if(verbose) cat("no fate.\n")
   ## create indices 
   dbGetQuery(con, "create index tx_id_idx on tx (tx_id);")
   dbGetQuery(con, "create index gene_idx on gene (gene);")
   dbGetQuery(con, "create index txb_id_idx on tx_biotype (id);")
-  dbGetQuery(con, "create index tx_biotype_idx on tx (tx_biotype);")
+  dbGetQuery(con, "create index tx_biotype_idx on tx (tx_biotype_id);")
   dbGetQuery(con, "create index gxb_id_idx on gene_biotype (id);")
   dbGetQuery(con, "create index class_id_idx on biotype_class (class);")
   dbGetQuery(con, "create index biotype_id_idx on biotype_class (biotype);")
