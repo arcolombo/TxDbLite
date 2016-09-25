@@ -25,6 +25,11 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE, dryRun=FALSE) {
                           gene_name=rep(NA, length(txs)),
                           entrezid=rep(NA, length(txs)))
   txs <- .addSpikeInSubgroup(txs)
+  txs<-as.data.frame(txs)
+  txs$gene<-txs$seqnames
+  txs$tx_biotype_id<-as.numeric(as.factor(txs$tx_biotype))
+  txs$gene_biotype_id<-as.numeric(as.factor(txs$gene_biotype))
+  txs$median_length<-txs$tx_length
   if (verbose) cat("done.\n")
 
   if (verbose) cat("Creating the database...") # {{{
@@ -41,17 +46,48 @@ erccDbLiteFromFasta <- function(fastaFile, verbose=TRUE, dryRun=FALSE) {
   }
   if (verbose) cat("done.\n") # }}}
 
+ if(verbose) cat("Writing the gene table...")
+   gxcols <- c("seqnames", "start", "end", "strand",
+              "gene", "gene_id", "gene_biotype_id",
+              "entrezid", "gene_name", "median_length","copyNumber")
+   if(dryRun==FALSE){
+   gxs<-as.data.frame(txs[,gxcols])
+   dbWriteTable(con,name="gene",gxs,overwrite=T,row.names=F)
+  #}}}
+  }
+  if(verbose) cat("Tabulating gene biotypes...")
+  gene_biotypes<-data.frame(id=seq_along(levels(as.factor(txs$gene_biotype))),
+                            gene_biotype=levels(as.factor(txs$gene_biotype)))
+
+  if(dryRun==FALSE){
+  dbWriteTable(con,name="gene_biotype",gene_biotypes,overwrite=T,row.names=F)
+   }
+  if(verbose) cat ("done. \n")
+
   if (verbose) cat("Writing the spike-in tables...") # {{{
-  txcols <- c("seqnames", "start", "end", "strand",
+  txcols <- c("start", "end", "tx_id",
               "tx_length", "gc_content", 
-              "tx_id", "gene_id", "gene_name", "entrezid", 
-              "tx_biotype", "gene_biotype", "biotype_class","copyNumber")
-  tx <- as(txs, "data.frame")[, txcols] 
+               "tx_biotype_id","gene","copyNumber")
+  tx <- txs[, txcols] 
   if(dryRun==FALSE){
   dbWriteTable(con, name="tx", tx, overwrite=T, row.names=F)
   }
   rm(tx)
   if (verbose) cat("done.\n") # }}}
+  
+  if(verbose) cat("Tabulating transcript biotypes...")
+  if(dryRun==FALSE){
+  tx_biotypes<-data.frame(id=seq_along(levels(as.factor(txs$tx_biotype))),
+                         tx_biotype=levels(as.factor(txs$tx_biotype)))
+  dbWriteTable(con,name="tx_biotype",tx_biotypes,overwrite=T,row.names=F)
+  }
+
+  if(verbose) cat("Writing the biotype_class table...")
+  if(dryRun==FALSE){
+   biotype_class<-data.frame(biotype=levels(as.factor(txs$gene_biotype)),
+                             class="SpikeIn")
+  dbWriteTable(con,name="biotype_class",biotype_class,overwrite=T,row.names=F)
+   }
 
   Metadata <- .erccDbLiteMetadata(packageName=outstub, sourceFile=fastaFile)
   if(dryRun==FALSE){

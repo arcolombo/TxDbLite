@@ -217,7 +217,7 @@ setMethod("promoters", "RepDbLite", function(x) callNextMethod()[0] ) ## none
 setMethod("show", "ErccDbLite", function(object) { # {{{
   callNextMethod() # TxDbLite show method -- basic information on the db  
   ctlsql <- "select count(distinct tx_id) from tx"
-  grpsql <- "select count(distinct tx_biotype) from tx"
+  grpsql <- "select count(distinct tx_biotype) from tx_biotype"
   ctl <- dbGetQuery(dbconn(object), ctlsql)[1,1]
   grp <- dbGetQuery(dbconn(object), grpsql)[1,1]
   ## subtract 1 from the number of subgroups as "unannotated" is in there
