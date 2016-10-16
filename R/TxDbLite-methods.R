@@ -183,7 +183,7 @@ setMethod("show", "EnsDbLite", function(object) { # {{{
 setMethod("show", "RepDbLite", function(object) { # {{{
   callNextMethod() # TxDbLite show method -- basic information on the db  
   repsql <- "select count(distinct tx_id) from tx"
-  famsql <- "select count(distinct tx_biotype) from tx"
+  famsql <- "select count(distinct tx_biotype) from tx_biotype"
   rpts <- dbGetQuery(dbconn(object), repsql)[1,1]
   fam <- dbGetQuery(dbconn(object), famsql)[1,1]
   cat(paste0("| ", rpts, " repeat exemplars from ", 
