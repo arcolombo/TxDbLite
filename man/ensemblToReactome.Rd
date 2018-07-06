@@ -23,4 +23,3 @@ ensemblToReactome
 Data frame of ENSEMBL transcript IDs and corresponding reactome pathway IDs, Reactome URL pathway-browser, reactome pathway name, and organism for numerous species including Mus musculus, Homo Sapiens and many more.  This is used for enrichment activation analysis.
 }
 \keyword{datasets}
-

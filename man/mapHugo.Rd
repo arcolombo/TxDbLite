@@ -23,4 +23,3 @@ map genes or transcripts to updated HUGO symbols
 mapHugo("ENST00000003084")
 
 }
-

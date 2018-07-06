@@ -15,4 +15,3 @@ the sequence for that duplicated entry
 \description{
 helper function for findDupes
 }
-

@@ -17,4 +17,3 @@ the array produced by splitting basename(x) on y
 \description{
 array-ify a string with a possible leading path/URL/whatever
 }
-

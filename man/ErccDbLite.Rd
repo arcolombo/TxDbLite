@@ -17,4 +17,3 @@ an ErccDbLite object.
 \description{
 Constructor for an ErccDbLite object.
 }
-

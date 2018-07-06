@@ -21,4 +21,3 @@ the element(s) produced by splitting basename(x) on y
 Pop a string off of a string, for (e.g.) grabbing source barcodes from GEO.
 unlike Perl or C versions, this function does not modify x behind the scenes
 }
-

@@ -15,4 +15,3 @@ ensembl_biotypes
 holds 48 transcript biotypes and 6 levels of classes for Homo Sapiens.
 }
 \keyword{datasets}
-

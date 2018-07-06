@@ -25,4 +25,3 @@ supportedOrganismsForTxDbLite
 A Data Frame of all supported organisms and supported annotations available by TxDbLite
 }
 \keyword{datasets}
-

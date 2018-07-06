@@ -23,4 +23,3 @@ the string produced by shoving x onto str2vec(w, y) after [z]
 shove new element(s) x onto a (possibly splittable on y) string x after [z]
 unlike Perl or C versions, this function does not modify w behind the scenes
 }
-

@@ -19,4 +19,3 @@ this function should only ever be used to reload/maintain Reactome caches
 all the files are as downloaded from the Reactome/Ensembl website but gzipped
 FIXME: add loading of interaction maps for all of the supported organisms.
 }
-

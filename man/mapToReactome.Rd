@@ -33,4 +33,3 @@ map transcripts or genes to Reactome pathways, using a cache if possible
            mapToReactome("ENST00000387459", asNames=TRUE)
 
 }
-

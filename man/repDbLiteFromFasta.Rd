@@ -18,4 +18,3 @@ repDbLiteFromFasta(fastaFile, verbose = TRUE, dryRun = FALSE)
 functions to create a RepDbLite object (a stripped-down SQLite db) from
 a specified RepBase FASTA file for a given version, species, and type(s). this will use biotype catalog designed for human species, but can possibly be used for mouse, though not recommended.
 }
-

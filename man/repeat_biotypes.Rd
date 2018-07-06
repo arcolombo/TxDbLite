@@ -21,4 +21,3 @@ repeat_biotypes
 A Data frame of repetitive elements relating to Homo Sapiens
 }
 \keyword{datasets}
-

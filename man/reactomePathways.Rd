@@ -15,4 +15,3 @@ reactomePathways
 A list of Reactome IDs and associated names for each reactome ID
 }
 \keyword{datasets}
-

@@ -20,4 +20,3 @@ create an ERCC annotation DB from the FASTA file
 NOTE: we probably shouldn't even bother exporting this.
 If ERCC spike-ins change radically, we'll need to build an entirely new one.
 }
-

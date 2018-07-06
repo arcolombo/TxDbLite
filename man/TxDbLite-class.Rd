@@ -2,17 +2,19 @@
 % Please edit documentation in R/TxDbLite-class.R, R/TxDbLite-methods.R
 \docType{class}
 \name{TxDbLite-class}
-\alias{EnsDbLite-class}
-\alias{ErccDbLite-class}
-\alias{RepDbLite-class}
 \alias{TxDbLite-class}
-\alias{TxDbLite-method}
+\alias{EnsDbLite-class}
+\alias{RepDbLite-class}
+\alias{ErccDbLite-class}
+\alias{ArrayControlDbLite-class}
 \alias{dbconn,TxDbLite-method}
+\alias{show,TxDbLite-method}
+\alias{metadata,TxDbLite-method}
+\alias{transcriptsBy,TxDbLite-method}
 \alias{genesBy}
 \alias{genesBy,TxDbLite-method}
-\alias{metadata,TxDbLite-method}
-\alias{show,TxDbLite-method}
-\alias{transcriptsBy,TxDbLite-method}
+\alias{genesBy}
+\alias{TxDbLite-method}
 \title{A parent class for lightweight Ensembl and RepBase/RepeatMasker annotations}
 \usage{
 \S4method{dbconn}{TxDbLite}(x)
@@ -50,6 +52,8 @@ A parent class for Ensembl based annotations
 Repeat Parent Annotation Class
 
 Ercc Based Annotation Class
+
+ArrayControl Based Annotation Class
 
 get transcripts by gene, promoter, tx_biotype, gene_biotype, or biotype_class
 

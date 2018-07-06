@@ -11,6 +11,8 @@ getAnnotationType <- function(fastaFile) {
     type <- "RepDbLite"
   } else if (grepl("ERCC", fastaFile)) { 
     type <- "ErccDbLite"
+  } else if (grepl("ArrayControl", fastaFile)) {
+    type <- "ArrayControlDbLite"
   } else {
     type <- NULL
   }

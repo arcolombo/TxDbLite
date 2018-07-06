@@ -17,4 +17,3 @@ a data.frame of metadata suitable for cramming into the database
 \description{
 create metadata for a RepDbLite instance
 }
-

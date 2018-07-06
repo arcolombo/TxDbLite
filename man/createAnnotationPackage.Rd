@@ -17,4 +17,3 @@ the name of the annotation package, or NULL if uncertain how to do it
 \description{
 create an annotation package for a FASTA file (try to figure out what kind)
 }
-

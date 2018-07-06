@@ -23,4 +23,3 @@ a string
 The opposite of strpop: push string(s) onto a string.
 unlike Perl or C versions, this function does not modify w behind the scenes
 }
-

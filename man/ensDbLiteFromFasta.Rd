@@ -2,9 +2,9 @@
 % Please edit documentation in R/ensDbLiteFromFasta.R
 \name{ensDbLiteFromFasta}
 \alias{ensDbLiteFromFasta}
-\alias{ensDbLiteMetadata}
 \alias{getEntrezIDs}
 \alias{getSymbols}
+\alias{ensDbLiteMetadata}
 \title{Function to create an EnsDbLite object (a stripped-down SQLite db) from
 a specified Ensembl FASTA file for a given version, species, and type(s).
 Note that this is shockingly easier than the same process for the GTF...}

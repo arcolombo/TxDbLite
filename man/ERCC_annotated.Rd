@@ -15,4 +15,3 @@ ERCC_annotated
 Data frame of External RNA-Control-Consortium (ERCC) Ambion Spike-Ins Concentration Mixes
 }
 \keyword{datasets}
-

@@ -17,4 +17,3 @@ a RepDbLite object.
 \description{
 Constructor for an RepDbLite object.
 }
-

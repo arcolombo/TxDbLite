@@ -29,4 +29,3 @@ unannotatedTranscript
 GRanges object for entries without annotations
 }
 \keyword{datasets}
-

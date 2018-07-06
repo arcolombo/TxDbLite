@@ -17,4 +17,3 @@ data.frame of duplicate seqnames and fasta filenames, else NULL
 find any duplicate seqnames in FASTA files BEFORE creating an index...
 FIXME: remove them, write out a de-duped merged FASTA, and index that.
 }
-

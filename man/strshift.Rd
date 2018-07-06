@@ -21,4 +21,3 @@ the element(s) [z] produced by splitting basename(x) on y
 grab the first (or z'th) element(s) of x after splitting it on y 
 unlike Perl or C versions, this function does not modify x behind the scenes
 }
-

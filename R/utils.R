@@ -106,7 +106,9 @@ getTxDbLiteName <- function(fastaFile) { # {{{
   if (is.null(type)) {
     return(NULL)
   } else if (type == "ErccDbLite") {
-    return("ErccDbLite.ERCC.97") ## autoinstall?
+    return("ErccDbLite.ERCC.97")} ## autoinstall?
+  else if (type == "ArrayControlDbLite") {
+    return("ArrayControlDbLite.2018") 
   } else if(!is.null(type)) {
     tokens <- strsplit(fastaStub, "\\.")[[1]]
     organism <- tokens[1] 

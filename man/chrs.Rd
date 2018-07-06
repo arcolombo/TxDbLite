@@ -15,4 +15,3 @@ a data.frame with the contig entry names and the FASTA file of origin
 \description{
 helper function for findDupes
 }
-

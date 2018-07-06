@@ -32,4 +32,4 @@ Suggests:
     stringdist
 VignetteBuilder: knitr
 License: LGPL
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

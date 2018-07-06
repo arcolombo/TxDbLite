@@ -22,3 +22,8 @@ setClass("RepDbLite", contains="TxDbLite")
 #' @rdname TxDbLite-class
 #' @export
 setClass("ErccDbLite", contains="TxDbLite")
+
+#' ArrayControl Based Annotation Class
+#' @rdname TxDbLite-class
+#' @export
+setClass("ArrayControlDbLite", contains="TxDbLite")

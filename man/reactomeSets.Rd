@@ -24,4 +24,3 @@ using the cached Reactome databases, generate gene sets for qusage etc.
  reactomeSets("Homo sapiens") 
 
 }
-

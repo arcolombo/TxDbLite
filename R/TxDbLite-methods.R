@@ -25,7 +25,7 @@ setMethod("metadata", "TxDbLite", function(x, ...) { # {{{
 #' @importFrom GenomeInfoDb genome
 setMethod("transcripts", "TxDbLite", function(x) { # {{{
   sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
-               "       tx_length, gc_content, tx.copyNumber, tx_id, gene_id, gene_name,",
+               "       tx_length, gc_content, tx_id, gene_id, gene_name,",
                "       entrezid, tx_biotype, gene_biotype,",
                "       class as biotype_class",
                "  from gene, tx, gene_biotype, tx_biotype, biotype_class",
@@ -145,7 +145,7 @@ setMethod("genes", "EnsDbLite", function(x) { # {{{
 #' @importFrom GenomeInfoDb genome
 setMethod("transcripts", "EnsDbLite", function(x) { # {{{
   sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
-               "       tx_length, gc_content, tx.copyNumber, tx_id, gene_id, gene_name,",
+               "       tx_length, gc_content, tx_id, gene_id, gene_name,",
                "       entrezid, tx_biotype, gene_biotype,",
                "       class as biotype_class",
                "  from gene, tx, gene_biotype, tx_biotype, biotype_class",
@@ -193,7 +193,7 @@ setMethod("show", "RepDbLite", function(object) { # {{{
 ## RepDbLite objects have no genes in them
 setMethod("transcripts","RepDbLite",function(x) {
  sql <- paste("select gene.seqnames, tx.start, tx.end, gene.strand,",
-               "       tx_length, gc_content, tx.copyNumber, tx_id, gene_id, gene_name,",
+               "       tx_length, gc_content,  tx_id, gene_id, gene_name,",
                "       entrezid, tx_biotype, gene_biotype,",
                "       class as biotype_class",
                "  from gene, tx, gene_biotype, tx_biotype, biotype_class",
@@ -225,6 +225,28 @@ setMethod("show", "ErccDbLite", function(object) { # {{{
                    grp - 1, " subgroups (no known genes).\n"))
 }) # }}}
 
+## ErccDbLite show method
+setMethod("show", "ArrayControlDbLite", function(object) { # {{{
+  callNextMethod() # TxDbLite show method -- basic information on the db  
+  ctlsql <- "select count(distinct tx_id) from tx"
+  grpsql <- "select count(distinct tx_biotype) from tx_biotype"
+  ctl <- dbGetQuery(dbconn(object), ctlsql)[1,1]
+  grp <- dbGetQuery(dbconn(object), grpsql)[1,1]
+  ## subtract 1 from the number of subgroups as "unannotated" is in there
+  cat(paste0("| ", ctl, " spike-in controls from ",
+                   grp - 1, " subgroups (no known genes).\n"))
+}) # }}}
+
+
+
+
 ## ErccDbLite objects have no genes in them
 setMethod("genes", "ErccDbLite", function(x) callNextMethod()[0] ) ## no genes
 setMethod("promoters", "ErccDbLite", function(x) callNextMethod()[0] ) ## none
+
+
+# ArrayControlDbLite objects have no genes in them
+setMethod("genes", "ArrayControlDbLite", function(x) callNextMethod()[0] ) ## no genes
+setMethod("promoters", "ArrayControlDbLite", function(x) callNextMethod()[0] ) ## none
+
+

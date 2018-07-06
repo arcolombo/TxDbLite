@@ -17,4 +17,3 @@ an EnsDbLite object.
 \description{
 Constructor for an EnsDbLite object.
 }
-

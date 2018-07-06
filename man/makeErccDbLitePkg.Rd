@@ -26,4 +26,3 @@ the name of the package
 \description{
 create a ErccDbLite package from sqlite file (usually via repDbLiteFromFasta)
 }
-
