@@ -3,7 +3,7 @@
 #' 
 #'
 #' @importFrom Rsamtools indexFa index
-#' @importFrom Rsamtools scanFaIndex FaFile scanFa path
+#' @importFrom Rsamtools scanFaIndex FaFile scanFa
 #' @importFrom GenomeInfoDb seqnames
 #' @importFrom DBI dbConnect dbDriver dbWriteTable dbGetQuery dbDisconnect
 #' @importFrom S4Vectors DataFrame
