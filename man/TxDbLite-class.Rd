@@ -13,7 +13,6 @@
 \alias{transcriptsBy,TxDbLite-method}
 \alias{genesBy}
 \alias{genesBy,TxDbLite-method}
-\alias{genesBy}
 \alias{TxDbLite-method}
 \title{A parent class for lightweight Ensembl and RepBase/RepeatMasker annotations}
 \usage{
@@ -23,8 +22,8 @@
 
 \S4method{metadata}{TxDbLite}(x, ...)
 
-\S4method{transcriptsBy}{TxDbLite}(x, by = c("gene", "promoter", "tx_biotype",
-  "gene_biotype", "biotype_class"))
+\S4method{transcriptsBy}{TxDbLite}(x, by = c("gene", "promoter",
+  "tx_biotype", "gene_biotype", "biotype_class"))
 
 genesBy(x, by = c("gene_biotype", "biotype_class"), ...)
 

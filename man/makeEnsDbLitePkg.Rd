@@ -4,8 +4,8 @@
 \alias{makeEnsDbLitePkg}
 \title{create an EnsDbLite package from sqlite file (usually via ensDbLiteFromFasta)}
 \usage{
-makeEnsDbLitePkg(ensdblitefile, author = "Nobody", email = "dev@null.com",
-  version = "1.0", destDir = ".", ...)
+makeEnsDbLitePkg(ensdblitefile, author = "Nobody",
+  email = "dev@null.com", version = "1.0", destDir = ".", ...)
 }
 \arguments{
 \item{ensdblitefile}{the sqlite filename}

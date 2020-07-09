@@ -4,8 +4,9 @@
 \alias{mapToReactome}
 \title{map transcripts or genes to Reactome pathways, using a cache if possible}
 \usage{
-mapToReactome(IDs, type = c("transcript", "gene"), species = "Homo sapiens",
-  build = 84, asNames = FALSE, asUrls = FALSE, useCache = TRUE)
+mapToReactome(IDs, type = c("transcript", "gene"),
+  species = "Homo sapiens", build = 84, asNames = FALSE,
+  asUrls = FALSE, useCache = TRUE)
 }
 \arguments{
 \item{IDs}{the identifiers to map}

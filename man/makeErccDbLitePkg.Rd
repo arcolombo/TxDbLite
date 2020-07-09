@@ -4,8 +4,8 @@
 \alias{makeErccDbLitePkg}
 \title{create a ErccDbLite package from sqlite file (usually via repDbLiteFromFasta)}
 \usage{
-makeErccDbLitePkg(erccdblitefile, author = "Nobody", email = "dev@null.com",
-  version = "1.0", destDir = ".", ...)
+makeErccDbLitePkg(erccdblitefile, author = "Nobody",
+  email = "dev@null.com", version = "1.0", destDir = ".", ...)
 }
 \arguments{
 \item{erccdblitefile}{the sqlite filename}

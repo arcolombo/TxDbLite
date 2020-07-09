@@ -4,8 +4,8 @@
 \alias{makeRepDbLitePkg}
 \title{create a RepDbLite package from sqlite file (usually via repDbLiteFromFasta)}
 \usage{
-makeRepDbLitePkg(repdblitefile, author = "Nobody", email = "dev@null.com",
-  version = "1.0", destDir = ".", ...)
+makeRepDbLitePkg(repdblitefile, author = "Nobody",
+  email = "dev@null.com", version = "1.0", destDir = ".", ...)
 }
 \arguments{
 \item{repdblitefile}{the sqlite filename}

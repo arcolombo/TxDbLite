@@ -3,19 +3,12 @@
 \docType{data}
 \name{utils}
 \alias{utils}
-\alias{utils}
 \alias{idStub}
-\alias{utils}
 \alias{getFastaStub}
-\alias{utils}
 \alias{colAsVector}
-\alias{utils}
 \alias{getSupportedAbbreviations}
-\alias{utils}
 \alias{getOrganismAbbreviation}
-\alias{utils}
 \alias{getOrgDetails}
-\alias{utils}
 \alias{getTxDbLiteName}
 \title{utility functions}
 \format{An object of class \code{NULL} of length 0.}
